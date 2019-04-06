@@ -13,9 +13,7 @@ import org.springframework.data.r2dbc.function.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.data.r2dbc.repository.support.R2dbcRepositoryFactory;
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
-import su.svn.href.dao.CountryDao;
-import su.svn.href.dao.LocationDao;
-import su.svn.href.dao.RegionDao;
+import su.svn.href.dao.*;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -47,6 +45,18 @@ public class R2dbcConfiguration extends AbstractR2dbcConfiguration
     public LocationDao locationDao(R2dbcRepositoryFactory factory)
     {
         return factory.getRepository(LocationDao.class);
+    }
+
+    @Bean
+    public DepartmentDao departmentDao(R2dbcRepositoryFactory factory)
+    {
+        return factory.getRepository(DepartmentDao.class);
+    }
+
+    @Bean
+    public ManagerDao managerDao(R2dbcRepositoryFactory factory)
+    {
+        return factory.getRepository(ManagerDao.class);
     }
 
 

@@ -26,13 +26,13 @@ public class LocationsRestController
     }
 
     @GetMapping("/all")
-    public Flux<Location> readPersons()
+    public Flux<Location> readLocations()
     {
         return locationDao.findAll();
     }
 
     @GetMapping("/all-full")
-    public Flux<LocationFull> readFullCountries()
+    public Flux<LocationFull> readFullLocations()
     {
         return locationFullDao.findAll();
     }

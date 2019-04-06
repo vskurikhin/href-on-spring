@@ -10,18 +10,19 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-@Table("countries")
-public class Country
+@Table("departments")
+public class DepartmentFull
 {
-    static final long serialVersionUID = -2L;
+    static final long serialVersionUID = -6L;
 
     @Id
-    @Column("country_id")
-    private String id;
+    @Column("department_id")
+    private long id;
 
-    @Column("country_name")
-    private String countryName;
+    @Column("department_name")
+    private String departmentName;
 
-    @Column("region_id")
-    private Long regionId;
+    private Manager manager;
+
+    private Location location;
 }

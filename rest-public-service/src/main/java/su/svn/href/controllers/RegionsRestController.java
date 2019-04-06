@@ -19,7 +19,7 @@ public class RegionsRestController
     }
 
     @GetMapping("/all")
-    public Flux<Region> readPersons()
+    public Flux<Region> readRegions()
     {
         return regionDao.findAll();
     }
