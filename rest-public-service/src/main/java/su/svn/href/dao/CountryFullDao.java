@@ -6,7 +6,7 @@ import su.svn.href.models.CountryFull;
 
 public interface CountryFullDao
 {
-    Mono<CountryFull> findById(Long id);
+    Mono<CountryFull> findById(String id);
 
     Flux<CountryFull> findAll();
 }

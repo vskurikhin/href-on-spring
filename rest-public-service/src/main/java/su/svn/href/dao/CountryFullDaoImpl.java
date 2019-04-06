@@ -1,5 +1,6 @@
 package su.svn.href.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +17,7 @@ public class CountryFullDaoImpl implements CountryFullDao
 
     private final RegionDao regionDao;
 
+    @Autowired
     public CountryFullDaoImpl(CountryDao countryDao, RegionDao regionDao)
     {
         this.countryDao = countryDao;
@@ -27,7 +29,7 @@ public class CountryFullDaoImpl implements CountryFullDao
         return region -> new CountryFull(country.getId(), country.getCountryName(), region);
     }
 
-    private Mono<? extends CountryFull> apply(Country country)
+    private Mono<? extends CountryFull> join(Country country)
     {
         return regionDao
             .findById(country.getRegionId())
@@ -35,14 +37,14 @@ public class CountryFullDaoImpl implements CountryFullDao
     }
 
     @Override
-    public Mono<CountryFull> findById(Long id)
+    public Mono<CountryFull> findById(String id)
     {
-        return countryDao.findById(id).flatMap(this::apply);
+        return countryDao.findById(id).flatMap(this::join);
     }
 
     @Override
     public Flux<CountryFull> findAll()
     {
-        return countryDao.findAll().flatMap(this::apply);
+        return countryDao.findAll().flatMap(this::join);
     }
 }
