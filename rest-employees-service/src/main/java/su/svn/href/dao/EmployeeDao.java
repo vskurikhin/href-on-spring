@@ -49,4 +49,11 @@ public interface EmployeeDao extends ReactiveCrudRepository<Employee, Long>
             + " FROM employees e WHERE e.phone_number = $1"
     )
     Flux<Employee> findByPhoneNumber(String phoneNumber);
+
+    @Query(
+        "SELECT employee_id, first_name, last_name, email, phone_number, hire_date,"
+            + " job_id, salary, commission_pct, manager_id, department_id"
+            + " FROM employees e WHERE e.department_id = $1"
+    )
+    Flux<Employee> findByDepartmentId(Long departmentId);
 }

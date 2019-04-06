@@ -3,10 +3,17 @@ package su.svn.href.dao;
 import org.springframework.data.r2dbc.repository.query.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import su.svn.href.models.Location;
 
 public interface LocationDao extends ReactiveCrudRepository<Location, Long>
 {
+    @Query(
+        "SELECT location_id, street_address, postal_code, city, state_province, country_id"
+            + " FROM locations c WHERE c.location_id = $1"
+    )
+    Mono<Location> findById(Long id);
+
     @Query(
         "SELECT location_id, street_address, postal_code, city, state_province, country_id"
             + " FROM locations c WHERE c.street_address = $1"

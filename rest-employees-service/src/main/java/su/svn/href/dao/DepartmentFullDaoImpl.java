@@ -6,6 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.models.*;
 
+import java.util.List;
 import java.util.function.Function;
 
 @Repository
@@ -13,48 +14,53 @@ public class DepartmentFullDaoImpl implements DepartmentFullDao
 {
     private final DepartmentDao departmentDao;
 
+    private final EmployeeDao employeeDao;
+
     private final LocationDao locationDao;
 
     private final ManagerDao managerDao;
 
     @Autowired
-    public DepartmentFullDaoImpl(DepartmentDao departmentDao, LocationDao locationDao, ManagerDao managerDao)
+    public DepartmentFullDaoImpl(DepartmentDao deptDao, EmployeeDao employeeDao, LocationDao locDao, ManagerDao mngrDao)
     {
-        this.departmentDao = departmentDao;
-        this.locationDao = locationDao;
-        this.managerDao = managerDao;
+        this.departmentDao = deptDao;
+        this.employeeDao = employeeDao;
+        this.locationDao = locDao;
+        this.managerDao = mngrDao;
     }
 
-    private Function<Manager, DepartmentFull> toDepartmentFull(Department department, Location location)
+    private Function<List<Employee>, DepartmentFull> toDepartmentFull(Department dept, Location location, Manager mngr)
     {
-        return manager -> new DepartmentFull(
-            department.getId(), department.getDepartmentName(), manager, location
+        return employees -> new DepartmentFull(
+            dept.getId(), dept.getDepartmentName(), mngr, location, employees
         );
     }
 
-    private Function<Location, Mono<DepartmentFull>> monoDepartmentFull(Department department)
+    private Function<Manager, Mono<DepartmentFull>> monoDepartmentFull(Department department, Location location)
     {
-        return location -> managerDao
-            .findById(department.getManagerId())
-            .map(toDepartmentFull(department, location));
-    }
-
-    private Mono<? extends DepartmentFull> joinLocation(Department department)
-    {
-        return locationDao
-            .findById(department.getLocationId())
-            .flatMap(monoDepartmentFull(department));
+        return manager -> employeeDao
+            .findByDepartmentId(department.getId())
+            .collectList()
+            .map(toDepartmentFull(department, location, manager));
     }
 
     @Override
     public Mono<DepartmentFull> findById(long id)
     {
-        return null;
+        return departmentDao.findById(id).flatMap(department -> locationDao
+            .findById(department.getLocationId())
+            .flatMap(location -> managerDao
+                .findById(department.getManagerId())
+                .flatMap(monoDepartmentFull(department, location))));
     }
 
     @Override
     public Flux<DepartmentFull> findAll()
     {
-        return departmentDao.findAll().flatMap(this::joinLocation);
+        return departmentDao.findAll().flatMap(department -> locationDao
+            .findById(department.getLocationId())
+            .flatMap(location -> managerDao
+                .findById(department.getManagerId())
+                .flatMap(monoDepartmentFull(department, location))));
     }
 }

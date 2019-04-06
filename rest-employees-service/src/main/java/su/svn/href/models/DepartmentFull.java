@@ -5,6 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,4 +28,6 @@ public class DepartmentFull
     private Manager manager;
 
     private Location location;
+
+    private Collection<Employee> employees = new LinkedList<>();
 }
