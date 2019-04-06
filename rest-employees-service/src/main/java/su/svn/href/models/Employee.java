@@ -5,15 +5,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Table("employees")
-public class Manager
+public class Employee
 {
-    static final long serialVersionUID = -8L;
+    static final long serialVersionUID = -9L;
 
     @Id
     @Column("employee_id")
@@ -30,4 +32,22 @@ public class Manager
 
     @Column("phone_number")
     private String phoneNumber;
+
+    @Column("hire_date")
+    private LocalDate hireDate;
+
+    @Column("job_id")
+    private String jobId;
+
+    @Column("salary")
+    private Double salary;
+
+    @Column("commission_pct")
+    private Double commissionPct;
+
+    @Column("manager_id")
+    private Long managerId;
+
+    @Column("department_id")
+    private Long departmentId;
 }

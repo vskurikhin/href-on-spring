@@ -11,9 +11,9 @@ import org.springframework.data.relational.core.mapping.Table;
 @EqualsAndHashCode
 @ToString
 @Table("departments")
-public class DepartmentFull
+public class Department
 {
-    static final long serialVersionUID = -7L;
+    static final long serialVersionUID = -6L;
 
     @Id
     @Column("department_id")
@@ -22,7 +22,9 @@ public class DepartmentFull
     @Column("department_name")
     private String departmentName;
 
-    private Manager manager;
+    @Column("manager_id")
+    private Long managerId;
 
-    private Location location;
+    @Column("location_id")
+    private Long locationId;
 }
