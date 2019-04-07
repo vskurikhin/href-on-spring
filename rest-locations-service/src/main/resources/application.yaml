@@ -1,0 +1,16 @@
+application:
+  r2dbc:
+    host: "localhost"
+    database: "db"
+    username: "dbuser"
+    password: "password"
+
+logging:
+  level:
+    root: WARN
+    org.springframework:
+      web: WARN
+      data.r2dbc: DEBUG
+
+server:
+  port: 8001
