@@ -7,9 +7,9 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>href</artifactId>
-    <version>1.Start-3.6</version>
+    <version>1.Start-3.7</version>
     <modules>
-        <module>rest-public-service</module>
+        <module>rest-locations-service</module>
         <module>rest-employees-service</module>
     </modules>
     <packaging>pom</packaging>
