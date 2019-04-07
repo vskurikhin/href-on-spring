@@ -13,11 +13,11 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("locations")
 public class Location
 {
-    static final long serialVersionUID = -4L;
+    static final long serialVersionUID = -30L;
 
     @Id
     @Column("location_id")
-    private String id;
+    private long id;
 
     @Column("street_address")
     private String streetAddress;

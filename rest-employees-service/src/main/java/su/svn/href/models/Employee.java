@@ -6,6 +6,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @Table("employees")
 public class Employee
 {
-    static final long serialVersionUID = -9L;
+    static final long serialVersionUID = -50L;
 
     @Id
     @Column("employee_id")
@@ -34,7 +35,7 @@ public class Employee
     private String phoneNumber;
 
     @Column("hire_date")
-    private LocalDate hireDate;
+    private Date hireDate;
 
     @Column("job_id")
     private String jobId;

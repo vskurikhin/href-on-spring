@@ -6,7 +6,7 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>rest-locations-service</artifactId>
-    <version>1.0-7</version>
+    <version>1.0-8</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -119,7 +119,7 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
-            <version>3.2.8.RELEASE</version>
+            <version>${reactor.test.version}</version>
             <scope>test</scope>
         </dependency>
 

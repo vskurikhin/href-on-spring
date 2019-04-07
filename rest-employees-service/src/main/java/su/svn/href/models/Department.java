@@ -13,7 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("departments")
 public class Department
 {
-    static final long serialVersionUID = -6L;
+    static final long serialVersionUID = -40L;
 
     @Id
     @Column("department_id")

@@ -1,16 +1,13 @@
 package su.svn.href.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.dao.DepartmentDao;
 import su.svn.href.dao.DepartmentFullDao;
 import su.svn.href.models.Department;
-import su.svn.href.models.DepartmentFull;
+import su.svn.href.models.dto.DepartmentDto;
 
 @RestController()
 @RequestMapping(value = "/departments")
@@ -27,21 +24,42 @@ public class DepartmentsRestController
         this.departmentFullDao = departmentFullDao;
     }
 
-    @GetMapping("/all")
-    public Flux<Department> readDepartments()
+    @GetMapping(path = "/range", params = { "page", "size" , "sort"})
+    public Flux<Department> readDepartments(@RequestParam("page") int page,
+                                            @RequestParam("size") int size,
+                                            @RequestParam("sort") String sort)
     {
-        return departmentDao.findAll();
+        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
+        int offset = (page < 1 ? 0 : page - 1) * size;
+        switch (sort.toUpperCase()) {
+            case "ID":
+                return departmentDao.findAllOrderById(offset, limit);
+            case "NAME":
+                return departmentDao.findAllOrderByDepartmentName(offset, limit);
+            default:
+                return departmentDao.findAll(offset, limit);
+        }
     }
 
-    @GetMapping("/all-full")
-    public Flux<DepartmentFull> readFullDepartments()
+    @GetMapping(path = "/range-full", params = { "page", "size" , "sort"})
+    public Flux<DepartmentDto> readFullDepartments(@RequestParam("page") int page,
+                                                   @RequestParam("size") int size,
+                                                   @RequestParam("sort") String sort)
     {
-        return departmentFullDao.findAll();
+        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
+        int offset = (page < 1 ? 0 : page - 1) * size;
+        switch (sort.toUpperCase()) {
+            case "ID":
+                return departmentFullDao.findAll(offset, limit, "department_id");
+            case "NAME":
+                return departmentFullDao.findAll(offset, limit, "department_name");
+            default:
+                return departmentFullDao.findAll(offset, limit);
+        }
     }
-
 
     @GetMapping("/{id}")
-    public Mono<DepartmentFull> readDepartment(@PathVariable Long id)
+    public Mono<DepartmentDto> readDepartment(@PathVariable Long id)
     {
         return departmentFullDao.findById(id);
     }
