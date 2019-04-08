@@ -27,10 +27,10 @@ public class CountryDto
     public static CountryDto collectFromMap(Map<String, Object> map)
     {
         long regionId = Long.parseLong(map.get("REGION_ID").toString());
-        String regionName = StringHelper.stringOrNULL(map.getOrDefault("REGION_NAME", "null"));
+        String regionName = StringHelper.valueOrNULL(map, "REGION_NAME");
 
         String countryId = map.get("COUNTRY_ID").toString();
-        String countryName = StringHelper.stringOrNULL(map.getOrDefault("COUNTRY_NAME", "null"));
+        String countryName = StringHelper.valueOrNULL(map, "COUNTRY_NAME");
 
         return new CountryDto(countryId, countryName, new Region(regionId, regionName));
     }

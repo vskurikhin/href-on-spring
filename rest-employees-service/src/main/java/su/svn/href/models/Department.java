@@ -20,7 +20,7 @@ public class Department
     private long id;
 
     @Column("department_name")
-    private String departmentName;
+    private String departmentName = "";
 
     @Column("manager_id")
     private Long managerId;

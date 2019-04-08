@@ -7,7 +7,7 @@ application:
 
 logging:
   level:
-    root: OFF
+    root: WARN
     org.springframework:
       web: OFF
       data.r2dbc: OFF

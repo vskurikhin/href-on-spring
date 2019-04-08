@@ -6,7 +6,7 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>rest-locations-service</artifactId>
-    <version>1.0-8</version>
+    <version>1.0-10</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

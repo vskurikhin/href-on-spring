@@ -23,9 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static su.svn.href.models.CountryTest.testCountriesDb;
-import static su.svn.href.models.LocationTest.testLocationsDb;
-import static su.svn.href.models.RegionTest.testRegionsDb;
+import static su.svn.href.models.CountryTest.createTestTableForCountries;
+import static su.svn.href.models.LocationTest.createTestTableForLocations;
+import static su.svn.href.models.RegionTest.createTestTableForRegions;
 import static su.svn.href.models.dto.LocationDtoTest.testLocationDto;
 import static su.svn.utils.TestData.TEST_ID;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
@@ -50,9 +50,9 @@ class LocationFullDaoImplTest
                     .build()
             );
             client = DatabaseClient.create(connectionFactory);
-            testRegionsDb(client);
-            testCountriesDb(client);
-            testLocationsDb(client);
+            createTestTableForRegions(client);
+            createTestTableForCountries(client);
+            createTestTableForLocations(client);
 
             return client;
         }

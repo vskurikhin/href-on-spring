@@ -9,9 +9,11 @@
         </layout>
     </appender>
 
-    <root level="OFF" />
+    <root level="WARN" />
 
     <logger name="org.springframework" level="OFF" />
 
-    <logger name="su.svn" level="OFF" additivity="false" />
+    <logger name="su.svn" level="WARN" additivity="false">
+        <appender-ref ref="Console" />
+    </logger>
 </configuration>

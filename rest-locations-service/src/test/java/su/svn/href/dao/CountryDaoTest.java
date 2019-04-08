@@ -18,7 +18,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static su.svn.href.models.RegionTest.testRegionsDb;
+import static su.svn.href.models.RegionTest.createTestTableForRegions;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @ExtendWith(SpringExtension.class)
@@ -41,7 +41,7 @@ class CountryDaoTest
                     .build()
             );
             client = DatabaseClient.create(connectionFactory);
-            testRegionsDb(client);
+            createTestTableForRegions(client);
 
             return client;
         }

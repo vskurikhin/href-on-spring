@@ -16,16 +16,13 @@ import org.springframework.data.r2dbc.function.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import su.svn.href.models.Department;
 import su.svn.href.models.dto.DepartmentDto;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.href.models.DepartmentTest.testDepartment;
-import static su.svn.href.models.DepartmentTest.testDepartmentsDb;
+import static su.svn.href.models.DepartmentTest.createTestTableForDepartments;
 import static su.svn.href.models.EmployeeTest.testEmployee;
 import static su.svn.href.models.EmployeeTest.testEmployeesDb;
 import static su.svn.href.models.LocationTest.testLocation;
@@ -56,7 +53,7 @@ class DepartmentFullDaoImplTest
                     .build()
             );
             client = DatabaseClient.create(connectionFactory);
-            testDepartmentsDb(client);
+            createTestTableForDepartments(client);
             testEmployeesDb(client);
             testLocationsDb(client);
 

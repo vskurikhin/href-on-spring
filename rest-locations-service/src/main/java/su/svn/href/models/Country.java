@@ -17,7 +17,7 @@ public class Country
 
     @Id
     @Column("country_id")
-    private String id;
+    private String id = "";
 
     @Column("country_name")
     private String countryName;

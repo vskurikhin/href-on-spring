@@ -17,7 +17,7 @@ public class Location
 
     @Id
     @Column("location_id")
-    private String id;
+    private long id;
 
     @Column("street_address")
     private String streetAddress;
@@ -26,7 +26,7 @@ public class Location
     private String postalCode;
 
     @Column("city")
-    private String city;
+    private String city = "";
 
     @Column("state_province")
     private String stateProvince;
