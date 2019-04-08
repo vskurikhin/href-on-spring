@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta regionName="viewport" content="width=device-width, initial-scale=1">
+    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div id="title">
+            <h1>locations</h1>
+        </div>
+        <table id="locations" class="table table-striped">
+            <thead>
+            <tr>
+                <th width="20%">Id</th>
+                <th width="40%">city</th>
+                <th>country</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="result" data-th-each="location : ${locations}">
+                <td>[[${location.id}]]</td>
+                <td>[[${location.city}]]</td>
+                <td>[[${location.country.countryName}]]</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

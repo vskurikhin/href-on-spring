@@ -7,9 +7,8 @@ application:
 
 logging:
   level:
-    root: WARN
     org.springframework:
-      web: WARN
+      web: INFO
       data.r2dbc: DEBUG
 
 server:
