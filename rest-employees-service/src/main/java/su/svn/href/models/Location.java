@@ -26,7 +26,7 @@ public class Location
     private String postalCode;
 
     @Column("city")
-    private String city = "";
+    private String city;
 
     @Column("state_province")
     private String stateProvince;

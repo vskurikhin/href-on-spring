@@ -13,4 +13,4 @@ logging:
       data.r2dbc: OFF
 
 server:
-  port: 8001
+  port: 8002

@@ -15,7 +15,7 @@ public class LocationDto
 {
     static final long serialVersionUID = -31L;
 
-    private String id;
+    private long id;
 
     private String streetAddress;
 
@@ -29,11 +29,11 @@ public class LocationDto
 
     public static LocationDto collectFromMap(Map<String, Object> map)
     {
-        String locationId = map.get("LOCATION_ID").toString();
-        String streetAddress = StringHelper.stringOrNULL(map.getOrDefault("STREET_ADDRESS", "null"));
-        String postalCode = StringHelper.stringOrNULL(map.getOrDefault("POSTAL_CODE", "null"));
-        String city = map.get("CITY").toString();
-        String stateProvince = StringHelper.stringOrNULL(map.getOrDefault("STATE_PROVINCE", "null"));
+        long locationId = Long.parseLong(map.get("LOCATION_ID").toString());
+        String streetAddress = StringHelper.valueOrNULL(map, "STREET_ADDRESS");
+        String postalCode = StringHelper.valueOrNULL(map, "POSTAL_CODE");
+        String city = StringHelper.valueOrNULL(map, "CITY");
+        String stateProvince = StringHelper.valueOrNULL(map, "STATE_PROVINCE");
 
         return new LocationDto(
             locationId, streetAddress, postalCode, city, stateProvince,

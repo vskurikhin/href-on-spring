@@ -24,9 +24,7 @@ public class RegionTest
 {
     public static Region testRegion = new Region(TEST_ID, TEST_REGION_NAME);
 
-    private Region region;
-
-    public static void testRegionsDb(DatabaseClient client)
+    public static void createTestTableForRegions(DatabaseClient client)
     {
         databaseClientExecuteSql(client,
             "CREATE TABLE IF NOT EXISTS regions (\n"
@@ -34,7 +32,6 @@ public class RegionTest
                 + ", region_name VARCHAR(25)\n"
                 + ")"
         );
-
         client.insert()
             .into(Region.class)
             .using(testRegion)
@@ -43,8 +40,10 @@ public class RegionTest
             .verifyComplete();
     }
 
+    private Region region;
+
     @Test
-    @DisplayName("is instantiated with new Region()")
+    @DisplayName("is instantiated with new object")
     void isInstantiatedWithNew()
     {
         new Region();
@@ -61,7 +60,7 @@ public class RegionTest
         }
 
         @Test
-        @DisplayName("default values in Region()")
+        @DisplayName("default values in the instance of class")
         void defaults()
         {
             assertThat(region).hasFieldOrPropertyWithValue("id", 0L);
@@ -69,7 +68,16 @@ public class RegionTest
         }
 
         @Test
-        @DisplayName("Setter and getter for firstName")
+        @DisplayName("setter and getter for id")
+        void testGetSetId()
+        {
+            region.setId(TEST_ID);
+            assertThat(region).hasFieldOrPropertyWithValue("id", TEST_ID);
+            assertEquals(TEST_ID, region.getId());
+        }
+
+        @Test
+        @DisplayName("setter and getter for regionName")
         void testGetSetRegionName()
         {
             region.setRegionName(TEST);
@@ -89,7 +97,7 @@ public class RegionTest
         }
 
         @Test
-        @DisplayName("initialized values in Author()")
+        @DisplayName("initialized values in instance of class")
         void defaults()
         {
             assertThat(region).hasFieldOrPropertyWithValue("id", TEST_ID);
@@ -98,7 +106,7 @@ public class RegionTest
         }
 
         @Test
-        @DisplayName("Equals for class Author and hashCode")
+        @DisplayName("equals and hashCode for class")
         void testEquals()
         {
             assertNotEquals(new Region(), region);
@@ -108,22 +116,22 @@ public class RegionTest
         }
 
         @Test
-        @DisplayName("The length of string from Author::toString is great than zero")
+        @DisplayName("the length of string from toString is great than zero")
         void testToString()
         {
             assertTrue(region.toString().length() > 0);
         }
     }
 
-    private static final Log log = LogFactory.getLog(WithDataBaseTable.class);
+    private static final Log log = LogFactory.getLog(IntegrateWithDB.class);
 
     @Nested
-    @DisplayName("when integrate DB regions")
-    class WithDataBaseTable
+    @DisplayName("do integrate with DB")
+    class IntegrateWithDB
     {
-
         @Test
-        void table()
+        @DisplayName("create table then inserts test record and then drop table")
+        void createTableInsertsRecordAndDropTable()
         {
             ConnectionFactory connectionFactory = new H2ConnectionFactory(
                 H2ConnectionConfiguration
@@ -132,7 +140,7 @@ public class RegionTest
                     .build()
             );
             DatabaseClient client = DatabaseClient.create(connectionFactory);
-            testRegionsDb(client);
+            createTestTableForRegions(client);
             client.select()
                 .from(Region.class)
                 .fetch()

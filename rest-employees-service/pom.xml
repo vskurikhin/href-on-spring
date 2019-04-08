@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>su.svn.href</groupId>
-    <artifactId>rest-locations-service</artifactId>
-    <version>1.0-10</version>
+    <artifactId>rest-employees-service</artifactId>
+    <version>1.0-3</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
