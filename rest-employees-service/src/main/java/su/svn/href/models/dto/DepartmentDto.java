@@ -6,6 +6,7 @@ import su.svn.href.models.Location;
 import su.svn.href.models.Manager;
 import su.svn.utils.StringHelper;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class DepartmentDto
 
     private long id;
 
-    private String departmentName;
+    private String departmentName = "";
 
     private Manager manager;
 
@@ -29,7 +30,7 @@ public class DepartmentDto
 
     private Collection<Employee> employees = new LinkedList<>();
 
-    public static DepartmentDto collectFromMap(Map<String, Object> map)
+    public static DepartmentDto collectFromMap(@NotNull Map<String, Object> map)
     {
         long departmentId = Long.parseLong(map.get("DEPARTMENT_ID").toString());
         String departmentName = StringHelper.valueOrNULL(map, "DEPARTMENT_NAME");
@@ -50,9 +51,9 @@ public class DepartmentDto
         return new DepartmentDto(
             departmentId, departmentName,
             null == managerId ? null : new Manager(managerId, firstName, lastName, email, phoneNumber),
-            null == locationId
-                ? null
-                : new Location(locationId, streetAddress, postalCode, city, stateProvince, countryId),
+            null != locationId
+                ? new Location(locationId, streetAddress, postalCode, city, stateProvince, countryId)
+                : null,
             new LinkedList<>()
         );
     }

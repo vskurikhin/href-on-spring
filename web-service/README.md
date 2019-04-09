@@ -1,10 +1,8 @@
-# Spring Boot WebFlux + Thymeleaf
+# java-2018-11-VSkurikhin
+## "Разработчик на Spring Framework"
 
-Article link : https://www.mkyong.com/spring-boot/spring-boot-webflux-thymeleaf-reactive-example/
+#### (C) 2018-11
+##### @Author Виктор Скурихин (Victor Skurikhin)
 
-## 1. How to start
-```
-$ mvn spring-boot:run
-```
+### Spring Boot WebFlux + Thymeleaf
 
-Access http://localhost:8080
