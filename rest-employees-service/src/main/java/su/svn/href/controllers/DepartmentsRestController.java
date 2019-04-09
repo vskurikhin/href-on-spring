@@ -24,7 +24,7 @@ public class DepartmentsRestController
         this.departmentFullDao = departmentFullDao;
     }
 
-    @GetMapping(path = "/range", params = { "page", "size" , "sort"})
+    @GetMapping(path = "/range", params = { "page", "size", "sort"})
     public Flux<Department> readDepartments(@RequestParam("page") int page,
                                             @RequestParam("size") int size,
                                             @RequestParam("sort") String sort)
@@ -41,7 +41,7 @@ public class DepartmentsRestController
         }
     }
 
-    @GetMapping(path = "/range-full", params = { "page", "size" , "sort"})
+    @GetMapping(path = "/range-full", params = { "page", "size", "sort"})
     public Flux<DepartmentDto> readFullDepartments(@RequestParam("page") int page,
                                                    @RequestParam("size") int size,
                                                    @RequestParam("sort") String sort)

@@ -26,7 +26,7 @@ public class LocationsRestController
         this.locationFullDao = locationFullDao;
     }
 
-    @GetMapping(path = "/range", params = { "page", "size" , "sort"})
+    @GetMapping(path = "/range", params = { "page", "size", "sort"})
     public Flux<Location> readLocations(@RequestParam("page") int page,
                                         @RequestParam("size") int size,
                                         @RequestParam("sort") String sort)
@@ -47,7 +47,7 @@ public class LocationsRestController
         }
     }
 
-    @GetMapping(path = "/range-full", params = { "page", "size" , "sort"})
+    @GetMapping(path = "/range-full", params = { "page", "size", "sort"})
     public Flux<LocationDto> readFullLocations(@RequestParam("page") int page,
                                                @RequestParam("size") int size,
                                                @RequestParam("sort") String sort)
