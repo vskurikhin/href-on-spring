@@ -21,7 +21,7 @@ public class CountriesRestController
         this.countryDao = countryDao;
     }
 
-    @GetMapping(path = "/range", params = { "page", "size" , "sort"})
+    @GetMapping(path = "/range", params = { "page", "size", "sort"})
     public Flux<Country> readCountries(@RequestParam("page") int page,
                                        @RequestParam("size") int size,
                                        @RequestParam("sort") String sort)
