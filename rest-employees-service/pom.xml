@@ -114,6 +114,7 @@
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
             <version>${r2dbc.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-test -->
