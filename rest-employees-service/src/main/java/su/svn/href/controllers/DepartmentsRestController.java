@@ -59,7 +59,7 @@ public class DepartmentsRestController
             default:
                 return departmentFullDao.findAllTry(offset, limit);
         } */
-        return departmentFullDao.findAllTry(offset, limit);
+        return departmentFullDao.findAll(offset, limit);
     }
 
     @GetMapping("/{id}")
