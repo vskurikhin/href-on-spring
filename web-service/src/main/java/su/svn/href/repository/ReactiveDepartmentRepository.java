@@ -29,9 +29,8 @@ public class ReactiveDepartmentRepository implements DepartmentRepository
     {
         return webClient
             .get()
-            .uri("/range-full?page=2&size=10&sort=id")
+            .uri("/range-full?page=0&size=10&sort=id")
             .retrieve()
-            .bodyToFlux(DepartmentDto.class)
-            .delayElements(Duration.ofMillis(100));
+            .bodyToFlux(DepartmentDto.class);
     }
 }

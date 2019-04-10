@@ -9,7 +9,7 @@ public interface DepartmentDao extends ReactiveCrudRepository<Department, Long>
 {
     String OFFSET_LIMIT = " OFFSET $1 LIMIT $2";
     String SELECT = "SELECT department_id, department_name, manager_id, location_id"
-                  + " FROM departments d";
+                  + " FROM departments";
 
     @Query(SELECT + OFFSET_LIMIT)
     Flux<Department> findAll(int offset, int limit);
