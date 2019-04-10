@@ -4,13 +4,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.models.dto.DepartmentDto;
 
+import java.util.List;
+
 public interface DepartmentFullDao
 {
     Mono<DepartmentDto> findById(long id);
 
-    Flux<DepartmentDto> findAll(int offset, int limit);
+    Mono<List<DepartmentDto>> findAll(int offset, int limit, String sortBy, boolean descending);
 
-    Flux<DepartmentDto> findAll(int offset, int limit, String sortBy);
+    Mono<List<DepartmentDto>> findAll(int offset, int limit, String sortBy);
 
-    Flux<DepartmentDto> findAll(int offset, int limit, String sortBy, boolean descending);
+    Mono<List<DepartmentDto>> findAll(int offset, int limit);
 }

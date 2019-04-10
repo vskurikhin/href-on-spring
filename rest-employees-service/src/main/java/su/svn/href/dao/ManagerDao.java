@@ -8,45 +8,27 @@ import su.svn.href.models.Manager;
 
 public interface ManagerDao extends ReactiveCrudRepository<Manager, Long>
 {
-    @Query(
-        "SELECT employee_id, first_name, last_name, email, phone_number"
-            + " FROM employees e WHERE e.employee_id = $1 AND employee_id IN"
-            + " (SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL)"
-    )
-    Mono<Manager> findById(Long id);
+    String OFFSET_LIMIT = " OFFSET $1 LIMIT $2";
 
-    @Query(
-        "SELECT employee_id, first_name, last_name, email, phone_number"
-            + " FROM employees e WHERE employee_id IN"
-            + " (SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL)"
-    )
+    String SELECT = "SELECT employee_id, first_name, last_name, email, phone_number"
+                  +  " FROM employees";
+    String SELECT_MNGR_SET = "SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL";
+
+    @Query(SELECT + " WHERE employee_id = $1 AND employee_id IN (" + SELECT_MNGR_SET + ')')
+    Mono<Manager> findById(long id);
+
+    @Query(SELECT + " WHERE employee_id IN (" + SELECT_MNGR_SET + ')')
     Flux<Manager> findAll();
 
-    @Query(
-        "SELECT employee_id, first_name, last_name, email, phone_number"
-            + " FROM employees e WHERE e.first_name = $1 AND employee_id IN"
-            + " (SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL)"
-    )
+    @Query(SELECT + " WHERE first_name LIKE $1 AND employee_id IN (" + SELECT_MNGR_SET + ')')
     Flux<Manager> findByFirstName(String firstName);
 
-    @Query(
-        "SELECT employee_id, first_name, last_name, email, phone_number"
-            + " FROM employees e WHERE e.last_name = $1 AND employee_id IN"
-            + " (SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL)"
-    )
+    @Query(SELECT + " WHERE last_name LIKE $1 AND employee_id IN (" + SELECT_MNGR_SET + ')')
     Flux<Manager> findByLastName(String lastName);
 
-    @Query(
-        "SELECT employee_id, first_name, last_name, email, phone_number"
-            + " FROM employees e WHERE e.email = $1 AND employee_id IN"
-            + " (SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL)"
-    )
+    @Query(SELECT + " WHERE email LIKE $1 AND employee_id IN (" + SELECT_MNGR_SET + ')')
     Flux<Manager> findByEmail(String email);
 
-    @Query(
-        "SELECT employee_id, first_name, last_name, email, phone_number"
-            + " FROM employees e WHERE e.phone_number = $1 AND employee_id IN"
-            + " (SELECT DISTINCT manager_id FROM departments WHERE manager_id IS NOT NULL)"
-    )
+    @Query(SELECT + " WHERE phone_number LIKE $1 AND employee_id IN (" + SELECT_MNGR_SET + ')')
     Flux<Manager> findByPhoneNumber(String phoneNumber);
 }
