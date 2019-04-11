@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                [%blue(%t)] %highlight(%1level) %yellow(%c{5}): %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <root level="WARN" />
+
+    <logger name="org.springframework" level="OFF" />
+
+    <logger name="su.svn" level="WARN" additivity="false">
+        <appender-ref ref="Console" />
+    </logger>
+</configuration>
