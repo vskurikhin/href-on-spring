@@ -98,7 +98,7 @@ class DepartmentFullDaoImplTest
         );
         expectedDepartmentDto.setEmployees(Collections.singletonList(testEmployee));
         List<DepartmentDto> expected = Collections.singletonList(expectedDepartmentDto);
-        List<DepartmentDto> list = departmentFullDao.findAll(0, 1).collectList().block();
+        List<DepartmentDto> list = departmentFullDao.findAll(0, 1).block();
         // TODO assertEquals(expected, list);
     }
 

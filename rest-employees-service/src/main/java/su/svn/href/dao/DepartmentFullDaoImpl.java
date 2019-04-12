@@ -5,7 +5,11 @@ import org.springframework.data.r2dbc.function.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import su.svn.href.models.Employee;
 import su.svn.href.models.dto.DepartmentDto;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Repository
 public class DepartmentFullDaoImpl implements DepartmentFullDao
@@ -39,22 +43,36 @@ public class DepartmentFullDaoImpl implements DepartmentFullDao
     }
 
     @Override
-    public Flux<DepartmentDto> findAll(int offset, int limit)
-    {
-        return findAll(offset, limit, "department_id");
-    }
-
-    @Override
-    public Flux<DepartmentDto> findAll(int offset, int limit, String sortBy)
+    public Mono<List<DepartmentDto>> findAll(int offset, int limit, String sortBy)
     {
         return findAll(offset, limit, sortBy, false);
     }
 
     @Override
-    public Flux<DepartmentDto> findAll(int offset, int limit, String sortBy, boolean descending)
+    public Mono<List<DepartmentDto>> findAll(int offset, int limit)
     {
-        String direction = descending ? " DESC" : " ASC";
-        String orderBy = sortBy != null ? " ORDER BY " + sortBy : "";
+        return findAll(offset, limit, "department_id");
+    }
+
+
+    private Mono<DepartmentDto> departmentDtoMono(DepartmentDto departmentDto)
+    {
+        Mono<List<Employee>> employees = employeeDao
+            .findByDepartmentId(departmentDto.getId())
+            .collectList();
+
+        return employees.map(e -> {
+            departmentDto.setEmployees(e);
+            return departmentDto;
+        });
+    }
+
+    public Mono<List<DepartmentDto>> findAllTry(int offset, int limit)
+    {
+        String direction = " ASC";
+        String orderBy = " ORDER BY d.department_id";
+
+        Comparator<DepartmentDto> comparator = (o1, o2) -> Long.compare(o1.getId(), o2.getId());
 
         return databaseClient.execute()
             .sql(SELECT + orderBy + direction + " OFFSET $1 LIMIT $2")
@@ -63,11 +81,26 @@ public class DepartmentFullDaoImpl implements DepartmentFullDao
             .fetch()
             .all()
             .map(DepartmentDto::collectFromMap)
-            .flatMap(departmentDto -> employeeDao
-                .findByDepartmentId(departmentDto.getId())
-                .collectList().map(employees -> {
-                    departmentDto.setEmployees(employees);
-                    return departmentDto;
-                }));
+            .flatMap(this::departmentDtoMono)
+            .collectSortedList(comparator);
+    }
+
+    @Override
+    public Mono<List<DepartmentDto>> findAll(int offset, int limit, String sortBy, boolean descending)
+    {
+        String direction = descending ? " DESC" : " ASC";
+        String orderBy = sortBy != null ? " ORDER BY " + sortBy : "";
+
+        Comparator<DepartmentDto> comparator = Comparator.comparingLong(DepartmentDto::getId);
+
+        return databaseClient.execute()
+            .sql(SELECT + orderBy + direction + " OFFSET $1 LIMIT $2")
+            .bind("$1", offset)
+            .bind("$2", limit)
+            .fetch()
+            .all()
+            .map(DepartmentDto::collectFromMap)
+            .flatMap(this::departmentDtoMono)
+            .collectSortedList(comparator);
     }
 }
