@@ -31,7 +31,7 @@ public class ReactiveLocationRepository implements LocationRepository
             .get()
             .uri("/range-full?page=1&size=10&sort=id")
             .retrieve()
-            .bodyToFlux(LocationDto.class)
-            .delayElements(Duration.ofMillis(100));
+            .bodyToFlux(LocationDto.class);
+            // .delayElements(Duration.ofMillis(100));
     }
 }
