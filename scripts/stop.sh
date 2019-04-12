@@ -2,7 +2,7 @@
 
 ps -ef | grep [j]ava | while read PROC
 do
-    if [[ $PROC =~ web-service-1.0-SNAPSHOT.jar ]]
+    if [[ $PROC =~ web-service-1.1-SNAPSHOT.jar ]]
     then
         set $PROC
         ps -p $2 -O pid,command
