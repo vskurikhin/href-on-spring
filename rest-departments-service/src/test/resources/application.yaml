@@ -7,9 +7,10 @@ application:
 
 logging:
   level:
+    root: WARN
     org.springframework:
-      web: INFO
-      data.r2dbc: DEBUG
+      web: OFF
+      data.r2dbc: OFF
 
 server:
-  port: 8001
+  port: 8002

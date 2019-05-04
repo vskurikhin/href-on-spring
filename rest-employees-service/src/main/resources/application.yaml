@@ -12,4 +12,4 @@ logging:
       data.r2dbc: DEBUG
 
 server:
-  port: 8002
+  port: 8003
