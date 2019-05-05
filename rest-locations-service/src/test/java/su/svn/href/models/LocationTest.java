@@ -16,7 +16,7 @@ import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 public class LocationTest
 {
     public static Location testLocation = new Location(
-        TEST_ID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
+        TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
     );
 
     public static void createTestTableForLocations(DatabaseClient client)
@@ -62,7 +62,7 @@ public class LocationTest
         @DisplayName("default values in the instance of class")
         void defaults()
         {
-            assertThat(location).hasFieldOrPropertyWithValue("id", 0L);
+            assertThat(location).hasFieldOrPropertyWithValue("id", null);
             assertThat(location).hasFieldOrPropertyWithValue("streetAddress", null);
             assertThat(location).hasFieldOrPropertyWithValue("postalCode", null);
             assertThat(location).hasFieldOrPropertyWithValue("city", "");
@@ -74,9 +74,9 @@ public class LocationTest
         @DisplayName("setter and getter for id")
         void testGetSetId()
         {
-            location.setId(TEST_ID);
-            assertThat(location).hasFieldOrPropertyWithValue("id", TEST_ID);
-            assertEquals(TEST_ID, location.getId());
+            location.setId(TEST_LID);
+            assertThat(location).hasFieldOrPropertyWithValue("id", TEST_LID);
+            assertEquals(TEST_LID, location.getId());
         }
 
         @Test
@@ -133,7 +133,7 @@ public class LocationTest
         void createNew()
         {
             location = new Location(
-                TEST_ID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
+                TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
             );
         }
 
@@ -141,7 +141,7 @@ public class LocationTest
         @DisplayName("initialized values in instance of class")
         void defaults()
         {
-            assertThat(location).hasFieldOrPropertyWithValue("id", TEST_ID);
+            assertThat(location).hasFieldOrPropertyWithValue("id", TEST_LID);
             assertThat(location).hasFieldOrPropertyWithValue("streetAddress", TEST_STREET_ADDRESS);
             assertThat(location).hasFieldOrPropertyWithValue("postalCode", TEST_POSTAL_CODE);
             assertThat(location).hasFieldOrPropertyWithValue("city", TEST_CITY);
@@ -155,7 +155,7 @@ public class LocationTest
         {
             assertNotEquals(new Location(), location);
             Location expected = new Location(
-                TEST_ID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
+                TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
             );
             assertEquals(expected.hashCode(), location.hashCode());
             assertEquals(expected, location);

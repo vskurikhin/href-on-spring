@@ -10,6 +10,7 @@ import su.svn.href.dao.LocationDao;
 import su.svn.href.dao.LocationFullDao;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.LocationDto;
+import su.svn.href.models.helpers.PageSettings;
 
 @RestController()
 @RequestMapping(value = "/locations")
@@ -19,11 +20,16 @@ public class LocationsRestController
 
     private LocationFullDao locationFullDao;
 
+    private PageSettings paging;
+
     @Autowired
-    public LocationsRestController(LocationDao locationDao, LocationFullDao locationFullDao)
+    public LocationsRestController(LocationDao locationDao,
+                                   LocationFullDao locationFullDao,
+                                   PageSettings paging)
     {
         this.locationDao = locationDao;
         this.locationFullDao = locationFullDao;
+        this.paging = paging;
     }
 
     @GetMapping(path = "/range", params = { "page", "size", "sort"})
@@ -31,8 +37,9 @@ public class LocationsRestController
                                         @RequestParam("size") int size,
                                         @RequestParam("sort") String sort)
     {
-        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
-        int offset = (page < 1 ? 0 : page - 1) * size;
+        int limit = paging.getLimit(size);
+        int offset = paging.getOffset(page, size);
+
         switch (sort.toUpperCase()) {
             case "ID":
                 return locationDao.findAllOrderById(offset, limit);
@@ -52,8 +59,9 @@ public class LocationsRestController
                                                @RequestParam("size") int size,
                                                @RequestParam("sort") String sort)
     {
-        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
-        int offset = (page < 1 ? 0 : page - 1) * size;
+        int limit = paging.getLimit(size);
+        int offset = paging.getOffset(page, size);
+
         switch (sort.toUpperCase()) {
             case "STREET":
                 return locationFullDao.findAll(offset, limit, "street_address");

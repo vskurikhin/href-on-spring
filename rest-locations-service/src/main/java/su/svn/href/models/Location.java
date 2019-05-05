@@ -17,7 +17,7 @@ public class Location
 
     @Id
     @Column("location_id")
-    private long id;
+    private Long id;
 
     @Column("street_address")
     private String streetAddress;

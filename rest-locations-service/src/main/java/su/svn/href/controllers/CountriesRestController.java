@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import su.svn.href.dao.CountryDao;
 import su.svn.href.models.Country;
+import su.svn.href.models.helpers.PageSettings;
 
 @RestController()
 @RequestMapping(value = "/countries")
@@ -15,10 +16,13 @@ public class CountriesRestController
 {
     private final CountryDao countryDao;
 
+    private final PageSettings paging;
+
     @Autowired
-    public CountriesRestController(CountryDao countryDao)
+    public CountriesRestController(CountryDao countryDao, PageSettings paging)
     {
         this.countryDao = countryDao;
+        this.paging = paging;
     }
 
     @GetMapping(path = "/range", params = { "page", "size", "sort"})
@@ -26,12 +30,13 @@ public class CountriesRestController
                                        @RequestParam("size") int size,
                                        @RequestParam("sort") String sort)
     {
-        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
-        int offset = (page < 1 ? 0 : page - 1) * size;
+        int limit = paging.getLimit(size);
+        int offset = paging.getOffset(page, size);
+
         switch (sort.toUpperCase()) {
-            case "ID": return countryDao.findAllOrderById(offset, limit);
+            case "ID":   return countryDao.findAllOrderById(offset, limit);
             case "NAME": return countryDao.findAllOrderByCountryName(offset, limit);
-            default: return countryDao.findAll(offset, limit);
+            default:     return countryDao.findAll(offset, limit);
         }
     }
 }

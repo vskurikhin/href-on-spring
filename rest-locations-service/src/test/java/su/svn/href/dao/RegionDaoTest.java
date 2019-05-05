@@ -24,15 +24,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static su.svn.href.models.RegionTest.createTestTableForRegions;
-import static su.svn.utils.TestData.TEST_ID;
-import static su.svn.utils.TestData.TEST_REGION_NAME;
+import static su.svn.utils.TestData.*;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 class RegionDaoTest
 {
-    static Region testRegion = new Region(TEST_ID, TEST_REGION_NAME);
+    static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
 
     static DatabaseClient client;
 
@@ -75,7 +74,7 @@ class RegionDaoTest
     @Test
     void findById()
     {
-        assertEquals(testRegion, regionDao.findById(TEST_ID).block());
+        assertEquals(testRegion, regionDao.findById(TEST_LID).block());
     }
 
     @Test

@@ -2,11 +2,15 @@ package su.svn.utils;
 
 import su.svn.href.models.Region;
 
+import java.math.BigInteger;
+
 public class TestData
 {
     public static String TEST = "test";
 
     public static long TEST_ID = 13L;
+
+    public static BigInteger TEST_BID = BigInteger.valueOf(13L);
 
     public static Long TEST_LID = 13L;
 

@@ -7,12 +7,12 @@
     <packaging>jar</packaging>
 
     <artifactId>rest-locations-service</artifactId>
-    <version>1.4.9-Start</version>
+    <version>1.4.1-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.4.9-Start</version>
+        <version>1.4.8-Start</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -40,6 +40,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- reactive -->

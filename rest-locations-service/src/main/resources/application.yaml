@@ -5,6 +5,10 @@ application:
     username: "dbuser"
     password: "password"
 
+  paging:
+    min: 10
+    max: 1000
+
 logging:
   level:
     org.springframework:
