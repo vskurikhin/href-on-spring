@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.dao.RegionDao;
-import su.svn.href.exceptions.BadValueForRegiosIdException;
+import su.svn.href.exceptions.BadValueForRegionIdException;
 import su.svn.href.exceptions.RegionDontSavedException;
 import su.svn.href.exceptions.RegionNotFoundException;
 import su.svn.href.models.Region;
@@ -40,14 +40,15 @@ public class RegionsRestController
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public Mono<AnswerCreated> createRegion(@RequestBody Region region,
-                                            HttpServletRequest request, HttpServletResponse response)
+                                            HttpServletRequest request,
+                                            HttpServletResponse response)
     {
-        if ( ! Objects.isNull(region.getId())) throw new BadValueForRegiosIdException();
+        if ( ! Objects.isNull(region.getId())) throw new BadValueForRegionIdException();
 
         return regionDao
             .save(region)
             .map(r -> new AnswerCreated(response, request.getRequestURI(), r.getId()))
-            .switchIfEmpty(Mono.error(new RegionNotFoundException()));
+            .switchIfEmpty(Mono.error(new RegionDontSavedException()));
     }
 
     @GetMapping(REST_ALL)
@@ -59,7 +60,7 @@ public class RegionsRestController
     @GetMapping("/{id}")
     public Mono<Region> readRegionById(@PathVariable Long id)
     {
-        if (Objects.isNull(id) || id < 1) throw new BadValueForRegiosIdException();
+        if (Objects.isNull(id) || id < 1) throw new BadValueForRegionIdException();
 
         return regionDao
             .findById(id)
@@ -70,7 +71,7 @@ public class RegionsRestController
     public Mono<AnswerOk> updateRegion(@RequestBody Region region)
     {
         if (Objects.isNull(region) || Objects.isNull(region.getId()) || region.getId() < 1) {
-            throw new BadValueForRegiosIdException();
+            throw new BadValueForRegionIdException();
         }
 
         return regionDao
@@ -81,9 +82,9 @@ public class RegionsRestController
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public Mono<AnswerNoContent> deleteAuthorFromBook(@PathVariable Long id)
+    public Mono<AnswerNoContent> deleteRegion(@PathVariable Long id)
     {
-        if (Objects.isNull(id) || id < 1) throw new BadValueForRegiosIdException();
+        if (Objects.isNull(id) || id < 1) throw new BadValueForRegionIdException();
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
 
         return regionDao
@@ -95,35 +96,32 @@ public class RegionsRestController
             .switchIfEmpty(Mono.error(new RegionNotFoundException()));
     }
 
-    @ExceptionHandler(BadValueForRegiosIdException.class)
+    @ExceptionHandler(BadValueForRegionIdException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody
-    AnswerBadRequest handleException(BadValueForRegiosIdException e)
+    public @ResponseBody AnswerBadRequest handleException(BadValueForRegionIdException e)
     {
         return new AnswerBadRequest("Bad value for Region Id");
     }
 
     @ExceptionHandler(RegionNotFoundException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody
-    AnswerBadRequest handleException(RegionNotFoundException e)
+    public @ResponseBody AnswerBadRequest handleException(RegionNotFoundException e)
     {
         return new AnswerBadRequest("Region not found for Id");
     }
 
     @ExceptionHandler(PostgresqlServerErrorException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody
-    AnswerBadRequest handleException(PostgresqlServerErrorException e)
+    public @ResponseBody AnswerBadRequest handleException(PostgresqlServerErrorException e)
     {
         return new AnswerBadRequest("Bad value for Region");
     }
 
     @ExceptionHandler(RegionDontSavedException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody
-    AnswerBadRequest handleException(RegionDontSavedException e)
+    public @ResponseBody AnswerBadRequest handleException(RegionDontSavedException e)
     {
+        System.out.println("e = " + e);
         return new AnswerBadRequest("Region don't saved");
     }
 }

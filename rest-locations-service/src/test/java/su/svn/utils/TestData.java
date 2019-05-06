@@ -1,5 +1,6 @@
 package su.svn.utils;
 
+import su.svn.href.models.Country;
 import su.svn.href.models.Region;
 
 import java.math.BigInteger;
@@ -33,7 +34,7 @@ public class TestData
     public static Region createRegion0()
     {
         Region result = new Region();
-        result.setId(0L);
+        result.setId(null);
         result.setRegionName("test_region_name_0");
 
         return result;
@@ -53,6 +54,35 @@ public class TestData
         Region result = new Region();
         result.setId(2L);
         result.setRegionName("test_region_name_2");
+
+        return result;
+    }
+
+    public static Country createCountry0()
+    {
+        Country result = new Country();
+        result.setCountryName("test_country_name_0");
+        result.setRegionId(null);
+
+        return result;
+    }
+
+    public static Country createCountry1()
+    {
+        Country result = new Country();
+        result.setId("1");
+        result.setCountryName("test_country_name_1");
+        result.setRegionId(1L);
+
+        return result;
+    }
+
+    public static Country createCountry2()
+    {
+        Country result = new Country();
+        result.setId("2");
+        result.setCountryName("test_country_name_2");
+        result.setRegionId(2L);
 
         return result;
     }
