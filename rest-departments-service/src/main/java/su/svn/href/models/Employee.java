@@ -20,7 +20,7 @@ public class Employee
 
     @Id
     @Column("employee_id")
-    private long id;
+    private Long id;
 
     @Column("first_name")
     private String firstName;

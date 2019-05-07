@@ -7,10 +7,10 @@ import su.svn.href.configs.YamlApplProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(YamlApplProperties.class)
-public class EmployeesRestApplication
+public class DepartmentsRestApplication
 {
     public static void main(String[] args)
     {
-        SpringApplication.run(EmployeesRestApplication.class, args);
+        SpringApplication.run(DepartmentsRestApplication.class, args);
     }
 }
