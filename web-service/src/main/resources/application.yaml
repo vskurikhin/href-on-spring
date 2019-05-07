@@ -2,10 +2,10 @@ application:
   service:
     departments:
       host: localhost
-      port: 8003
+      port: 8002
     employees:
       host: localhost
-      port: 8002
+      port: 8003
     locations:
       host: localhost
       port: 8001
@@ -15,4 +15,3 @@ logging.level.org.springframework.web: INFO
 spring.thymeleaf:
   cache: false
   reactive.max-chunk-size: 8192
-

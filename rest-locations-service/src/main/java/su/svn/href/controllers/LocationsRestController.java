@@ -1,38 +1,71 @@
 package su.svn.href.controllers;
 
+import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import su.svn.href.dao.LocationDao;
 import su.svn.href.dao.LocationFullDao;
+import su.svn.href.exceptions.BadValueForLocationIdException;
+import su.svn.href.exceptions.LocationDontSavedException;
+import su.svn.href.exceptions.LocationNotFoundException;
 import su.svn.href.models.Location;
-import su.svn.href.models.dto.LocationDto;
+import su.svn.href.models.dto.*;
+import su.svn.href.models.helpers.PageSettings;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.Objects;
+
+import static su.svn.href.controllers.Constants.*;
 
 @RestController()
-@RequestMapping(value = "/locations")
+@RequestMapping(value = REST_API + REST_V1_LOCATIONS)
 public class LocationsRestController
 {
     private LocationDao locationDao;
 
     private LocationFullDao locationFullDao;
 
+    private PageSettings paging;
+
     @Autowired
-    public LocationsRestController(LocationDao locationDao, LocationFullDao locationFullDao)
+    public LocationsRestController(LocationDao locationDao,
+                                   LocationFullDao locationFullDao,
+                                   PageSettings paging)
     {
         this.locationDao = locationDao;
         this.locationFullDao = locationFullDao;
+        this.paging = paging;
     }
 
-    @GetMapping(path = "/range", params = { "page", "size", "sort"})
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Mono<? extends Answer> createLocation(@RequestBody Location location,
+                                                 HttpServletRequest request,
+                                                 HttpServletResponse response)
+    {
+        if (Objects.isNull(location.getId()) || location.getId() < 1) {
+            throw new BadValueForLocationIdException();
+        }
+
+        return locationDao
+            .save(location)
+            .map(r -> new AnswerCreated(response, request.getRequestURI(), r.getId()))
+            .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+    }
+
+    @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
     public Flux<Location> readLocations(@RequestParam("page") int page,
                                         @RequestParam("size") int size,
                                         @RequestParam("sort") String sort)
     {
-        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
-        int offset = (page < 1 ? 0 : page - 1) * size;
+        int limit = paging.getLimit(size);
+        int offset = paging.getOffset(page, size);
+
         switch (sort.toUpperCase()) {
             case "ID":
                 return locationDao.findAllOrderById(offset, limit);
@@ -47,13 +80,14 @@ public class LocationsRestController
         }
     }
 
-    @GetMapping(path = "/range-full", params = { "page", "size", "sort"})
+    @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
     public Flux<LocationDto> readFullLocations(@RequestParam("page") int page,
                                                @RequestParam("size") int size,
                                                @RequestParam("sort") String sort)
     {
-        int limit = size < 10 ? 10 : (size > 100 ? 100 : size);
-        int offset = (page < 1 ? 0 : page - 1) * size;
+        int limit = paging.getLimit(size);
+        int offset = paging.getOffset(page, size);
+
         switch (sort.toUpperCase()) {
             case "STREET":
                 return locationFullDao.findAll(offset, limit, "street_address");
@@ -64,5 +98,64 @@ public class LocationsRestController
             default:
                 return locationFullDao.findAll(offset, limit);
         }
+    }
+
+    @PutMapping
+    public Mono<AnswerOk> updateLocation(@RequestBody Location location)
+    {
+        if (Objects.isNull(location) || Objects.isNull(location.getId()) || location.getId() < 1) {
+            throw new BadValueForLocationIdException();
+        }
+
+        return locationDao
+            .save(location)
+            .map(r -> new AnswerOk())
+            .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public Mono<? extends Answer> deleteLocation(@PathVariable Long id)
+    {
+        if (Objects.isNull(id) || id < 1) throw new BadValueForLocationIdException();
+        AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
+
+        return locationDao
+            .findById(id)
+            .flatMap(location -> locationDao
+                .delete(location)
+                .map(v -> answerNoContent)
+                .switchIfEmpty(Mono.error(new LocationNotFoundException())))
+            .switchIfEmpty(Mono.error(new LocationNotFoundException()));
+    }
+
+    @ExceptionHandler(BadValueForLocationIdException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody AnswerBadRequest handleException(BadValueForLocationIdException e)
+    {
+        return new AnswerBadRequest("Bad value for Location Id");
+    }
+
+    @ExceptionHandler(LocationNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody AnswerBadRequest handleException(LocationNotFoundException e)
+    {
+        return new AnswerBadRequest("Location not found for Id");
+    }
+
+    @ExceptionHandler(PostgresqlServerErrorException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    AnswerBadRequest handleException(PostgresqlServerErrorException e)
+    {
+        return new AnswerBadRequest("Bad value for Location");
+    }
+
+    @ExceptionHandler(LocationDontSavedException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    AnswerBadRequest handleException(LocationDontSavedException e)
+    {
+        return new AnswerBadRequest("Location don't saved");
     }
 }

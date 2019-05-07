@@ -3,9 +3,7 @@ package su.svn.href.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.function.DatabaseClient;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import su.svn.href.models.Employee;
 import su.svn.href.models.dto.DepartmentDto;
 
 import java.util.Comparator;
@@ -54,35 +52,15 @@ public class DepartmentFullDaoImpl implements DepartmentFullDao
         return findAll(offset, limit, "department_id");
     }
 
-
     private Mono<DepartmentDto> departmentDtoMono(DepartmentDto departmentDto)
     {
-        Mono<List<Employee>> employees = employeeDao
+        return employeeDao
             .findByDepartmentId(departmentDto.getId())
-            .collectList();
-
-        return employees.map(e -> {
-            departmentDto.setEmployees(e);
-            return departmentDto;
-        });
-    }
-
-    public Mono<List<DepartmentDto>> findAllTry(int offset, int limit)
-    {
-        String direction = " ASC";
-        String orderBy = " ORDER BY d.department_id";
-
-        Comparator<DepartmentDto> comparator = (o1, o2) -> Long.compare(o1.getId(), o2.getId());
-
-        return databaseClient.execute()
-            .sql(SELECT + orderBy + direction + " OFFSET $1 LIMIT $2")
-            .bind("$1", offset)
-            .bind("$2", limit)
-            .fetch()
-            .all()
-            .map(DepartmentDto::collectFromMap)
-            .flatMap(this::departmentDtoMono)
-            .collectSortedList(comparator);
+            .collectList()
+            .map(e -> {
+                departmentDto.setEmployees(e);
+                return departmentDto;
+            });
     }
 
     @Override
