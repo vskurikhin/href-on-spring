@@ -11,7 +11,7 @@
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.4.5-Start</version>
+        <version>1.4.4-Start</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

@@ -1,9 +1,15 @@
 application:
+  locale: "en_US"
+
   r2dbc:
     host: "localhost"
     database: "db"
     username: "dbuser"
     password: "password"
+
+  paging:
+    min: 1
+    max: 2
 
 logging:
   level:

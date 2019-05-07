@@ -5,6 +5,7 @@ import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
+@DisplayName("Class LocationFullDao")
 class LocationFullDaoImplTest
 {
     static DatabaseClient client;
@@ -81,11 +83,6 @@ class LocationFullDaoImplTest
         databaseClientExecuteSql(client, "DROP TABLE IF EXISTS regions CASCADE");
     }
 
-    @BeforeEach
-    void setUp()
-    {
-    }
-
     @Test
     void findById()
     {
@@ -97,6 +94,22 @@ class LocationFullDaoImplTest
     {
         List<LocationDto> expected = Collections.singletonList(testLocationDto);
         List<LocationDto> list = locationFullDao.findAll(0, 1).collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByStreetAddress()
+    {
+        List<LocationDto> expected = Collections.singletonList(testLocationDto);
+        List<LocationDto> list = locationFullDao.findAll(0, 1, "street_address").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByCity()
+    {
+        List<LocationDto> expected = Collections.singletonList(testLocationDto);
+        List<LocationDto> list = locationFullDao.findAll(0, 1, "city").collectList().block();
         assertEquals(expected, list);
     }
 }

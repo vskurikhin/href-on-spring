@@ -4,6 +4,7 @@ import io.r2dbc.h2.H2ConnectionConfiguration;
 import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
+@DisplayName("Class RegionDao")
 class RegionDaoTest
 {
     static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
