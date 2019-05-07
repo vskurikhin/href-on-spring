@@ -17,7 +17,7 @@ public class Department
 
     @Id
     @Column("department_id")
-    private long id;
+    private Long id;
 
     @Column("department_name")
     private String departmentName = "";

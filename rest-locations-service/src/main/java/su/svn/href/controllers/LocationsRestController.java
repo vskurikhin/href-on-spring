@@ -101,7 +101,7 @@ public class LocationsRestController
     }
 
     @PutMapping
-    public Mono<AnswerOk> updateLocation(@RequestBody Location location)
+    public Mono<? extends Answer> updateLocation(@RequestBody Location location)
     {
         if (Objects.isNull(location) || Objects.isNull(location.getId()) || location.getId() < 1) {
             throw new BadValueForLocationIdException();
