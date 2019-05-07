@@ -20,7 +20,7 @@ public interface CountryDao extends ReactiveCrudRepository<Country, String>
     @Query(SELECT + " ORDER BY c.country_name" + OFFSET_LIMIT)
     Flux<Country> findAllOrderByCountryName(int offset, int limit);
 
-    @Query(SELECT + " c.country_name = $1")
+    @Query(SELECT + " WHERE c.country_name = $1")
     Flux<Country> findByCountryName(String countryName);
 }
 

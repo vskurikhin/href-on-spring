@@ -1,4 +1,6 @@
 application:
+  locale: "en_US"
+
   r2dbc:
     host: "localhost"
     database: "db"

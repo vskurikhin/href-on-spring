@@ -118,7 +118,6 @@ public class RegionsRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(RegionDontSavedException e)
     {
-        System.out.println("e = " + e);
         return new AnswerBadRequest("Region don't saved");
     }
 }
