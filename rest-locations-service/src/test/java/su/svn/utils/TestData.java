@@ -70,7 +70,7 @@ public class TestData
     public static Country createCountry1()
     {
         Country result = new Country();
-        result.setId("1");
+        result.setId("11");
         result.setCountryName("test_country_name_1");
         result.setRegionId(1L);
 
@@ -80,7 +80,7 @@ public class TestData
     public static Country createCountry2()
     {
         Country result = new Country();
-        result.setId("2");
+        result.setId("22");
         result.setCountryName("test_country_name_2");
         result.setRegionId(2L);
 
