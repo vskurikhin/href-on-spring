@@ -39,9 +39,9 @@ public class CountriesRestController
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<AnswerCreated> createCountry(@RequestBody Country country,
-                                            HttpServletRequest request,
-                                            HttpServletResponse response)
+    public Mono<? extends Answer> createCountry(@RequestBody Country country,
+                                                HttpServletRequest request,
+                                                HttpServletResponse response)
     {
         if (Objects.isNull(country.getId()) || country.getId().length() != 2) {
             throw new BadValueForCountryIdException();
@@ -79,7 +79,7 @@ public class CountriesRestController
     }
 
     @PutMapping
-    public Mono<AnswerOk> updateCountry(@RequestBody Country country)
+    public Mono<? extends Answer> updateCountry(@RequestBody Country country)
     {
         if (Objects.isNull(country) || Objects.isNull(country.getId()) || country.getId().length() != 2) {
             throw new BadValueForCountryIdException();
@@ -100,13 +100,10 @@ public class CountriesRestController
 
         return countryDao
             .findById(id)
-            .flatMap(country -> {
-                System.err.println("country = " + country);
-                return countryDao
-                    .delete(country)
-                    .map(v -> answerNoContent)
-                    .switchIfEmpty(Mono.error(new CountryNotFoundException()));
-            })
+            .flatMap(country -> countryDao
+                .delete(country)
+                .map(v -> answerNoContent)
+                .switchIfEmpty(Mono.error(new CountryNotFoundException())))
             .switchIfEmpty(Mono.error(new CountryNotFoundException()));
     }
 
@@ -137,7 +134,6 @@ public class CountriesRestController
     public @ResponseBody
     AnswerBadRequest handleException(CountryDontSavedException e)
     {
-        System.out.println("e = " + e);
         return new AnswerBadRequest("Country don't saved");
     }
 }

@@ -1,7 +1,10 @@
 package su.svn.utils;
 
 import su.svn.href.models.Country;
+import su.svn.href.models.Location;
 import su.svn.href.models.Region;
+import su.svn.href.models.dto.CountryDto;
+import su.svn.href.models.dto.LocationDto;
 
 import java.math.BigInteger;
 
@@ -83,6 +86,108 @@ public class TestData
         result.setId("22");
         result.setCountryName("test_country_name_2");
         result.setRegionId(2L);
+
+        return result;
+    }
+
+    public static CountryDto createCountryDto0()
+    {
+        CountryDto result = new CountryDto();
+        result.setCountryName("test_countryDto_name_0");
+
+        return result;
+    }
+
+    public static CountryDto createCountryDto1()
+    {
+        CountryDto result = new CountryDto();
+        result.setId("11");
+        result.setCountryName("test_countryDto_name_1");
+        result.setRegion(createRegion1());
+
+        return result;
+    }
+
+    public static CountryDto createCountryDto2()
+    {
+        CountryDto result = new CountryDto();
+        result.setId("22");
+        result.setCountryName("test_countryDto_name_2");
+        result.setRegion(createRegion2());
+
+        return result;
+    }
+
+    public static Location createLocation0()
+    {
+        Location result = new Location();
+        result.setStreetAddress("street_address_0");
+        result.setPostalCode("postal_code_0");
+        result.setCity("city_0");
+        result.setStateProvince("state_province_0");
+
+        return result;
+    }
+
+    public static Location createLocation1()
+    {
+        Location result = new Location();
+        result.setId(1L);
+        result.setStreetAddress("street_address_1");
+        result.setPostalCode("postal_code_1");
+        result.setCity("city_1");
+        result.setStateProvince("state_province_1");
+        result.setCountryId("11");
+
+        return result;
+    }
+
+    public static Location createLocation2()
+    {
+        Location result = new Location();
+        result.setId(2L);
+        result.setStreetAddress("street_address_2");
+        result.setPostalCode("postal_code_2");
+        result.setCity("city_2");
+        result.setStateProvince("state_province_2");
+        result.setCountryId("22");
+
+        return result;
+    }
+
+    public static LocationDto createLocationDto0()
+    {
+        LocationDto result = new LocationDto();
+        result.setStreetAddress("street_address_0");
+        result.setPostalCode("postal_code_0");
+        result.setCity("city_0");
+        result.setStateProvince("state_province_0");
+
+        return result;
+    }
+
+    public static LocationDto createLocationDto1()
+    {
+        LocationDto result = new LocationDto();
+        result.setId(1L);
+        result.setStreetAddress("street_address_1");
+        result.setPostalCode("postal_code_1");
+        result.setCity("city_1");
+        result.setStateProvince("state_province_1");
+        result.setCountry(createCountryDto1());
+
+        return result;
+    }
+
+    public static LocationDto createLocationDto2()
+    {
+        LocationDto result = new LocationDto();
+        result.setId(2L);
+        result.setStreetAddress("street_address_2");
+        result.setPostalCode("postal_code_2");
+        result.setCity("city_2");
+        result.setStateProvince("state_province_2");
+        result.setCountry(createCountryDto2());
 
         return result;
     }

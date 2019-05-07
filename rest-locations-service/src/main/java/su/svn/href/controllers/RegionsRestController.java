@@ -11,10 +11,7 @@ import su.svn.href.exceptions.BadValueForRegionIdException;
 import su.svn.href.exceptions.RegionDontSavedException;
 import su.svn.href.exceptions.RegionNotFoundException;
 import su.svn.href.models.Region;
-import su.svn.href.models.dto.AnswerBadRequest;
-import su.svn.href.models.dto.AnswerCreated;
-import su.svn.href.models.dto.AnswerNoContent;
-import su.svn.href.models.dto.AnswerOk;
+import su.svn.href.models.dto.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,9 +36,9 @@ public class RegionsRestController
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<AnswerCreated> createRegion(@RequestBody Region region,
-                                            HttpServletRequest request,
-                                            HttpServletResponse response)
+    public Mono<? extends Answer> createRegion(@RequestBody Region region,
+                                               HttpServletRequest request,
+                                               HttpServletResponse response)
     {
         if ( ! Objects.isNull(region.getId())) throw new BadValueForRegionIdException();
 
@@ -68,7 +65,7 @@ public class RegionsRestController
     }
 
     @PutMapping
-    public Mono<AnswerOk> updateRegion(@RequestBody Region region)
+    public Mono<? extends Answer> updateRegion(@RequestBody Region region)
     {
         if (Objects.isNull(region) || Objects.isNull(region.getId()) || region.getId() < 1) {
             throw new BadValueForRegionIdException();
@@ -82,7 +79,7 @@ public class RegionsRestController
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public Mono<AnswerNoContent> deleteRegion(@PathVariable Long id)
+    public Mono<? extends Answer> deleteRegion(@PathVariable Long id)
     {
         if (Objects.isNull(id) || id < 1) throw new BadValueForRegionIdException();
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");

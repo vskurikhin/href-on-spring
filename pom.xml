@@ -7,7 +7,7 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>href</artifactId>
-    <version>1.4.6-Start</version>
+    <version>1.4.5-Start</version>
 
     <modules>
         <module>rest-departments-service</module>
