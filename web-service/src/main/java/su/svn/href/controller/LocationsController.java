@@ -23,7 +23,7 @@ public class LocationsController
     public String regions(final Model model)
     {
         IReactiveDataDriverContextVariable reactiveDataDrivenMode = new ReactiveDataDriverContextVariable(
-            locationRepository.findAll(), 1
+            locationRepository.findAll(1, 10), 1
         );
         model.addAttribute("locations", reactiveDataDrivenMode);
 
