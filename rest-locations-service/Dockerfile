@@ -1,7 +1,7 @@
 FROM docker.io/vskurikhin/href:latest
 
 FROM openjdk:8-jdk
-`
+
 MAINTAINER Victor N. Skurikhin
 ENV TARGET_JAR=rest-locations-service.jar
 ENV PROJECT_DIR=/opt/project
