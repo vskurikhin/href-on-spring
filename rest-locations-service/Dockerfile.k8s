@@ -1,5 +1,3 @@
-FROM docker.io/vskurikhin/href:latest
-
 FROM openjdk:8-jdk
 
 MAINTAINER Victor N. Skurikhin
@@ -9,6 +7,8 @@ ENV TARGET_DIR=$PROJECT_DIR/rest-locations-service/target
 
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
+
+ADD ./rest-locations-service/   $PROJECT_DIR/rest-locations-service
 
 COPY --from=0 $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
 
