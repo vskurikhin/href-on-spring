@@ -14,16 +14,16 @@ public interface LocationDao extends ReactiveCrudRepository<Location, Long>
     @Query(SELECT + OFFSET_LIMIT)
     Flux<Location> findAll(int offset, int limit);
 
-    @Query(SELECT + " ORDER BY location_id" + OFFSET_LIMIT)
+    @Query(SELECT + " ORDER BY l.location_id" + OFFSET_LIMIT)
     Flux<Location> findAllOrderById(int offset, int limit);
 
-    @Query(SELECT + " ORDER BY street_address" + OFFSET_LIMIT)
+    @Query(SELECT + " ORDER BY l.street_address" + OFFSET_LIMIT)
     Flux<Location> findAllOrderByStreetAddress(int offset, int limit);
 
-    @Query(SELECT + " ORDER BY city" + OFFSET_LIMIT)
+    @Query(SELECT + " ORDER BY l.city" + OFFSET_LIMIT)
     Flux<Location> findAllOrderByCity(int offset, int limit);
 
-    @Query(SELECT + " ORDER BY state_province" + OFFSET_LIMIT)
+    @Query(SELECT + " ORDER BY l.state_province" + OFFSET_LIMIT)
     Flux<Location> findAllOrderByStateProvince(int offset, int limit);
 
 

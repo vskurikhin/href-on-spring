@@ -1,0 +1,21 @@
+application:
+  locale: "en_US"
+
+  r2dbc:
+    host: ${DB_HOST:localhost}
+    database: "db"
+    username: "dbuser"
+    password: "password"
+
+  paging:
+    min: 10
+    max: 1000
+
+logging:
+  level:
+    org.springframework:
+      web: INFO
+      data.r2dbc: DEBUG
+
+server:
+  port: 8002

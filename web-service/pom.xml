@@ -3,14 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
 
-    <groupId>su.svn.href</groupId>
     <artifactId>web-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.4.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>su.svn.href</groupId>
+        <artifactId>href</artifactId>
+        <version>1.6.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.webjars.bootstrap.version>4.3.1</org.webjars.bootstrap.version>
+        <org.webjars.jquery-ui.version>1.12.1</org.webjars.jquery-ui.version>
+        <org.webjars.jquery.version>3.3.1-2</org.webjars.jquery.version>
 
         <!-- TEST scope -->
         <org.junit.jupiter.version>5.3.2</org.junit.jupiter.version>
@@ -18,12 +26,6 @@
         <org.mockito.version>2.23.4</org.mockito.version>
         <reactor.test.version>3.2.8.RELEASE</reactor.test.version>
     </properties>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.3.RELEASE</version>
-    </parent>
 
     <dependencies>
         <dependency>
@@ -49,6 +51,24 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${org.webjars.bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${org.webjars.jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-ui</artifactId>
+            <version>${org.webjars.jquery-ui.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -83,23 +103,11 @@
             <version>${reactor.test.version}</version>
             <scope>test</scope>
         </dependency>
-
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

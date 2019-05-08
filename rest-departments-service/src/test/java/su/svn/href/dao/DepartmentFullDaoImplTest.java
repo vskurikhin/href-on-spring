@@ -24,9 +24,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.href.models.DepartmentTest.createTestTableForDepartments;
 import static su.svn.href.models.EmployeeTest.testEmployee;
-import static su.svn.href.models.EmployeeTest.testEmployeesDb;
+import static su.svn.href.models.EmployeeTest.createTestTableForEmployees;
 import static su.svn.href.models.LocationTest.testLocation;
-import static su.svn.href.models.LocationTest.testLocationsDb;
+import static su.svn.href.models.LocationTest.createTestTableForLocations;
 import static su.svn.href.models.ManagerTest.testManager;
 import static su.svn.href.models.dto.DepartmentDtoTest.testDepartmentDto;
 import static su.svn.utils.TestData.TEST_DEPARTMENT_NAME;
@@ -54,8 +54,8 @@ class DepartmentFullDaoImplTest
             );
             client = DatabaseClient.create(connectionFactory);
             createTestTableForDepartments(client);
-            testEmployeesDb(client);
-            testLocationsDb(client);
+            createTestTableForEmployees(client);
+            createTestTableForLocations(client);
 
             return client;
         }

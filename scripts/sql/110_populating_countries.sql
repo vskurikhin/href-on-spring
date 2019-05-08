@@ -28,4 +28,3 @@ INSERT INTO countries VALUES
   ('BE', 'Belgium', 1),
   ('RU', 'Russia', 1)
 ;
-        

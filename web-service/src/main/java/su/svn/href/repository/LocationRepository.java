@@ -5,5 +5,5 @@ import su.svn.href.models.dto.LocationDto;
 
 public interface LocationRepository
 {
-    Flux<LocationDto> findAll();
+    Flux<LocationDto> findAll(int page, int size);
 }

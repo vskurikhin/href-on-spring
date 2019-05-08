@@ -4,6 +4,7 @@ import io.r2dbc.h2.H2ConnectionConfiguration;
 import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static su.svn.href.models.RegionTest.createTestTableForRegions;
-import static su.svn.utils.TestData.TEST_ID;
-import static su.svn.utils.TestData.TEST_REGION_NAME;
+import static su.svn.utils.TestData.*;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
+@DisplayName("Class RegionDao")
 class RegionDaoTest
 {
-    static Region testRegion = new Region(TEST_ID, TEST_REGION_NAME);
+    static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
 
     static DatabaseClient client;
 
@@ -75,7 +76,7 @@ class RegionDaoTest
     @Test
     void findById()
     {
-        assertEquals(testRegion, regionDao.findById(TEST_ID).block());
+        assertEquals(testRegion, regionDao.findById(TEST_LID).block());
     }
 
     @Test
