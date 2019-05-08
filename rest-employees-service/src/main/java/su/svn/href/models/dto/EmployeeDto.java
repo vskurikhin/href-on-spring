@@ -1,11 +1,10 @@
-package su.svn.href.models;
+package su.svn.href.models.dto;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -14,13 +13,13 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 @Table("employees")
-public class Employee
+public class EmployeeDto
 {
     static final long serialVersionUID = -50L;
 
     @Id
     @Column("employee_id")
-    private Long id;
+    private long id;
 
     @Column("first_name")
     private String firstName;

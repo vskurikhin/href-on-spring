@@ -20,16 +20,16 @@ public class ReactiveLocationRepository implements LocationRepository
     {
         this.webClient = wcBuilder
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            .baseUrl("http://localhost:8001/locations")
+            .baseUrl("http://localhost:8001/rest/api/v1/locations")
             .build();
     }
 
     @Override
-    public Flux<LocationDto> findAll()
+    public Flux<LocationDto> findAll(int page, int size)
     {
         return webClient
             .get()
-            .uri("/range-full?page=1&size=10&sort=id")
+            .uri("/range-full?page=" + page  + "&size=" + size + "&sort=id")
             .retrieve()
             .bodyToFlux(LocationDto.class)
             .delayElements(Duration.ofMillis(100));

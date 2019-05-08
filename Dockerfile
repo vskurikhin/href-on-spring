@@ -1,4 +1,4 @@
-FROM href-maven:latest
+FROM maven:3-alpine
 MAINTAINER Victor N. Skurikhin
 
 ENV PROJECT_DIR=/opt/project
@@ -20,6 +20,6 @@ RUN /bin/sed -i \
 RUN /bin/sed -i \
  's/^\( \+\)host: "localhost"$/\1host: "pgsql-1-node-1"/g' \
  rest-locations-service/src/main/resources/application.yaml
-RUN mvn -B install
+RUN mvn -B package
 
 CMD [ "sh" ]

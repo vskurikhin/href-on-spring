@@ -75,6 +75,7 @@ class CountryDaoTest
     @AfterAll
     static void clean()
     {
+        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS countries CASCADE");
         databaseClientExecuteSql(client, "DROP TABLE IF EXISTS regions CASCADE");
     }
 
