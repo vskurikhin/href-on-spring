@@ -6,9 +6,9 @@ RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
 ADD ./pom.xml $PROJECT_DIR
-ADD ./rest-locations-service/   $PROJECT_DIR/rest-locations-service
+ADD ./rest-departments-service/   $PROJECT_DIR/rest-locations-service
 
 WORKDIR $PROJECT_DIR/rest-locations-service
 RUN mvn -B clean package
 
-CMD [ "java", "-jar", "/opt/project/rest-locations-service/target/rest-locations-service.jar" ]
+CMD [ "java", "-jar", "/opt/project/rest-departments-service/target/rest-departments-service.jar" ]

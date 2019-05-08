@@ -10,6 +10,6 @@ WORKDIR $TARGET_DIR
 
 COPY --from=0 $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
 
-EXPOSE 8002
+EXPOSE 8001
 
 CMD [ "java", "-jar", "/opt/project/rest-locations-service.jar" ]
