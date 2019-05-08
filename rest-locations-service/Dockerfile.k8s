@@ -1,26 +1,19 @@
-FROM docker.io/vskurikhin/href:latest
-
-ENV TARGET_JAR=rest-locations-service.jar
-ENV PROJECT_DIR=/opt/project
-ENV TARGET_DIR=$PROJECT_DIR/rest-locations-service/target
-
-RUN mkdir -p $PROJECT_DIR
-
-FROM openjdk:8-jdk
-
+FROM maven:3.6.1-jdk-8
 MAINTAINER Victor N. Skurikhin
-ENV TARGET_JAR=rest-locations-service.jar
-ENV PROJECT_DIR=/opt/project
-ENV TARGET_DIR=$PROJECT_DIR/rest-locations-service/target
 
+ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
+ADD ./pom.xml $PROJECT_DIR
+ADD ./rest-departments-service/ $PROJECT_DIR/rest-departments-service
+ADD ./rest-employees-service/   $PROJECT_DIR/rest-employees-service
 ADD ./rest-locations-service/   $PROJECT_DIR/rest-locations-service
+ADD ./web-service/              $PROJECT_DIR/web-service
 
-COPY --from=docker.io/vskurikhin/href:latest $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
+WORKDIR $PROJECT_DIR/rest-locations-service
+RUN mvn -B clean package
 
-
-EXPOSE 8001
+COPY $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
 
 CMD [ "java", "-jar", "/opt/project/rest-locations-service.jar" ]
