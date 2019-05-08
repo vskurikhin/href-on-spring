@@ -22,8 +22,8 @@ spec:
     hostPath:
       path: /var/run/docker.sock
   - name: repository
-      persistentVolumeClaim:
-        claimName: jnlp-slave-pvc
+    persistentVolumeClaim:
+      claimName: jnlp-slave-pvc
 """
     }
   }
