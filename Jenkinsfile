@@ -28,15 +28,22 @@ spec:
     }
   }
   stages {
-    stage('Build Docker images') {
+    stage('Build Docker image 1') {
       steps {
         git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
             def hrefImage = docker.build('docker.io/vskurikhin/href')
           }
+        }
+      }
+    }
+
+    stage('Build Docker image 2') {
+      steps {
+        container('docker') {
           script {
-            def locationsImage = docker.build('docker.io/vskurikhin/href-locations', './rest-locations-service/')
+            def locationImage = docker.build('docker.io/vskurikhin/href-location', '-f ./rest-locations-service/Dockerfile .')
           }
         }
       }
