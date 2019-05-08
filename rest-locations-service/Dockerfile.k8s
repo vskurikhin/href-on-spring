@@ -18,7 +18,7 @@ WORKDIR $PROJECT_DIR
 
 ADD ./rest-locations-service/   $PROJECT_DIR/rest-locations-service
 
-COPY --from=0 $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
+COPY --from=docker.io/vskurikhin/href:latest $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
 
 
 EXPOSE 8001
