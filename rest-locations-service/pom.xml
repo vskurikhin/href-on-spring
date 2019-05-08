@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
 
     <artifactId>rest-locations-service</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>

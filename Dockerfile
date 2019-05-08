@@ -1,4 +1,4 @@
-FROM maven:3-alpine
+FROM maven:3.6.1-jdk-8
 MAINTAINER Victor N. Skurikhin
 
 ENV PROJECT_DIR=/opt/project
@@ -11,15 +11,6 @@ ADD ./rest-employees-service/   $PROJECT_DIR/rest-employees-service
 ADD ./rest-locations-service/   $PROJECT_DIR/rest-locations-service
 ADD ./web-service/              $PROJECT_DIR/web-service
 
-RUN /bin/sed -i \
- 's/^\( \+\)host: "localhost"$/\1host: "pgsql-1-node-1"/g' \
- rest-departments-service/src/main/resources/application.yaml
-RUN /bin/sed -i \
- 's/^\( \+\)host: "localhost"$/\1host: "pgsql-1-node-1"/g' \
- rest-employees-service/src/main/resources/application.yaml
-RUN /bin/sed -i \
- 's/^\( \+\)host: "localhost"$/\1host: "pgsql-1-node-1"/g' \
- rest-locations-service/src/main/resources/application.yaml
-RUN mvn -B package
+RUN mvn -B clean package
 
 CMD [ "sh" ]

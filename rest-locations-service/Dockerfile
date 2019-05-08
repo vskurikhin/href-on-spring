@@ -1,7 +1,8 @@
-FROM vstalker/href-on-spring:latest
-MAINTAINER Victor Skurikhin
+FROM docker.io/vskurikhin/href:latest
 
 FROM openjdk:8-jdk
+`
+MAINTAINER Victor N. Skurikhin
 ENV TARGET_JAR=rest-locations-service.jar
 ENV PROJECT_DIR=/opt/project
 ENV TARGET_DIR=$PROJECT_DIR/rest-locations-service/target

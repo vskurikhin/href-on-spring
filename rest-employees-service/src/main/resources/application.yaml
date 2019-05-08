@@ -1,6 +1,6 @@
 application:
   r2dbc:
-    host: "localhost"
+    host: ${DB_HOST:localhost}
     database: "db"
     username: "dbuser"
     password: "password"
