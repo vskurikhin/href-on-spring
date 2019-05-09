@@ -1,0 +1,27 @@
+kind: Deployment
+metadata:
+  name: href-departments
+spec:
+  selector:
+    matchLabels:
+      app: href-departments
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: href-departments
+        name: href-departments
+    spec:
+      hostname: href-departments
+      containers:
+      - image: docker.io/vskurikhin/href-departments:latest
+        name: href-departments
+        ports:
+        - containerPort: 8002
+          name: departments
+        command: ["java"]
+        args: [ "-jar", "/opt/project/rest-departments-service/target/rest-departments-service.jar" ]
+        env:
+        - name: "DB_HOST"
+          value: "_DB_HOST_POSTGRESQL_"

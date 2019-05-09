@@ -16,7 +16,7 @@ spec:
     - name: dockersock
       mountPath: /var/run/docker.sock
     - name: repository
-      mountPath: /root/.m2/repository
+      mountPath: /root/.m2
   volumes:
   - name: dockersock
     hostPath:
@@ -28,22 +28,22 @@ spec:
     }
   }
   stages {
-    stage('Build Docker image 1') {
+    stage('Build Docker image href-locations') {
       steps {
         git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def hrefImage = docker.build('docker.io/vskurikhin/href')
+            def locationImage = docker.build('docker.io/vskurikhin/href-locations', '-f ./rest-locations-service/Dockerfile.k8s .')
           }
         }
       }
     }
-
-    stage('Build Docker image 2') {
+    stage('Build Docker image href-departments') {
       steps {
+        git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def locationImage = docker.build('docker.io/vskurikhin/href-location', '-f ./rest-locations-service/Dockerfile .')
+            def locationImage = docker.build('docker.io/vskurikhin/href-departments', '-f ./rest-departments-service/Dockerfile.k8s .')
           }
         }
       }
