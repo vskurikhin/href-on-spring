@@ -1,0 +1,27 @@
+kind: Deployment
+metadata:
+  name: href-locations
+spec:
+  selector:
+    matchLabels:
+      app: href-locations
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: href-locations
+        name: href-locations
+    spec:
+      hostname: href-locations
+      containers:
+      - image: docker.io/vskurikhin/href-locations:latest
+        name: href-locations
+        ports:
+        - containerPort: 8001
+          name: locations
+        command: ["java"]
+        args: [ "-jar", "/opt/project/rest-locations-service/target/rest-locations-service.jar" ]
+        env:
+        - name: "DB_HOST"
+          value: "_DB_HOST_POSTGRESQL_"
