@@ -1,14 +1,15 @@
 FROM maven:3.6.1-jdk-8
 MAINTAINER Victor N. Skurikhin
 
+ENV TARGET=rest-departments-service
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
 ADD ./pom.xml $PROJECT_DIR
-ADD ./rest-departments-service/   $PROJECT_DIR/rest-departments-service
+ADD ./$TARGET/   $PROJECT_DIR/$TARGET
 
-WORKDIR $PROJECT_DIR/rest-departments-service
+WORKDIR $PROJECT_DIR/$TARGET
 RUN mvn -B clean package
 
 CMD [ "java", "-jar", "/opt/project/rest-departments-service/target/rest-departments-service.jar" ]

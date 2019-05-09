@@ -1,14 +1,15 @@
 FROM maven:3.6.1-jdk-8
-MAINTAINER Victor N. Skurikhin
 
+MAINTAINER Victor N. Skurikhin
+ENV TARGET=rest-locations-service
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
 ADD ./pom.xml $PROJECT_DIR
-ADD ./rest-locations-service/   $PROJECT_DIR/rest-locations-service
+ADD ./$TARGET/   $PROJECT_DIR/$TARGET
 
-WORKDIR $PROJECT_DIR/rest-locations-service
+WORKDIR $PROJECT_DIR/$TARGET
 RUN mvn -B clean package
 
 CMD [ "java", "-jar", "/opt/project/rest-locations-service/target/rest-locations-service.jar" ]

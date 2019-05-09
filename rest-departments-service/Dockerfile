@@ -3,12 +3,14 @@ FROM docker.io/vskurikhin/href:latest
 FROM openjdk:8-jdk
 
 MAINTAINER Victor N. Skurikhin
-ENV TARGET_JAR=rest-departments-service.jar
+ENV TARGET=rest-departments-service
+ENV TARGET_JAR=$TARGET.jar
 ENV PROJECT_DIR=/opt/project
-ENV TARGET_DIR=$PROJECT_DIR/rest-departments-service/target
+RUN mkdir -p $PROJECT_DIR
+ENV TARGET_DIR=$PROJECT_DIR/$TARGET/target
 WORKDIR $TARGET_DIR
 
-COPY --from=0 $TARGET_DIR/$TARGET_JAR $PROJECT_DIR/
+COPY --from=0 $TARGET_DIR/$TARGET.jar $PROJECT_DIR/
 
 EXPOSE 8002
 
