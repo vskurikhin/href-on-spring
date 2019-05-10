@@ -16,6 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.utils.TestData.TEST_DEPARTMENT_NAME;
 import static su.svn.utils.TestData.TEST_ID;
+import static su.svn.utils.TestData.TEST_LID;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @DisplayName("Class Region")
@@ -66,7 +67,7 @@ public class DepartmentTest
         @DisplayName("default values in the instance of class")
         void defaults()
         {
-            assertThat(department).hasFieldOrPropertyWithValue("id", 0L);
+            assertThat(department).hasFieldOrPropertyWithValue("id", null);
             assertThat(department).hasFieldOrPropertyWithValue("departmentName", "");
             assertThat(department).hasFieldOrPropertyWithValue("managerId", null);
             assertThat(department).hasFieldOrPropertyWithValue("locationId", null);
@@ -78,7 +79,7 @@ public class DepartmentTest
         {
             department.setId(TEST_ID);
             assertThat(department).hasFieldOrPropertyWithValue("id", TEST_ID);
-            assertEquals(TEST_ID, department.getId());
+            assertEquals(TEST_LID, department.getId());
         }
 
         @Test

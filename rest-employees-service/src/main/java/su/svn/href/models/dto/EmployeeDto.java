@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+import su.svn.href.models.Department;
+import su.svn.href.models.Manager;
 
 import java.util.Date;
 
@@ -12,42 +14,29 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-@Table("employees")
 public class EmployeeDto
 {
-    static final long serialVersionUID = -50L;
+    static final long serialVersionUID = -51L;
 
-    @Id
-    @Column("employee_id")
     private long id;
 
-    @Column("first_name")
     private String firstName;
 
-    @Column("last_name")
     private String lastName;
 
-    @Column("email")
     private String email;
 
-    @Column("phone_number")
     private String phoneNumber;
 
-    @Column("hire_date")
     private Date hireDate;
 
-    @Column("job_id")
-    private String jobId;
+    private String jobId; // TODO
 
-    @Column("salary")
     private Double salary;
 
-    @Column("commission_pct")
     private Double commissionPct;
 
-    @Column("manager_id")
-    private Long managerId;
+    private Manager manager;
 
-    @Column("department_id")
-    private Long departmentId;
+    private Department department;
 }

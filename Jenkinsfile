@@ -33,7 +33,8 @@ spec:
         git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def locationImage = docker.build('docker.io/vskurikhin/href-locations', '-f ./rest-locations-service/Dockerfile.k8s .')
+            def pom = readMavenPom file: './rest-locations-service/pom.xml'  
+            def locationImage = docker.build('docker.io/vskurikhin/href-locations:' + pom.version, '-f ./rest-locations-service/Dockerfile.k8s .')
           }
         }
       }
@@ -43,7 +44,8 @@ spec:
         git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def locationImage = docker.build('docker.io/vskurikhin/href-departments', '-f ./rest-departments-service/Dockerfile.k8s .')
+            def pom = readMavenPom file: './rest-departments-service/pom.xml'  
+            def locationImage = docker.build('docker.io/vskurikhin/href-departments:' + pom.version, '-f ./rest-departments-service/Dockerfile.k8s .')
           }
         }
       }

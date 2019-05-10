@@ -1,7 +1,9 @@
 package su.svn.href.controllers;
 
-public class Constants
+public final class Constants
 {
+    private Constants() { /* None */ }
+
     public static final String REST_API = "/rest/api";
 
     public static final String REST_V1_REGIONS = "/v1/regions";
@@ -11,6 +13,7 @@ public class Constants
     public static final String REST_V1_LOCATIONS = "/v1/locations";
 
     public static final String REST_RANGE = "/range";
+
     public static final String REST_RANGE_FULL = "/range-full";
 
     public static final String REST_ALL = "/all";

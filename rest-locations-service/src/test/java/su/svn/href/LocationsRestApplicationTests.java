@@ -27,6 +27,7 @@ public class LocationsRestApplicationTests
     @Autowired
     YamlApplProperties yamlApplProperties;
 
+    @SuppressWarnings("Duplicates")
     @Test
     void contextLoads()
     {

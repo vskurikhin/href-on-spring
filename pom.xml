@@ -7,9 +7,10 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>href</artifactId>
-    <version>1.6.1-SNAPSHOT</version>
+    <version>1.6.2-SNAPSHOT</version>
 
     <modules>
+        <module>href-library</module>
         <module>rest-departments-service</module>
         <module>rest-employees-service</module>
         <module>rest-locations-service</module>
@@ -39,11 +40,16 @@
         <kotlin.version>1.2.71</kotlin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <href-library.version>1.6.3-4</href-library.version>
+        <main.basedir>${project.basedir}</main.basedir>
+
         <lombok.version>1.18.2</lombok.version>
         <reactor-bom.version>Californium-RELEASE</reactor-bom.version>
         <spring.version>5.1.3.RELEASE</spring.version>
         <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
         <spring-data.version>Lovelace-RELEASE</spring-data.version>
+
+        <maven-surefire-plugin>2.22.1</maven-surefire-plugin>
     </properties>
 
     <dependencies>

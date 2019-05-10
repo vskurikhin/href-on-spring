@@ -26,6 +26,7 @@ class DepartmentsRestApplicationTest
     @Autowired
     YamlApplProperties yamlApplProperties;
 
+    @SuppressWarnings("Duplicates")
     @Test
     void contextLoads()
     {
