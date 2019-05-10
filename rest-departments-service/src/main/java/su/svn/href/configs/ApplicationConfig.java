@@ -19,6 +19,7 @@ public class ApplicationConfig
         yp = yamlApplProperties;
     }
 
+    @SuppressWarnings("Duplicates")
     @Bean
     public PageSettings paging()
     {
