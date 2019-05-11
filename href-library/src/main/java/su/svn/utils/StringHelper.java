@@ -1,5 +1,6 @@
 package su.svn.utils;
 
+import java.util.Date;
 import java.util.Map;
 
 public class StringHelper
@@ -24,5 +25,19 @@ public class StringHelper
         Object l = map.get(key);
 
         return null == l ? null : Long.parseLong(l.toString());
+    }
+
+    public static Double doubleOrNULL(Map<String, Object> map, String key)
+    {
+        Object d = map.get(key);
+
+        return null == d ? null : Double.parseDouble(d.toString());
+    }
+
+    public static Date dateOrNULL(Map<String, Object> map, String key)
+    {
+        Object d = map.get(key);
+
+        return d.getClass().getName().equals(Date.class.getName()) ? (Date) d : null;
     }
 }

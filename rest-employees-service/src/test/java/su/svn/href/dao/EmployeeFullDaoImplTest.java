@@ -1,7 +1,10 @@
 package su.svn.href.dao;
 
+import io.r2dbc.h2.H2ConnectionConfiguration;
+import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,7 @@ import reactor.test.StepVerifier;
 import su.svn.href.models.Department;
 import su.svn.href.models.Employee;
 import su.svn.href.models.Location;
-import su.svn.href.models.dto.DepartmentDto;
+import su.svn.href.models.dto.EmployeeDto;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +33,8 @@ import static su.svn.utils.TestData.*;
 @SuppressWarnings("ALL")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
-class DepartmentFullDaoImplTest
+@DisplayName("Class EmployeeFullDaoImpl")
+class EmployeeFullDaoImplTest
 {
     static DatabaseClient client;
 
@@ -93,14 +97,14 @@ class DepartmentFullDaoImplTest
         }
 
         @Bean
-        public DepartmentFullDao locationFullDao(EmployeeDao employeeDao)
+        public EmployeeFullDao employeeFullDao()
         {
-            return new DepartmentFullDaoImpl(client, employeeDao);
+            return new EmployeeFullDaoImpl(client);
         }
     }
 
     @Autowired
-    DepartmentFullDao departmentFullDao;
+    EmployeeFullDao employeeFullDao;
 
     @AfterAll
     static void clean()
@@ -113,18 +117,34 @@ class DepartmentFullDaoImplTest
     @Test
     void findById()
     {
-        assertEquals(testDepartmentDto, departmentFullDao.findById(TEST_LID).block());
+        // TODO
+        // assertEquals(testEmployeeDto, employeeFullDao.findById(TEST_LID).block());
     }
 
     @Test
     void findAll()
     {
-        DepartmentDto expectedDepartmentDto = new DepartmentDto(
-            TEST_ID, TEST_DEPARTMENT_NAME, testManager, testLocation, null
-        );
-        expectedDepartmentDto.setEmployees(Collections.singletonList(testEmployee));
-        List<DepartmentDto> expected = Collections.singletonList(expectedDepartmentDto);
-        List<DepartmentDto> list = departmentFullDao.findAll(0, 1).block();
-        // TODO assertEquals(expected, list);
+        // TODO
+        // List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        // List<EmployeeDto> list = employeeFullDao.findAll(0, 1).collectList().block();
+        // assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByFirstName()
+    {
+        // TODO
+        // List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        // List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.first_name").collectList().block();
+        // assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByCityLastName()
+    {
+        // TODO
+        // List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        // List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "last_name").collectList().block();
+        // assertEquals(expected, list);
     }
 }

@@ -1,5 +1,8 @@
 package su.svn.href.models;
 
+import io.r2dbc.spi.ConnectionFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,8 +12,10 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
+import static su.svn.href.test.H2Helper.createTestTableForLocations;
+import static su.svn.href.test.H2Helper.dropTestTableForLocations;
 import static su.svn.utils.TestData.*;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @DisplayName("Class Location")
 public class LocationTest
@@ -18,26 +23,6 @@ public class LocationTest
     public static Location testLocation = new Location(
         TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
     );
-
-    public static void createTestTableForLocations(DatabaseClient client)
-    {
-        databaseClientExecuteSql(client,
-            "CREATE TABLE IF NOT EXISTS locations (\n"
-                + "  location_id    BIGINT UNIQUE NOT NULL\n"
-                + ", street_address VARCHAR(40)\n"
-                + ", postal_code    VARCHAR(12)\n"
-                + ", city           VARCHAR(30) CONSTRAINT loc_city_nn NOT NULL\n"
-                + ", state_province VARCHAR(25)\n"
-                + ", country_id     CHAR(2)\n"
-                + ")"
-        );
-        client.insert()
-            .into(Location.class)
-            .using(testLocation)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
 
     private Location location;
 
@@ -166,6 +151,37 @@ public class LocationTest
         void testToString()
         {
             assertTrue(location.toString().length() > 0);
+        }
+    }
+
+    private static final Log log = LogFactory.getLog(IntegrateWithDB.class);
+
+    @Nested
+    @DisplayName("do integrate with DB")
+    class IntegrateWithDB
+    {
+        @Test
+        @DisplayName("create table then inserts test record and then drop table")
+        void createTableInsertsRecordAndDropTable()
+        {
+            ConnectionFactory connectionFactory = createH2ConnectionFactory();
+            DatabaseClient client = DatabaseClient.create(connectionFactory);
+            createTestTableForLocations(client);
+            client.insert()
+                .into(Location.class)
+                .using(testLocation)
+                .then()
+                .as(StepVerifier::create)
+                .verifyComplete();
+            client.select()
+                .from(Location.class)
+                .fetch()
+                .first()
+                .doOnNext(it -> log.info(it))
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete();
+            dropTestTableForLocations(client);
         }
     }
 }
