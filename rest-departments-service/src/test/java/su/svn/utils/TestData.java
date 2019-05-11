@@ -1,6 +1,7 @@
 package su.svn.utils;
 
 import su.svn.href.models.Department;
+import su.svn.href.models.Employee;
 import su.svn.href.models.Location;
 import su.svn.href.models.Manager;
 import su.svn.href.models.dto.DepartmentDto;
@@ -8,6 +9,7 @@ import su.svn.href.models.dto.DepartmentDto;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class TestData
 {
@@ -56,6 +58,27 @@ public class TestData
     public static Double TEST_SALARY = 13_000_000.0;
 
     public static Double TEST_COMMISSION_PCT = 0.013;
+
+
+    public static Location testLocation = new Location(
+        TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
+    );
+
+    public static Department testDepartment = new Department(TEST_ID, TEST_DEPARTMENT_NAME, TEST_LID, TEST_LID);
+
+    public static Employee testEmployee = new Employee(
+        TEST_LID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PHONE_NUMBER,
+        TEST_HIRE_DATE, TEST_SID, TEST_SALARY, TEST_COMMISSION_PCT, TEST_LID, TEST_LID
+    );
+
+    public static Manager testManager = new Manager(
+        TEST_LID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PHONE_NUMBER
+    );
+
+    public static DepartmentDto testDepartmentDto = new DepartmentDto(
+        TEST_LID, TEST_DEPARTMENT_NAME, testManager, testLocation, new LinkedList<>()
+    );
+
 
     public static Location createLocation0()
     {

@@ -10,16 +10,10 @@ import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.href.models.LocationTest.testLocation;
-import static su.svn.href.models.ManagerTest.testManager;
 import static su.svn.utils.TestData.*;
 
 public class DepartmentDtoTest
 {
-    public static DepartmentDto testDepartmentDto = new DepartmentDto(
-        TEST_ID, TEST_DEPARTMENT_NAME, testManager, testLocation, new LinkedList<>()
-    );
-
     private List<Employee> testEmployeesList = Collections.emptyList();
 
     private DepartmentDto departmentDto;
@@ -54,7 +48,7 @@ public class DepartmentDtoTest
                 put("DEPARTMENT_ID", TEST_SID);
             }};
             DepartmentDto expected = new DepartmentDto(
-                TEST_ID, "NULL", null, null, testDepartmentDto.getEmployees()
+                TEST_LID, "NULL", null, null, testDepartmentDto.getEmployees()
             );
             assertEquals(expected, DepartmentDto.collectFromMap(mapTest));
         }

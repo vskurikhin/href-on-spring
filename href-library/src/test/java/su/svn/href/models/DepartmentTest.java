@@ -1,7 +1,5 @@
 package su.svn.href.models;
 
-import io.r2dbc.h2.H2ConnectionConfiguration;
-import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,35 +12,17 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
+import static su.svn.href.test.H2Helper.createTestTableForDepartments;
+import static su.svn.href.test.H2Helper.dropTestTableForDepartments;
 import static su.svn.utils.TestData.TEST_DEPARTMENT_NAME;
 import static su.svn.utils.TestData.TEST_ID;
 import static su.svn.utils.TestData.TEST_LID;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @DisplayName("Class Region")
 public class DepartmentTest
 {
     public static Department testDepartment = new Department(TEST_ID, TEST_DEPARTMENT_NAME, TEST_ID, TEST_ID);
-
-    public static void createTestTableForDepartments(DatabaseClient client)
-    {
-        databaseClientExecuteSql(client,
-            "CREATE TABLE departments (\n"
-                + "  department_id    BIGINT UNIQUE NOT NULL\n"
-                + ", department_name  VARCHAR(30) CONSTRAINT dept_name_nn  NOT NULL\n"
-                + ", manager_id       BIGINT\n"
-                + ", location_id      BIGINT\n"
-                + ", CONSTRAINT       dept_id_pk PRIMARY KEY (department_id)\n"
-                + ")"
-        );
-
-        client.insert()
-            .into(Department.class)
-            .using(testDepartment)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
 
     private Department department;
 
@@ -159,14 +139,15 @@ public class DepartmentTest
         @DisplayName("create table then inserts test record and then drop table")
         void createTableInsertsRecordAndDropTable()
         {
-            ConnectionFactory connectionFactory = new H2ConnectionFactory(
-                H2ConnectionConfiguration
-                    .builder()
-                    .url("mem:test;DB_CLOSE_DELAY=10")
-                    .build()
-            );
+            ConnectionFactory connectionFactory = createH2ConnectionFactory();
             DatabaseClient client = DatabaseClient.create(connectionFactory);
             createTestTableForDepartments(client);
+            client.insert()
+                .into(Department.class)
+                .using(testDepartment)
+                .then()
+                .as(StepVerifier::create)
+                .verifyComplete();
             client.select()
                 .from(Department.class)
                 .fetch()
@@ -175,7 +156,7 @@ public class DepartmentTest
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
-            databaseClientExecuteSql(client, "DROP TABLE IF EXISTS departments CASCADE");
+            dropTestTableForDepartments(client);
         }
     }
 }

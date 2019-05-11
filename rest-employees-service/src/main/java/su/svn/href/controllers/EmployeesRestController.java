@@ -14,7 +14,6 @@ public class EmployeesRestController
 {
     private EmployeeDao employeeDao;
 
-    @Autowired
     public EmployeesRestController(EmployeeDao employeeDao)
     {
         this.employeeDao = employeeDao;

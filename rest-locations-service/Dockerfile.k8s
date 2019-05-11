@@ -1,7 +1,7 @@
 FROM maven:3.6.1-jdk-8
 
 MAINTAINER Victor N. Skurikhin
-EMV LIBRARY=href-library
+ENV LIBRARY=href-library
 ENV TARGET=rest-locations-service
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR

@@ -1,7 +1,5 @@
 package su.svn.href.models;
 
-import io.r2dbc.h2.H2ConnectionConfiguration;
-import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,8 +14,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
+import static su.svn.href.test.H2Helper.createTestTableForEmployees;
+import static su.svn.href.test.H2Helper.dropTestTableForEmployees;
 import static su.svn.utils.TestData.*;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 public class EmployeeTest
 {
@@ -25,66 +25,6 @@ public class EmployeeTest
         TEST_ID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PHONE_NUMBER,
         TEST_HIRE_DATE, TEST_SID, TEST_SALARY, TEST_COMMISSION_PCT, TEST_ID, TEST_ID
     );
-
-    public static void createTestTableForEmployees(DatabaseClient client)
-    {
-        databaseClientExecuteSql(client,
-            "CREATE TABLE IF NOT EXISTS employees (\n"
-                + "  employee_id    BIGINT UNIQUE NOT NULL\n"
-                + ", first_name     VARCHAR(20)\n"
-                + ", last_name      VARCHAR(25) CONSTRAINT emp_last_name_nn NOT NULL\n"
-                + ", email          VARCHAR(25) CONSTRAINT emp_email_nn NOT NULL\n"
-                + ", phone_number   VARCHAR(20)\n"
-                + ", hire_date      DATE        CONSTRAINT emp_hire_date_nn NOT NULL\n"
-                + ", job_id         VARCHAR(10) CONSTRAINT emp_job_nn NOT NULL\n"
-                + ", salary         REAL\n"
-                + ", commission_pct REAL\n"
-                + ", manager_id     BIGINT\n"
-                + ", department_id  BIGINT\n"
-                + ", CONSTRAINT     emp_salary_min CHECK (salary > 0) \n"
-                + ", CONSTRAINT     emp_email_uk   UNIQUE (email)\n"
-                + ", CONSTRAINT     emp_emp_id_pk  PRIMARY KEY (employee_id)\n"
-                + ")"
-        );
-
-        client.insert()
-            .into(Employee.class)
-            .using(testEmployee)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
-
-    private static final Log log = LogFactory.getLog(WithDataBaseTable.class);
-
-    @Nested
-    @DisplayName("when integrate DB regions")
-    class WithDataBaseTable
-    {
-
-        @Test
-        @DisplayName("integration test with DB table employees")
-        void table()
-        {
-            ConnectionFactory connectionFactory = new H2ConnectionFactory(
-                H2ConnectionConfiguration
-                    .builder()
-                    .url("mem:test;DB_CLOSE_DELAY=10")
-                    .build()
-            );
-            DatabaseClient client = DatabaseClient.create(connectionFactory);
-            createTestTableForEmployees(client);
-            client.select()
-                .from(Employee.class)
-                .fetch()
-                .first()
-                .doOnNext(it -> log.info(it))
-                .as(StepVerifier::create)
-                .expectNextCount(1)
-                .verifyComplete();
-            databaseClientExecuteSql(client, "DROP TABLE IF EXISTS employees CASCADE");
-        }
-    }
 
     private Employee employee;
 
@@ -270,6 +210,37 @@ public class EmployeeTest
         void testToString()
         {
             assertTrue(employee.toString().length() > 0);
+        }
+    }
+
+    private static final Log log = LogFactory.getLog(IntegrateWithDB.class);
+
+    @Nested
+    @DisplayName("do integrate with DB")
+    class IntegrateWithDB
+    {
+        @Test
+        @DisplayName("create table then inserts test record and then drop table")
+        void createTableInsertsRecordAndDropTable()
+        {
+            ConnectionFactory connectionFactory = createH2ConnectionFactory();
+            DatabaseClient client = DatabaseClient.create(connectionFactory);
+            createTestTableForEmployees(client);
+            client.insert()
+                .into(Employee.class)
+                .using(testEmployee)
+                .then()
+                .as(StepVerifier::create)
+                .verifyComplete();
+            client.select()
+                .from(Employee.class)
+                .fetch()
+                .first()
+                .doOnNext(it -> log.info(it))
+                .as(StepVerifier::create)
+                .expectNextCount(1)
+                .verifyComplete();
+            dropTestTableForEmployees(client);
         }
     }
 }

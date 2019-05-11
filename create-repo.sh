@@ -1,9 +1,9 @@
 #!/bin/sh
 # Create maven repository.
 
-VERSION=${2:-1.6.3-4}
+VERSION=${2:-1.6.3-7}
 
-if [[ -z "$1" ]]
+if [ -z "$1" ]
 then
     echo Usage:
     echo "     $0 <path_to_repo_dir> [<VERSION>]"

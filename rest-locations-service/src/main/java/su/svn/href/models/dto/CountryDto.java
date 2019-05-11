@@ -1,14 +1,10 @@
 package su.svn.href.models.dto;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 import su.svn.href.models.Region;
 import su.svn.utils.StringHelper;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigInteger;
 import java.util.Map;
 
 @Data
