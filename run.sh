@@ -13,4 +13,4 @@ java ${JAVA_OPTS} -jar ./rest-locations-service/target/rest-locations-service.ja
 
 sleep 5
 
-java ${JAVA_OPTS} -jar ./web-service/target/web-service.jar
+# java ${JAVA_OPTS} -jar ./web-service/target/web-service.jar
