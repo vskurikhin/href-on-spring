@@ -8,7 +8,7 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>href-library</artifactId>
-    <version>1.6.6-7</version>
+    <version>1.6.6-8</version>
 
     <properties>
         <java.version>1.8</java.version>

@@ -58,8 +58,20 @@ spec:
         git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def pom = readMavenPom file: './rest-employees-service/pom.xml'  
+            def pom = readMavenPom file: './rest-employees-service/pom.xml'
             def locationImage = docker.build('docker.io/vskurikhin/href-employees:' + pom.version, '-f ./rest-employees-service/Dockerfile.k8s .')
+          }
+        }
+      }
+    }
+
+    stage('Build Docker image href-web') {
+      steps {
+        git 'https://github.com/vskurikhin/href-on-spring.git'
+        container('docker') {
+          script {
+            def pom = readMavenPom file: './web-service/pom.xml'
+            def locationImage = docker.build('docker.io/vskurikhin/href-web:' + pom.version, '-f ./web-service/Dockerfile.k8s .')
           }
         }
       }

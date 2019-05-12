@@ -19,8 +19,8 @@ public class LocationsController
         this.locationRepository = locationRepository;
     }
 
-    @RequestMapping("/")
-    public String regions(final Model model)
+    @RequestMapping("/locations")
+    public String locations(final Model model)
     {
         IReactiveDataDriverContextVariable reactiveDataDrivenMode = new ReactiveDataDriverContextVariable(
             locationRepository.findAll(1, 10), 1

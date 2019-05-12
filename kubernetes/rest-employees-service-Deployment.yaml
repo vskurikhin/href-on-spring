@@ -1,0 +1,27 @@
+kind: Deployment
+metadata:
+  name: href-employees
+spec:
+  selector:
+    matchLabels:
+      app: href-employees
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: href-employees
+        name: href-employees
+    spec:
+      hostname: href-employees
+      containers:
+      - image: docker.io/vskurikhin/href-employees:latest
+        name: href-employees
+        ports:
+        - containerPort: 8003
+          name: employees
+        command: ["java"]
+        args: [ "-jar", "/opt/project/rest-employees-service/target/rest-employees-service.jar" ]
+        env:
+        - name: "DB_HOST"
+          value: "_DB_HOST_POSTGRESQL_"
