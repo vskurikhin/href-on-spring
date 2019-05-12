@@ -6,7 +6,7 @@ public final class Constants
 
     public static final String REST_API = "/rest/api";
 
-    public static final String REST_V1_EMPLOYEES = "/employees";
+    public static final String REST_V1_EMPLOYEES = "/v1/employees";
 
     public static final String REST_RANGE = "/range";
 
