@@ -1,10 +1,9 @@
 application:
-  service:
+  services:
     departments:
       host: ${DEPARTMENTS_HOST:localhost}
       port: 8002
     employees:
-      host: localhost
       host: ${EMPLOYEES_HOST:localhost}
       port: 8003
     locations:

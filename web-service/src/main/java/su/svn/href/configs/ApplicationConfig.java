@@ -9,15 +9,11 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @ComponentScan
 public class ApplicationConfig
 {
-    private ServiceDepartmentsProperties sdp;
+    private ServicesProperties servicesProperties;
 
-    private ServiceEmployeesProperties sep;
-
-    public ApplicationConfig(ServiceDepartmentsProperties serviceDepartmentsProperties,
-                             ServiceEmployeesProperties serviceEmployeesProperties)
+    public ApplicationConfig(ServicesProperties servicesProperties)
     {
-        sdp = serviceDepartmentsProperties;
-        sep = serviceEmployeesProperties;
+        this.servicesProperties = servicesProperties;
     }
 
     @Bean

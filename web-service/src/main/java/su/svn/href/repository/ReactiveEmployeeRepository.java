@@ -7,42 +7,41 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import su.svn.href.configs.ServicesProperties;
-import su.svn.href.models.dto.DepartmentDto;
+import su.svn.href.models.dto.EmployeeDto;
 
 import java.time.Duration;
 import java.util.Properties;
 
 import static su.svn.href.controllers.Constants.REST_API;
 import static su.svn.href.controllers.Constants.REST_RANGE_FULL;
-import static su.svn.href.controllers.Constants.REST_V1_DEPARTMENTS;
+import static su.svn.href.controllers.Constants.REST_V1_EMPLOYEES;
 
 @Repository
-public class ReactiveDepartmentRepository implements DepartmentRepository
+public class ReactiveEmployeeRepository implements EmployeeRepository
 {
     private final WebClient webClient;
 
     @Autowired
-    public ReactiveDepartmentRepository(WebClient.Builder wcBuilder, ServicesProperties sp)
+    public ReactiveEmployeeRepository(WebClient.Builder wcBuilder, ServicesProperties sp)
     {
-        Properties departments = sp.getDepartments();
-        String host = departments.getProperty("host");
-        String port = departments.getProperty("port");
+        Properties employees = sp.getEmployees();
+        String host = employees.getProperty("host");
+        String port = employees.getProperty("port");
 
         this.webClient = wcBuilder
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            // .baseUrl("http://localhost:8002/departments")
-            .baseUrl("http://" + host + ':' + port + REST_API + REST_V1_DEPARTMENTS)
+            .baseUrl("http://" + host + ':' + port + REST_API + REST_V1_EMPLOYEES)
             .build();
     }
 
     @Override
-    public Flux<DepartmentDto> findAll(int page, int size)
+    public Flux<EmployeeDto> findAll(int page, int size)
     {
         return webClient
             .get()
             .uri(REST_RANGE_FULL + "?page=" + page  + "&size=" + size + "&sort=id")
             .retrieve()
-            .bodyToFlux(DepartmentDto.class)
+            .bodyToFlux(EmployeeDto.class)
             .delayElements(Duration.ofMillis(10));
     }
 }

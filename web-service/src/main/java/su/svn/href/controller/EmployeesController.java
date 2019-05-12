@@ -1,32 +1,32 @@
 package su.svn.href.controller;
 
-import su.svn.href.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.spring5.context.webflux.IReactiveDataDriverContextVariable;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
+import su.svn.href.repository.EmployeeRepository;
 
 @Controller
-public class DepartmentsController
+public class EmployeesController
 {
-    private DepartmentRepository departmentRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    public DepartmentsController(DepartmentRepository departmentRepository)
+    public EmployeesController(EmployeeRepository employeeRepository)
     {
-        this.departmentRepository = departmentRepository;
+        this.employeeRepository = employeeRepository;
     }
 
-    @RequestMapping("/departments")
-    public String departments(final Model model)
+    @RequestMapping("/employees")
+    public String employees(final Model model)
     {
         IReactiveDataDriverContextVariable reactiveDataDrivenMode = new ReactiveDataDriverContextVariable(
-            departmentRepository.findAll(1, 10), 1
+            employeeRepository.findAll(1, 10), 1
         );
-        model.addAttribute("departments", reactiveDataDrivenMode);
+        model.addAttribute("employees", reactiveDataDrivenMode);
 
-        return "departments";
+        return "employees";
     }
 }

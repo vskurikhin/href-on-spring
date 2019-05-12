@@ -1,6 +1,9 @@
-package su.svn.href.models;
+package su.svn.href.models.dto;
 
 import lombok.*;
+import su.svn.href.models.Department;
+import su.svn.href.models.Manager;
+
 import java.util.Date;
 
 @Data
@@ -8,9 +11,9 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Employee
+public class EmployeeDto
 {
-    static final long serialVersionUID = -50L;
+    static final long serialVersionUID = -51L;
 
     private long id;
 
@@ -24,13 +27,13 @@ public class Employee
 
     private Date hireDate;
 
-    private String jobId;
+    private String jobId; // TODO
 
     private Double salary;
 
     private Double commissionPct;
 
-    private Long managerId;
+    private Manager manager;
 
-    private Long departmentId;
+    private Department department;
 }
