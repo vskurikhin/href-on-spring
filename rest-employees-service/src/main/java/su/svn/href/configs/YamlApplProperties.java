@@ -11,6 +11,8 @@ public class YamlApplProperties
 
     private Properties r2dbc;
 
+    private Properties paging;
+
     public String getLocale()
     {
         return locale;
@@ -29,5 +31,15 @@ public class YamlApplProperties
     public void setR2dbc(Properties r2dbc)
     {
         this.r2dbc = r2dbc;
+    }
+
+    public Properties getPaging()
+    {
+        return paging;
+    }
+
+    public void setPaging(Properties paging)
+    {
+        this.paging = paging;
     }
 }
