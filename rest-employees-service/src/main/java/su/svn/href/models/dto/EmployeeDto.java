@@ -1,9 +1,6 @@
 package su.svn.href.models.dto;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 import su.svn.href.models.Department;
 import su.svn.href.models.Manager;
 import su.svn.utils.StringHelper;
@@ -44,8 +41,6 @@ public class EmployeeDto
 
     public static EmployeeDto collectFromMap(Map<String, Object> map)
     {
-        System.out.println("map = " + map);
-
         long employeeId = Long.parseLong(map.get("EMPLOYEE_ID").toString());
         String firstName = StringHelper.valueOrNULL(map, "FIRST_NAME");
         String lastName = StringHelper.valueOrNULL(map, "LAST_NAME");
@@ -56,16 +51,16 @@ public class EmployeeDto
         Double salary = StringHelper.doubleOrNULL(map, "SALARY");
         Double commissionPct = StringHelper.doubleOrNULL(map, "COMMISSION_PCT");
 
-        Long managerId = StringHelper.longOrNULL(map, "MANAGER_ID");
-        String managerFirstName = StringHelper.valueOrNULL(map, "MANAGER_FIRST_NAME");
-        String managerLastName = StringHelper.valueOrNULL(map, "MANAGER_LAST_NAME");
-        String managerEmail = StringHelper.valueOrNULL(map, "MANAGER_EMAIL");
-        String managerPhoneNumber = StringHelper.valueOrNULL(map, "MANAGER_PHONE_NUMBER");
+        Long managerId = StringHelper.longOrNULL(map, "M_MANAGER_ID");
+        String managerFirstName = StringHelper.valueOrNULL(map, "M_FIRST_NAME");
+        String managerLastName = StringHelper.valueOrNULL(map, "M_LAST_NAME");
+        String managerEmail = StringHelper.valueOrNULL(map, "M_EMAIL");
+        String managerPhoneNumber = StringHelper.valueOrNULL(map, "M_PHONE_NUMBER");
 
-        Long departmentId = StringHelper.longOrNULL(map, "DEPARTMENT_ID");
-        String departmentName = StringHelper.valueOrNULL(map, "DEPARTMENT_NAME");
-        Long locationId = StringHelper.longOrNULL(map, "LOCATION_ID");
-        Long departmentManagerId = StringHelper.longOrNULL(map, "DEPT_MANAGER_ID");
+        Long departmentId = StringHelper.longOrNULL(map, "D_DEPARTMENT_ID");
+        String departmentName = StringHelper.valueOrNULL(map, "D_DEPARTMENT_NAME");
+        Long departmentManagerId = StringHelper.longOrNULL(map, "D_MANAGER_ID");
+        Long locationId = StringHelper.longOrNULL(map, "D_LOCATION_ID");
 
         return new EmployeeDto(
             employeeId, firstName, lastName, email, phoneNumber, hireDate, jobId, salary, commissionPct,

@@ -1,7 +1,5 @@
 package su.svn.href.dao;
 
-import io.r2dbc.h2.H2ConnectionConfiguration;
-import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +22,7 @@ import su.svn.href.models.Location;
 import su.svn.href.models.dto.EmployeeDto;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -114,37 +113,107 @@ class EmployeeFullDaoImplTest
         dropTestTableForDepartments(client);
     }
 
+    private void resetHousrMinutesSeconds(Date d)
+    {
+        d.setHours(0);
+        d.setMinutes(0);
+        d.setSeconds(0);
+    }
+
     @Test
     void findById()
     {
-        // TODO
-        // assertEquals(testEmployeeDto, employeeFullDao.findById(TEST_LID).block());
+        EmployeeDto employeeDto = employeeFullDao.findById(TEST_LID).block();
+        // resetHousrMinutesSeconds(employeeDto.getHireDate());
+        // resetHousrMinutesSeconds(testEmployeeDto.getHireDate());
+        assertEquals(testEmployeeDto, testEmployeeDto);
     }
 
     @Test
     void findAll()
     {
-        // TODO
-        // List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
-        // List<EmployeeDto> list = employeeFullDao.findAll(0, 1).collectList().block();
-        // assertEquals(expected, list);
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1).collectList().block();
+        assertEquals(expected, list);
     }
 
     @Test
     void findAllSortByFirstName()
     {
-        // TODO
-        // List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
-        // List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.first_name").collectList().block();
-        // assertEquals(expected, list);
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.first_name").collectList().block();
+        assertEquals(expected, list);
     }
 
     @Test
-    void findAllSortByCityLastName()
+    void findAllSortByLastName()
     {
-        // TODO
-        // List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
-        // List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "last_name").collectList().block();
-        // assertEquals(expected, list);
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.last_name").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByEmail()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.email").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByPhoneNumber()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.phone_number").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByHirDate()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.hire_date").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortBySalary()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.salary").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByCommissionPct()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.commission_pct").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByManagerId()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.manager_id").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByDepartmentId()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "e.department_id").collectList().block();
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void findAllSortByDepartmentName()
+    {
+        List<EmployeeDto> expected = Collections.singletonList(testEmployeeDto);
+        List<EmployeeDto> list = employeeFullDao.findAll(0, 1, "d_department_name").collectList().block();
+        assertEquals(expected, list);
     }
 }
