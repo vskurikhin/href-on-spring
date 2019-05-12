@@ -8,7 +8,7 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>href-library</artifactId>
-    <version>1.6.3-7</version>
+    <version>1.6.4-7</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -76,6 +76,13 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${com.fasterxml.jackson.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -154,6 +161,7 @@
             <artifactId>r2dbc-h2</artifactId>
             <version>${r2dbc.version}</version>
             <scope>compile</scope>
+            <!--<scope>test</scope>-->
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-test -->
@@ -161,7 +169,8 @@
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <version>${reactor.test.version}</version>
-            <scope>test</scope>
+            <scope>compile</scope>
+            <!--<scope>test</scope>-->
         </dependency>
 
         <dependency>
@@ -176,18 +185,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <version>${spring-boot-devtools.version}</version>
             <optional>true</optional>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>io.r2dbc</groupId>-->
-            <!--<artifactId>r2dbc-h2</artifactId>-->
-            <!--<version>RELEASE</version>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -1,7 +1,6 @@
 package su.svn.href.models.dto;
 
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigInteger;
 
 public class AnswerCreated extends Answer
 {

@@ -10,15 +10,25 @@ import su.svn.href.models.dto.EmployeeDto;
 @Repository
 public class EmployeeFullDaoImpl implements EmployeeFullDao
 {
-    public static String SELECT =
-        "SELECT e.employee_id, e.first_name, e.last_name, e.email, e.phone_number, e.hire_date, e.job_id, e.salary,"
+    private String SELECT =
+        "SELECT e.employee_id, e.first_name, e.last_name, e.email, e.phone_number,"
+            + " e.hire_date, e.job_id, e.salary,"
             + " e.commission_pct, e.manager_id, e.department_id,"
-            + " m.employee_id AS manager_id, m.first_name AS manager_first_name, m.last_name AS manager_last_name,"
-            + " m.email AS manager_email, m.phone_number AS manager_phone_number,"
-            + " d.department_id, d.department_name, d.manager_id AS dept_manager_id, d.location_id"
+            + " m_manager_id, m_first_name, m_last_name, m_email, m_phone_number,"
+            + " d_department_id, d_department_name, d_manager_id, d_location_id"
             + " FROM employees e"
-            + " LEFT JOIN employees m ON m.employee_id = e.manager_id"
-            + " LEFT JOIN departments d ON d.department_id = e.department_id";
+            + " LEFT JOIN ("
+            + "  SELECT employee_id AS m_manager_id,"
+            + "   first_name AS m_first_name,"
+            + "   last_name AS m_last_name, email AS m_email,"
+            + "   phone_number AS m_phone_number FROM employees"
+            + " ) AS m ON m.m_manager_id = e.manager_id"
+            + " LEFT JOIN ("
+            + "  SELECT department_id AS d_department_id,"
+            + "   department_name AS d_department_name,"
+            + "   manager_id AS d_manager_id,"
+            + "   location_id AS d_location_id FROM departments"
+            + " ) AS d ON d.d_department_id = e.department_id";
 
     private final DatabaseClient databaseClient;
 
