@@ -1,4 +1,4 @@
-package su.svn.href.controller;
+package su.svn.href.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
