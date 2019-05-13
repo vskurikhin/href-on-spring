@@ -6,8 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import su.svn.href.configs.ServicesProperties;
-import su.svn.href.models.dto.LocationDto;
+import su.svn.href.models.Location;
 
 import java.time.Duration;
 import java.util.Properties;
@@ -33,13 +34,23 @@ public class ReactiveLocationRepository implements LocationRepository
     }
 
     @Override
-    public Flux<LocationDto> findAll(int page, int size)
+    public Mono<Long> count()
     {
         return webClient
             .get()
-            .uri(REST_RANGE_FULL + "?page=" + page  + "&size=" + size + "&sort=id")
+            .uri(REST_COUNT)
             .retrieve()
-            .bodyToFlux(LocationDto.class)
+            .bodyToMono(Long.class);
+    }
+
+    @Override
+    public Flux<Location> findAll(int page, int size)
+    {
+        return webClient
+            .get()
+            .uri(REST_RANGE + "?page=" + page  + "&size=" + size + "&sort=id")
+            .retrieve()
+            .bodyToFlux(Location.class)
             .delayElements(Duration.ofMillis(10));
     }
 }

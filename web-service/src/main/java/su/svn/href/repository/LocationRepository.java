@@ -1,9 +1,12 @@
 package su.svn.href.repository;
 
 import reactor.core.publisher.Flux;
-import su.svn.href.models.dto.LocationDto;
+import reactor.core.publisher.Mono;
+import su.svn.href.models.Location;
 
 public interface LocationRepository
 {
-    Flux<LocationDto> findAll(int page, int size);
+    Mono<Long> count();
+
+    Flux<Location> findAll(int page, int size);
 }
