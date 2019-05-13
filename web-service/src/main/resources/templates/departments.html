@@ -27,17 +27,19 @@
         <div id="title">
             <h1>departments</h1>
         </div>
-        <table id="departments" class="table table-striped">
+        <table id="departments" class="table table-hover">
             <thead>
             <tr>
-                <th width="30%">Id</th>
-                <th>Name</th>
+                <th width="12%">Id</th>
+                <th width="44%">Name</th>
+                <th width="44%">Manager</th>
             </tr>
             </thead>
             <tbody>
             <tr class="result" data-th-each="department : ${departments}">
                 <td>[[${department.id}]]</td>
                 <td>[[${department.departmentName}]]</td>
+                <td>[[${department.manager.id}]]</td>
             </tr>
             </tbody>
         </table>

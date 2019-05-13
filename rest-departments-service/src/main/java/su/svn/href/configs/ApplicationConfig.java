@@ -19,6 +19,7 @@ public class ApplicationConfig
         yp = yamlApplProperties;
     }
 
+    @SuppressWarnings("Duplicates")
     @Bean
     public PageSettings paging()
     {
@@ -27,7 +28,7 @@ public class ApplicationConfig
         Integer max = null;
 
         try {
-            if (!Objects.isNull(paging)) {
+            if ( ! Objects.isNull(paging)) {
                 min = Integer.parseInt(paging.getProperty("min"));
                 max = Integer.parseInt(paging.getProperty("max"));
             }

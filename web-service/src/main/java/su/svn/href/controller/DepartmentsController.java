@@ -20,10 +20,10 @@ public class DepartmentsController
     }
 
     @RequestMapping("/departments")
-    public String regions(final Model model)
+    public String departments(final Model model)
     {
         IReactiveDataDriverContextVariable reactiveDataDrivenMode = new ReactiveDataDriverContextVariable(
-            departmentRepository.findAll(), 1
+            departmentRepository.findAll(1, 10), 1
         );
         model.addAttribute("departments", reactiveDataDrivenMode);
 

@@ -1,6 +1,5 @@
 package su.svn.utils;
 
-import java.math.BigInteger;
 import java.util.Map;
 
 public class StringHelper
@@ -25,12 +24,5 @@ public class StringHelper
         Object l = map.get(key);
 
         return null == l ? null : Long.parseLong(l.toString());
-    }
-
-    public static BigInteger bigIntegerOrNULL(Map<String, Object> map, String key)
-    {
-        Object l = map.get(key);
-
-        return null == l ? null : new BigInteger(l.toString());
     }
 }

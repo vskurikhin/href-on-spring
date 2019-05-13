@@ -7,6 +7,6 @@ import su.svn.href.models.Region;
 
 public interface RegionDao extends ReactiveCrudRepository<Region, Long>
 {
-    @Query("SELECT region_id, region_name FROM regions r WHERE r.region_name = $1")
+    @Query("SELECT * FROM regions WHERE region_name = $1")
     Flux<Region> findByRegionName(String regionName);
 }

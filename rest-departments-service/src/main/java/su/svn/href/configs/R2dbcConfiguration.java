@@ -15,7 +15,6 @@ import org.springframework.data.r2dbc.repository.support.R2dbcRepositoryFactory;
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 import su.svn.href.dao.*;
 
-import java.util.Objects;
 import java.util.Properties;
 
 @Configuration
@@ -64,27 +63,17 @@ public class R2dbcConfiguration extends AbstractR2dbcConfiguration
     }
 
     @Override
+    @SuppressWarnings("Duplicates")
     public ConnectionFactory connectionFactory()
     {
         Properties r2dbc = yap.getR2dbc();
-        String host  = null;
-        String database  = null;
-        String username  = null;
-        String password = null;
-
-        if ( ! Objects.isNull(r2dbc)) {
-            host = r2dbc.getProperty("host");
-            database = r2dbc.getProperty("database");
-            username = r2dbc.getProperty("username");
-            password = r2dbc.getProperty("password");
-        }
 
         return new PostgresqlConnectionFactory(
             PostgresqlConnectionConfiguration.builder()
-                .host(null != host ? host : "localhost")
-                .database(null != database ? database : "db")
-                .username(null != username ? username : "dbuser")
-                .password(null != password ? password : "password")
+                .host(r2dbc.getProperty("host"))
+                .database(r2dbc.getProperty("database"))
+                .username(r2dbc.getProperty("username"))
+                .password(r2dbc.getProperty("password"))
                 .build()
         );
     }

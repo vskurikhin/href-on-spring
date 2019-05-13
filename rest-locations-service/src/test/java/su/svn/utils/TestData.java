@@ -122,7 +122,7 @@ public class TestData
     {
         Location result = new Location();
         result.setStreetAddress("street_address_0");
-        result.setPostalCode("postal_code_0");
+        result.setPostalCode("postalCode0");
         result.setCity("city_0");
         result.setStateProvince("state_province_0");
 
@@ -134,7 +134,7 @@ public class TestData
         Location result = new Location();
         result.setId(1L);
         result.setStreetAddress("street_address_1");
-        result.setPostalCode("postal_code_1");
+        result.setPostalCode("postalCode1");
         result.setCity("city_1");
         result.setStateProvince("state_province_1");
         result.setCountryId("11");
@@ -147,7 +147,7 @@ public class TestData
         Location result = new Location();
         result.setId(2L);
         result.setStreetAddress("street_address_2");
-        result.setPostalCode("postal_code_2");
+        result.setPostalCode("postalCode2");
         result.setCity("city_2");
         result.setStateProvince("state_province_2");
         result.setCountryId("22");

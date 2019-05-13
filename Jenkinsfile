@@ -16,7 +16,7 @@ spec:
     - name: dockersock
       mountPath: /var/run/docker.sock
     - name: repository
-      mountPath: /root/.m2/repository
+      mountPath: /root/.m2
   volumes:
   - name: dockersock
     hostPath:
@@ -28,22 +28,50 @@ spec:
     }
   }
   stages {
-    stage('Build Docker image 1') {
+
+    stage('Build Docker image href-locations') {
       steps {
         git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def hrefImage = docker.build('docker.io/vskurikhin/href')
+            def pom = readMavenPom file: './rest-locations-service/pom.xml'  
+            def locationImage = docker.build('docker.io/vskurikhin/href-locations:' + pom.version, '-f ./rest-locations-service/Dockerfile.k8s .')
           }
         }
       }
     }
 
-    stage('Build Docker image 2') {
+    stage('Build Docker image href-departments') {
       steps {
+        git 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
-            def locationImage = docker.build('docker.io/vskurikhin/href-location', '-f ./rest-locations-service/Dockerfile .')
+            def pom = readMavenPom file: './rest-departments-service/pom.xml'  
+            def locationImage = docker.build('docker.io/vskurikhin/href-departments:' + pom.version, '-f ./rest-departments-service/Dockerfile.k8s .')
+          }
+        }
+      }
+    }
+
+    stage('Build Docker image href-employees') {
+      steps {
+        git 'https://github.com/vskurikhin/href-on-spring.git'
+        container('docker') {
+          script {
+            def pom = readMavenPom file: './rest-employees-service/pom.xml'
+            def locationImage = docker.build('docker.io/vskurikhin/href-employees:' + pom.version, '-f ./rest-employees-service/Dockerfile.k8s .')
+          }
+        }
+      }
+    }
+
+    stage('Build Docker image href-web') {
+      steps {
+        git 'https://github.com/vskurikhin/href-on-spring.git'
+        container('docker') {
+          script {
+            def pom = readMavenPom file: './web-service/pom.xml'
+            def locationImage = docker.build('docker.io/vskurikhin/href-web:' + pom.version, '-f ./web-service/Dockerfile.k8s .')
           }
         }
       }
