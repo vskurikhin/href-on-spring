@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.href.models.dto.CountryDtoTest.testCountryDto;
 import static su.svn.utils.TestData.*;
 
+@DisplayName("Class LocationDto")
 public class LocationDtoTest
 {
     public static LocationDto testLocationDto = new LocationDto(

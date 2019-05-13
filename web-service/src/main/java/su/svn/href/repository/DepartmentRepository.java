@@ -5,5 +5,5 @@ import su.svn.href.models.dto.DepartmentDto;
 
 public interface DepartmentRepository
 {
-    Flux<DepartmentDto> findAll();
+    Flux<DepartmentDto> findAll(int page, int size);
 }

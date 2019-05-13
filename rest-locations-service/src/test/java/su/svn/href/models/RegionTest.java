@@ -14,15 +14,13 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.utils.TestData.TEST;
-import static su.svn.utils.TestData.TEST_ID;
-import static su.svn.utils.TestData.TEST_REGION_NAME;
+import static su.svn.utils.TestData.*;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
 
 @DisplayName("Class Region")
 public class RegionTest
 {
-    public static Region testRegion = new Region(TEST_ID, TEST_REGION_NAME);
+    public static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
 
     public static void createTestTableForRegions(DatabaseClient client)
     {
@@ -63,7 +61,7 @@ public class RegionTest
         @DisplayName("default values in the instance of class")
         void defaults()
         {
-            assertThat(region).hasFieldOrPropertyWithValue("id", 0L);
+            assertThat(region).hasFieldOrPropertyWithValue("id", null);
             assertThat(region).hasFieldOrPropertyWithValue("regionName", null);
         }
 
@@ -71,9 +69,9 @@ public class RegionTest
         @DisplayName("setter and getter for id")
         void testGetSetId()
         {
-            region.setId(TEST_ID);
-            assertThat(region).hasFieldOrPropertyWithValue("id", TEST_ID);
-            assertEquals(TEST_ID, region.getId());
+            region.setId(TEST_LID);
+            assertThat(region).hasFieldOrPropertyWithValue("id", TEST_LID);
+            assertEquals(TEST_LID, region.getId());
         }
 
         @Test
@@ -93,14 +91,14 @@ public class RegionTest
         @BeforeEach
         void createNew()
         {
-            region = new Region(TEST_ID, TEST_REGION_NAME);
+            region = new Region(TEST_LID, TEST_REGION_NAME);
         }
 
         @Test
         @DisplayName("initialized values in instance of class")
         void defaults()
         {
-            assertThat(region).hasFieldOrPropertyWithValue("id", TEST_ID);
+            assertThat(region).hasFieldOrPropertyWithValue("id", TEST_LID);
             assertThat(region).hasFieldOrPropertyWithValue("regionName", TEST_REGION_NAME);
 
         }
@@ -110,7 +108,7 @@ public class RegionTest
         void testEquals()
         {
             assertNotEquals(new Region(), region);
-            Region expected = new Region(TEST_ID, TEST_REGION_NAME);
+            Region expected = new Region(TEST_LID, TEST_REGION_NAME);
             assertEquals(expected.hashCode(), region.hashCode());
             assertEquals(expected, region);
         }

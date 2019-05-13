@@ -27,3 +27,4 @@ INSERT INTO departments VALUES
 , ( 260 , 'Recruiting' , NULL , 1700)
 , ( 270 , 'Payroll' , NULL , 1700)
 ;
+ALTER SEQUENCE departments_seq RESTART WITH 280;

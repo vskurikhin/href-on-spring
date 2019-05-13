@@ -107,3 +107,4 @@ INSERT INTO employees VALUES
 ,  (205, 'Shelley', 'Higgins', 'SHIGGINS', '515.123.8080', TO_DATE('07-JUN-1994', 'dd-MON-yyyy'), 'AC_MGR', 12000, NULL, 101, 110)
 ,  (206, 'William', 'Gietz', 'WGIETZ', '515.123.8181', TO_DATE('07-JUN-1994', 'dd-MON-yyyy'), 'AC_ACCOUNT', 8300, NULL, 205, 110)
 ;
+ALTER SEQUENCE employees_seq RESTART WITH 207;

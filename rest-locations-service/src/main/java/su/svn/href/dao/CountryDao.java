@@ -7,16 +7,17 @@ import su.svn.href.models.Country;
 
 public interface CountryDao extends ReactiveCrudRepository<Country, String>
 {
-    @Query("SELECT country_id, country_name, region_id FROM countries OFFSET $1 LIMIT $2")
+    @Query("SELECT * FROM countries OFFSET $1 LIMIT $2")
     Flux<Country> findAll(int offset, int limit);
 
-    @Query("SELECT country_id, country_name, region_id FROM countries OFFSET $1 LIMIT $2")
+    @Query("SELECT * FROM countries ORDER BY country_id OFFSET $1 LIMIT $2")
     Flux<Country> findAllOrderById(int offset, int limit);
 
-    @Query("SELECT country_id, country_name, region_id FROM countries OFFSET $1 LIMIT $2")
+    @Query("SELECT * FROM countries ORDER BY country_name OFFSET $1 LIMIT $2")
     Flux<Country> findAllOrderByCountryName(int offset, int limit);
 
-    @Query("SELECT country_id, country_name, region_id FROM countries c WHERE c.country_name = $1")
+
+    @Query("SELECT * FROM countries WHERE country_name LIKE $1")
     Flux<Country> findByCountryName(String countryName);
 }
 

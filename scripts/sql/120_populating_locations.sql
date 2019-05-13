@@ -25,3 +25,4 @@ INSERT INTO locations VALUES
 , (3100, 'Pieter Breughelstraat 837', '3029SK', 'Utrecht', 'Utrecht', 'NL')
 , (3200, 'Mariano Escobedo 9991', '11932', 'Mexico City', 'Distrito Federal,', 'MX'   )
 ;
+ALTER SEQUENCE locations_seq RESTART WITH 3300;

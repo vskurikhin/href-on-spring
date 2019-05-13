@@ -1,11 +1,11 @@
 application:
-  service:
+  services:
     departments:
       host: localhost
-      port: 8003
+      port: 8002
     employees:
       host: localhost
-      port: 8002
+      port: 8003
     locations:
       host: localhost
       port: 8001
