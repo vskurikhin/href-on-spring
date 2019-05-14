@@ -87,6 +87,17 @@ public class LocationsRestController
         }
     }
 
+    @GetMapping("/{id}")
+    public Mono<LocationDto> readFullLocation(@PathVariable Long id)
+    {
+        if (Objects.isNull(id) || id < 1) throw new BadValueForLocationIdException();
+        AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
+
+        return locationFullDao
+            .findById(id)
+            .switchIfEmpty(Mono.error(new LocationNotFoundException()));
+    }
+
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
     public Flux<LocationDto> readFullLocations(@RequestParam("page") int page,
                                                @RequestParam("size") int size,

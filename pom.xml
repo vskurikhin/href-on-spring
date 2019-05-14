@@ -7,7 +7,7 @@
 
     <groupId>su.svn.href</groupId>
     <artifactId>href</artifactId>
-    <version>1.7.3-SNAPSHOT</version>
+    <version>1.7.4-SNAPSHOT</version>
 
     <modules>
         <module>href-library</module>

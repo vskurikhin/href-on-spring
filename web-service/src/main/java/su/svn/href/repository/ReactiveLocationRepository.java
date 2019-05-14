@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.configs.ServicesProperties;
 import su.svn.href.models.Location;
+import su.svn.href.models.dto.LocationDto;
 
 import java.time.Duration;
 import java.util.Properties;
@@ -52,5 +53,15 @@ public class ReactiveLocationRepository implements LocationRepository
             .retrieve()
             .bodyToFlux(Location.class)
             .delayElements(Duration.ofMillis(10));
+    }
+
+    @Override
+    public Mono<LocationDto> findById(long id)
+    {
+        return webClient
+            .get()
+            .uri("/" + id)
+            .retrieve()
+            .bodyToMono(LocationDto.class);
     }
 }

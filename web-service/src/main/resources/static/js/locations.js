@@ -1,7 +1,9 @@
 $(document).ready(function () {
     $('#example').DataTable({
+        dom: "<'row'<'col-sm-6'l><'col-sm-6'p>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         "ajax": "rest/api/v1/locations",
-        "dom": 'T clear Brtip',
         "orderCellsTop": true,
         "pageLength": 10,
         "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
@@ -32,7 +34,8 @@ $(document).ready(function() {
 
     $('#example tbody').on('click', 'tr', function () {
         var data = table.row( this ).data();
-        alert( 'You clicked on '+ data['id'] +'\'s row' );
-        console.log(data)
+        window.location.replace('location?id=' + data['id']);
+        console.log('You clicked on '+ data['id'] +'\'s row' );
     } );
 } );
+// "dom": 'T clear Brtip',
