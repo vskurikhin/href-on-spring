@@ -290,6 +290,66 @@ class LocationsRestControllerTest
     }
 
     @Test
+    @DisplayName("when update streetAddress is ok")
+    void updateStreetAddress() throws Exception
+    {
+        when(locationDao.updateStreetAddress(location1.getId(), location1.getStreetAddress()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "street_address")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("when update postalCode is ok")
+    void updatePostalCodes() throws Exception
+    {
+        when(locationDao.updatePostalCode(location1.getId(), location1.getPostalCode()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "postal_code")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("when update city is ok")
+    void updateCity() throws Exception
+    {
+        when(locationDao.updateCity(location1.getId(), location1.getCity()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "city")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("when update stateProvince is ok")
+    void updateStateProvince() throws Exception
+    {
+        when(locationDao.updateStateProvince(location1.getId(), location1.getStateProvince()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "state_province")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("delete")
     void deleteTest() throws Exception
     {
