@@ -120,6 +120,44 @@ public class LocationsRestController
             .switchIfEmpty(Mono.error(new LocationDontSavedException()));
     }
 
+    @PutMapping(path = REST_UPDATE, params = {"field"})
+    public Mono<? extends Answer> updateLocation(@RequestParam("field") String field, @RequestBody Location location)
+    {
+        if (Objects.isNull(location) || Objects.isNull(location.getId()) || location.getId() < 1) {
+            throw new BadValueForLocationIdException();
+        }
+
+        switch (field.toUpperCase()) {
+            case "STREET_ADDRESS":
+                return locationDao
+                    .updateStreetAddress(location.getId(), location.getStreetAddress())
+                    .map(r -> new AnswerOk())
+                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+            case "POSTAL_CODE":
+                return locationDao
+                    .updatePostalCode(location.getId(), location.getPostalCode())
+                    .map(r -> new AnswerOk())
+                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+            case "CITY":
+                return locationDao
+                    .updateCity(location.getId(), location.getCity())
+                    .map(r -> new AnswerOk())
+                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+            case "STATE_PROVINCE":
+                return locationDao
+                    .updateStateProvince(location.getId(), location.getStateProvince())
+                    .map(r -> new AnswerOk())
+                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+            case "COUNTRY_ID":
+                return locationDao
+                    .updateCountryId(location.getId(), location.getCountryId())
+                    .map(r -> new AnswerOk())
+                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+            default:
+                return Mono.error(new LocationDontSavedException());
+        }
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public Mono<? extends Answer> deleteLocation(@PathVariable Long id)
