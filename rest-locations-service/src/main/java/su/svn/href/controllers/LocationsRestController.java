@@ -58,6 +58,13 @@ public class LocationsRestController
             .switchIfEmpty(Mono.error(new LocationDontSavedException()));
     }
 
+    @GetMapping(path = REST_COUNT)
+    public Mono<Long> countLocations()
+    {
+        return locationDao.count();
+
+    }
+
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
     public Flux<Location> readLocations(@RequestParam("page") int page,
                                         @RequestParam("size") int size,

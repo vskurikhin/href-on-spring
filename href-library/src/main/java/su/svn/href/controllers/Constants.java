@@ -22,6 +22,8 @@ public final class Constants
     public static final String REST_V1_EMPLOYEES = "/v1/employees";
 
 
+    public static final String REST_COUNT = "/count";
+
     public static final String REST_RANGE = "/range";
 
     public static final String REST_RANGE_FULL = "/range-full";
