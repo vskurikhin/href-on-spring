@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
 
     <artifactId>web-service</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.7.2-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
