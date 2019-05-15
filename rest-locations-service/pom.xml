@@ -7,12 +7,12 @@
     <packaging>jar</packaging>
 
     <artifactId>rest-locations-service</artifactId>
-    <version>1.4.7-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.7.1-SNAPSHOT</version>
+        <version>1.7.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -92,12 +92,6 @@
 
 
         <!-- TEST scope JUnit -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>

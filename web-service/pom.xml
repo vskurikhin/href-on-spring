@@ -6,19 +6,21 @@
     <packaging>jar</packaging>
 
     <artifactId>web-service</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.7.4-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.7.1-SNAPSHOT</version>
+        <version>1.7.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
         <org.webjars.bootstrap.version>4.3.1</org.webjars.bootstrap.version>
+        <org.webjars.datatables.version>1.10.19</org.webjars.datatables.version>
         <org.webjars.jquery-ui.version>1.12.1</org.webjars.jquery-ui.version>
         <org.webjars.jquery.version>3.3.1-2</org.webjars.jquery.version>
+        <org.webjars.x-editable-bootstrap.version>1.5.1</org.webjars.x-editable-bootstrap.version>
 
         <!-- TEST scope -->
         <org.junit.jupiter.version>5.3.2</org.junit.jupiter.version>
@@ -67,6 +69,18 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery-ui</artifactId>
             <version>${org.webjars.jquery-ui.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.webjars/datatables -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>datatables.net</artifactId>
+            <version>${org.webjars.datatables.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.webjars/x-editable-bootstrap -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>x-editable-bootstrap</artifactId>
+            <version>${org.webjars.x-editable-bootstrap.version}</version>
         </dependency>
 
 

@@ -2,7 +2,7 @@ pipeline {
   agent {
     kubernetes {
       //cloud 'kubernetes'
-      label 'href'
+      label 'href-building'
       yaml """
 apiVersion: v1
 kind: Pod
@@ -31,7 +31,7 @@ spec:
 
     stage('Build Docker image href-locations') {
       steps {
-        git 'https://github.com/vskurikhin/href-on-spring.git'
+        git branch: 'build', url: 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
             def pom = readMavenPom file: './rest-locations-service/pom.xml'  
@@ -43,7 +43,7 @@ spec:
 
     stage('Build Docker image href-departments') {
       steps {
-        git 'https://github.com/vskurikhin/href-on-spring.git'
+        git branch: 'build', url: 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
             def pom = readMavenPom file: './rest-departments-service/pom.xml'  
@@ -55,7 +55,7 @@ spec:
 
     stage('Build Docker image href-employees') {
       steps {
-        git 'https://github.com/vskurikhin/href-on-spring.git'
+        git branch: 'build', url: 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
             def pom = readMavenPom file: './rest-employees-service/pom.xml'
@@ -67,7 +67,7 @@ spec:
 
     stage('Build Docker image href-web') {
       steps {
-        git 'https://github.com/vskurikhin/href-on-spring.git'
+        git branch: 'build', url: 'https://github.com/vskurikhin/href-on-spring.git'
         container('docker') {
           script {
             def pom = readMavenPom file: './web-service/pom.xml'

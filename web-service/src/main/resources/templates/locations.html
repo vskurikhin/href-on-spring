@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,8 +7,11 @@
 
     <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/locations.js}"></script>
 
     <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/datatables.min.css}" rel="stylesheet">
     <link data-th-href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
@@ -27,21 +30,29 @@
         <div id="title">
             <h1>locations</h1>
         </div>
-        <table id="locations" class="table table-hover">
+
+        <table id="example" class="display" style="width:100%">
             <thead>
-            <tr>
-                <th width="12%">Id</th>
-                <th width="44%">city</th>
-                <th>country</th>
+            <tr class="tr-header">
+                <th name="id" style="width: 10%">Id</th>
+                <th name="streetAddress" style="width: 35%">Street</th>
+                <th name="postalCode">Postal Code</th>
+                <th name="city">City</th>
+                <th name="stateProvince">State</th>
+                <th name="countryId">Country</th>
             </tr>
             </thead>
-            <tbody>
-            <tr class="result" data-th-each="location : ${locations}">
-                <td>[[${location.id}]]</td>
-                <td>[[${location.city}]]</td>
-                <td>[[${location.country.countryName}]]</td>
+            <!-- TODO
+            <tfoot>
+            <tr class="tr-filters">
+                <th><input id="id-search" type="text" placeholder="Filter"/></th>
+                <th><input id="streetAddress-search" type="text" placeholder="Filter"/></th>
+                <th><input id="postalCode-search" type="text" placeholder="Filter"/></th>
+                <th><input id="city-search" type="text" placeholder="Filter"/></th>
+                <th><input id="stateProvince-search" type="text" placeholder="Filter"/></th>
             </tr>
-            </tbody>
+            </tfoot>
+            -->
         </table>
     </div>
 
