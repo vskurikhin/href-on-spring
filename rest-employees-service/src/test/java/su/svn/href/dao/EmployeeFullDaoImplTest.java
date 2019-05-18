@@ -28,6 +28,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static su.svn.href.test.H2Helper.*;
 import static su.svn.utils.TestData.*;
+import static su.svn.utils.TestData.TEST_LID;
+import static su.svn.utils.TestData.testDepartment;
+import static su.svn.utils.TestData.testEmployee;
+import static su.svn.utils.TestData.testLocation;
 
 @SuppressWarnings("ALL")
 @ExtendWith(SpringExtension.class)

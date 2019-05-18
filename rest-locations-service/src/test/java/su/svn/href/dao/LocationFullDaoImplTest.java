@@ -23,13 +23,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static su.svn.href.models.CountryTest.createTestTableForCountries;
-import static su.svn.href.models.RegionTest.createTestTableForRegions;
 import static su.svn.href.models.dto.LocationDtoTest.testLocationDto;
 import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
 import static su.svn.href.test.H2Helper.createTestTableForLocations;
+import static su.svn.href.test.H2Helper.dropTestTableForLocations;
 import static su.svn.utils.TestData.*;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
+import static su.svn.utils.TestUtil.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
@@ -62,7 +61,11 @@ class LocationFullDaoImplTest
             ConnectionFactory connectionFactory = createH2ConnectionFactory();
             client = DatabaseClient.create(connectionFactory);
             createTestTableForRegions(client);
+            insertTestRegionToTable(client);
+
             createTestTableForCountries(client);
+            insertTestCountryToTable(client);
+
             createTestTableForLocations(client);
             insertTestLocationToTable(client);
 
@@ -88,9 +91,9 @@ class LocationFullDaoImplTest
     @AfterAll
     static void clean()
     {
-        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS locations CASCADE");
-        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS countries CASCADE");
-        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS regions CASCADE");
+        dropTestTableForLocations(client);
+        dropTestTableForCountries(client);
+        dropTestTableForRegions(client);
     }
 
     @Test

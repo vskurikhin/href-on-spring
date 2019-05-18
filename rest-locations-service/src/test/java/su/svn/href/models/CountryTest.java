@@ -17,31 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.utils.TestData.TEST_COUNTRY_NAME;
 import static su.svn.utils.TestData.TEST_ID;
 import static su.svn.utils.TestData.TEST_SID;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
+import static su.svn.utils.TestUtil.*;
 
 @DisplayName("Class Country")
 public class CountryTest
 {
-    public static Country testCountry = new Country(TEST_SID, TEST_COUNTRY_NAME, TEST_ID);
-
-    public static void createTestTableForCountries(DatabaseClient client)
-    {
-        databaseClientExecuteSql(client,
-            "CREATE TABLE IF NOT EXISTS countries (\n"
-                + "  country_id      CHAR(2) UNIQUE NOT NULL\n"
-                + ", country_name    VARCHAR(40)\n"
-                + ", region_id       BIGINT\n"
-                + ", CONSTRAINT      country_c_id_pk PRIMARY KEY (country_id)\n"
-                + ")"
-        );
-        client.insert()
-            .into(Country.class)
-            .using(testCountry)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
-
     private Country country;
 
     @Test
@@ -152,6 +132,7 @@ public class CountryTest
             );
             DatabaseClient client = DatabaseClient.create(connectionFactory);
             createTestTableForCountries(client);
+            insertTestCountryToTable(client);
             client.select()
                 .from(Country.class)
                 .fetch()
@@ -160,7 +141,7 @@ public class CountryTest
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
-            databaseClientExecuteSql(client, "DROP TABLE IF EXISTS countries CASCADE");
+            dropTestTableForCountries(client);
         }
     }
 }

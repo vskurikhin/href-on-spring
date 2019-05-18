@@ -14,6 +14,7 @@ import su.svn.href.exceptions.LocationNotFoundException;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.LocationMapUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,23 +31,29 @@ public class LocationsRestController
 
     private LocationFullDao locationFullDao;
 
+    private LocationMapUpdater locationMapUpdater;
+
     private PageSettings paging;
 
     @Autowired
-    public LocationsRestController(LocationDao locationDao,
-                                   LocationFullDao locationFullDao,
-                                   PageSettings paging)
+    public LocationsRestController(
+        LocationDao locationDao,
+        LocationFullDao locationFullDao,
+        LocationMapUpdater locationMapUpdater,
+        PageSettings paging)
     {
         this.locationDao = locationDao;
         this.locationFullDao = locationFullDao;
+        this.locationMapUpdater = locationMapUpdater;
         this.paging = paging;
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<? extends Answer> createLocation(@RequestBody Location location,
-                                                 HttpServletRequest request,
-                                                 HttpServletResponse response)
+    public Mono<? extends Answer> createLocation(
+        @RequestBody Location location,
+        HttpServletRequest request,
+        HttpServletResponse response)
     {
         if (Objects.isNull(location.getId()) || location.getId() < 1) {
             throw new BadValueForLocationIdException();
@@ -62,13 +69,13 @@ public class LocationsRestController
     public Mono<Long> countLocations()
     {
         return locationDao.count();
-
     }
 
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
-    public Flux<Location> readLocations(@RequestParam("page") int page,
-                                        @RequestParam("size") int size,
-                                        @RequestParam("sort") String sort)
+    public Flux<Location> readLocations(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
@@ -99,9 +106,10 @@ public class LocationsRestController
     }
 
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
-    public Flux<LocationDto> readFullLocations(@RequestParam("page") int page,
-                                               @RequestParam("size") int size,
-                                               @RequestParam("sort") String sort)
+    public Flux<LocationDto> readFullLocations(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
@@ -132,41 +140,11 @@ public class LocationsRestController
     }
 
     @PutMapping(path = REST_UPDATE, params = {"field"})
-    public Mono<? extends Answer> updateLocation(@RequestParam("field") String field, @RequestBody Location location)
+    public Mono<? extends Answer> updateLocationNew(@RequestParam("field") String field, @RequestBody Location location)
     {
-        if (Objects.isNull(location) || Objects.isNull(location.getId()) || location.getId() < 1) {
-            throw new BadValueForLocationIdException();
-        }
-
-        switch (field.toUpperCase()) {
-            case "STREET_ADDRESS":
-                return locationDao
-                    .updateStreetAddress(location.getId(), location.getStreetAddress())
-                    .map(r -> new AnswerOk())
-                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
-            case "POSTAL_CODE":
-                return locationDao
-                    .updatePostalCode(location.getId(), location.getPostalCode())
-                    .map(r -> new AnswerOk())
-                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
-            case "CITY":
-                return locationDao
-                    .updateCity(location.getId(), location.getCity())
-                    .map(r -> new AnswerOk())
-                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
-            case "STATE_PROVINCE":
-                return locationDao
-                    .updateStateProvince(location.getId(), location.getStateProvince())
-                    .map(r -> new AnswerOk())
-                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
-            case "COUNTRY_ID":
-                return locationDao
-                    .updateCountryId(location.getId(), location.getCountryId())
-                    .map(r -> new AnswerOk())
-                    .switchIfEmpty(Mono.error(new LocationDontSavedException()));
-            default:
-                return Mono.error(new LocationDontSavedException());
-        }
+        return locationMapUpdater.updateLocation(field, location)
+            .map(r -> new AnswerOk())
+            .switchIfEmpty(Mono.error(new LocationDontSavedException()));
     }
 
     @DeleteMapping("/{id}")

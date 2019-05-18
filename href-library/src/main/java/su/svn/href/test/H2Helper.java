@@ -5,9 +5,57 @@ import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.data.r2dbc.function.DatabaseClient;
 import reactor.test.StepVerifier;
+import su.svn.href.models.Department;
+import su.svn.href.models.Employee;
+import su.svn.href.models.Location;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class H2Helper
 {
+    public static Long TEST_LID = 13L;
+
+    public static String TEST_SID = "13";
+
+
+    public static String TEST_DEPARTMENT_NAME = "test_department_name";
+
+
+    public static String TEST_STREET_ADDRESS = "test_street_address";
+
+    public static String TEST_POSTAL_CODE = "postal_code";
+
+    public static String TEST_CITY = "test_city";
+
+    public static String TEST_STATE_PROVINCE = "test_state_province";
+
+    public static String TEST_FIRST_NAME = "test_first_name";
+
+    public static String TEST_LAST_NAME = "test_last_name";
+
+    public static String TEST_EMAIL = "test_email";
+
+    public static String TEST_PHONE_NUMBER = "test_phone_number";
+
+    public static Date TEST_HIRE_DATE =  Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+
+    public static Double TEST_SALARY = 13_000_000.0;
+
+    public static Double TEST_COMMISSION_PCT = 0.013;
+
+    public static Location testLocation = new Location(
+        TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
+    );
+
+    public static Department testDepartment = new Department(TEST_LID, TEST_DEPARTMENT_NAME, TEST_LID, TEST_LID);
+
+    public static Employee testEmployee = new Employee(
+        TEST_LID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PHONE_NUMBER,
+        TEST_HIRE_DATE, TEST_SID, TEST_SALARY, TEST_COMMISSION_PCT, TEST_LID, TEST_LID
+    );
+
     public static ConnectionFactory createH2ConnectionFactory()
     {
         return new H2ConnectionFactory(H2ConnectionConfiguration
@@ -42,6 +90,21 @@ public class H2Helper
         );
     }
 
+    public static void insertTestLocationToTable(DatabaseClient client)
+    {
+        client.insert()
+            .into(Location.class)
+            .using(testLocation)
+            .then()
+            .as(StepVerifier::create)
+            .verifyComplete();
+    }
+
+    public static void deleteTestTableForLocations(DatabaseClient client)
+    {
+        databaseClientExecuteSql(client, "DELETE locations CASCADE");
+    }
+
     public static void dropTestTableForLocations(DatabaseClient client)
     {
         databaseClientExecuteSql(client, "DROP TABLE IF EXISTS locations CASCADE");
@@ -58,6 +121,21 @@ public class H2Helper
                 + ", CONSTRAINT       dept_id_pk PRIMARY KEY (department_id)\n"
                 + ")"
         );
+    }
+
+    public static void insertTestDepartmentToTable(DatabaseClient client)
+    {
+        client.insert()
+            .into(Department.class)
+            .using(testDepartment)
+            .then()
+            .as(StepVerifier::create)
+            .verifyComplete();
+    }
+
+    public static void deleteTestTableForDepartments(DatabaseClient client)
+    {
+        databaseClientExecuteSql(client, "DELETE departments CASCADE");
     }
 
     public static void dropTestTableForDepartments(DatabaseClient client)
@@ -86,6 +164,23 @@ public class H2Helper
                 + ")"
         );
     }
+
+
+    public static void insertTestEmployeeToTable(DatabaseClient client)
+    {
+        client.insert()
+            .into(Employee.class)
+            .using(testEmployee)
+            .then()
+            .as(StepVerifier::create)
+            .verifyComplete();
+    }
+
+    public static void deleteTestTableForEmployees(DatabaseClient client)
+    {
+        databaseClientExecuteSql(client, "DELETE employees CASCADE");
+    }
+
     public static void dropTestTableForEmployees(DatabaseClient client)
     {
         databaseClientExecuteSql(client, "DROP TABLE IF EXISTS employees CASCADE");
