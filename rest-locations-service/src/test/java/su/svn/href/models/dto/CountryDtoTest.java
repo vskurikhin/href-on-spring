@@ -11,7 +11,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.href.models.RegionTest.testRegion;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class CountryDto")

@@ -17,6 +17,7 @@ public class LocationDaoImpl implements LocationUpdateDao
 
     }
 
+    @Override
     public Mono<Integer> updateStreetAddress(Long id, String streetAddress)
     {
         return databaseClient.execute()
@@ -63,12 +64,14 @@ public class LocationDaoImpl implements LocationUpdateDao
     @Override
     public Mono<Integer> updateCountryId(Long id, String countryId)
     {
+
         return databaseClient.execute()
             .sql("UPDATE locations SET country_id = $2 WHERE location_id = $1")
             .bind("$1", id)
             .bind("$2", countryId)
             .fetch()
             .rowsUpdated();
+
     }
 }
 

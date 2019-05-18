@@ -10,6 +10,7 @@ import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static su.svn.href.test.H2Helper.testLocation;
 import static su.svn.utils.TestData.*;
 
 public class DepartmentDtoTest

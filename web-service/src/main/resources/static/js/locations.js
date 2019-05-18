@@ -6,7 +6,7 @@ $(document).ready(function () {
         "ajax": "rest/api/v1/locations",
         "orderCellsTop": true,
         "pageLength": 10,
-        "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+        "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
         "bProcessing": false,
         "serverSide": true,
         "select": true,
@@ -38,4 +38,3 @@ $(document).ready(function() {
         console.log('You clicked on '+ data['id'] +'\'s row' );
     } );
 } );
-// "dom": 'T clear Brtip',

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -63,5 +65,15 @@ public class ReactiveLocationRepository implements LocationRepository
             .uri("/" + id)
             .retrieve()
             .bodyToMono(LocationDto.class);
+    }
+
+    @Override
+    public Mono<ClientResponse> update(String field, Location location)
+    {
+        return webClient
+            .put()
+            .uri(REST_UPDATE + "?field=" + field)
+            .body(BodyInserters.fromObject(location))
+            .exchange();
     }
 }

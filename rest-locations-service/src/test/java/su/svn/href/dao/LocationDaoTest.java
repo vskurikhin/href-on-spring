@@ -1,7 +1,5 @@
 package su.svn.href.dao;
 
-import io.r2dbc.h2.H2ConnectionConfiguration;
-import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,26 +13,23 @@ import org.springframework.data.r2dbc.function.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import reactor.test.StepVerifier;
 import su.svn.href.models.Location;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
 import static su.svn.href.test.H2Helper.createTestTableForLocations;
 import static su.svn.href.test.H2Helper.dropTestTableForLocations;
 import static su.svn.utils.TestData.*;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
+import static su.svn.utils.TestUtil.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @DisplayName("Class LocationDao")
 class LocationDaoTest
 {
-    public static Location testLocation = new Location(
-        TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
-    );
     static DatabaseClient client;
 
     @Configuration
@@ -44,13 +39,12 @@ class LocationDaoTest
         @Bean
         public DatabaseClient databaseClient()
         {
-            ConnectionFactory connectionFactory = new H2ConnectionFactory(
-                H2ConnectionConfiguration
-                    .builder()
-                    .url("mem:test;DB_CLOSE_DELAY=10")
-                    .build()
-            );
+            ConnectionFactory connectionFactory = createH2ConnectionFactory();
             client = DatabaseClient.create(connectionFactory);
+
+            createTestTableForRegions(client);
+            createTestTableForCountries(client);
+            createTestTableForLocations(client);
 
             return client;
         }
@@ -62,6 +56,7 @@ class LocationDaoTest
         }
     }
 
+
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     RegionDao regionDao;
@@ -70,22 +65,28 @@ class LocationDaoTest
     @Autowired
     LocationDao locationDao;
 
+    @AfterAll
+    static void drop()
+    {
+        dropTestTableForLocations(client);
+        dropTestTableForCountries(client);
+        dropTestTableForRegions(client);
+    }
+
     @BeforeEach
     void setUp()
     {
-        createTestTableForLocations(client);
-        client.insert()
-            .into(Location.class)
-            .using(testLocation)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
+        insertTestRegionToTable(client);
+        insertTestCountryToTable(client);
+        insertTestLocationToTable(client);
     }
 
     @AfterEach
     void clean()
     {
-        dropTestTableForLocations(client);
+        deleteTestTableForLocations(client);
+        deleteTestTableForCountries(client);
+        deleteTestTableForRegions(client);
     }
 
     @Test

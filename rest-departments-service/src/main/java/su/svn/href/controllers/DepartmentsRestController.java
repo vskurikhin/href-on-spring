@@ -14,6 +14,7 @@ import su.svn.href.exceptions.DepartmentNotFoundException;
 import su.svn.href.models.Department;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.DepartmentMapUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,15 +31,19 @@ public class DepartmentsRestController
 
     private DepartmentFullDao departmentFullDao;
 
+    private DepartmentMapUpdater departmentMapUpdater;
+
     private PageSettings paging;
 
     @Autowired
     public DepartmentsRestController(DepartmentDao departmentDao,
                                      DepartmentFullDao departmentFullDao,
+                                     DepartmentMapUpdater departmentMapUpdater,
                                      PageSettings paging)
     {
         this.departmentDao = departmentDao;
         this.departmentFullDao = departmentFullDao;
+        this.departmentMapUpdater = departmentMapUpdater;
         this.paging = paging;
     }
 
@@ -56,6 +61,12 @@ public class DepartmentsRestController
             .save(department)
             .map(r -> new AnswerCreated(response, request.getRequestURI(), r.getId()))
             .switchIfEmpty(Mono.error(new DepartmentDontSavedException()));
+    }
+
+    @GetMapping(path = REST_COUNT)
+    public Mono<Long> countLocations()
+    {
+        return departmentDao.count();
     }
 
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
@@ -113,6 +124,16 @@ public class DepartmentsRestController
 
         return departmentDao
             .save(department)
+            .map(r -> new AnswerOk())
+            .switchIfEmpty(Mono.error(new DepartmentDontSavedException()));
+    }
+
+    @PutMapping(path = REST_UPDATE, params = {"field"})
+    public Mono<? extends Answer> updateLocationField(
+        @RequestParam("field") String field,
+        @RequestBody Department department)
+    {
+        return departmentMapUpdater.updateDepartment(field, department)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(new DepartmentDontSavedException()));
     }

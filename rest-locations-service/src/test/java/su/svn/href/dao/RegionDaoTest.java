@@ -1,11 +1,7 @@
 package su.svn.href.dao;
 
-import io.r2dbc.h2.H2ConnectionConfiguration;
-import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,16 +20,15 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static su.svn.href.models.RegionTest.createTestTableForRegions;
+import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
 import static su.svn.utils.TestData.*;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
+import static su.svn.utils.TestUtil.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @DisplayName("Class RegionDao")
 class RegionDaoTest
 {
-    static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
 
     static DatabaseClient client;
 
@@ -44,12 +39,7 @@ class RegionDaoTest
         @Bean
         public DatabaseClient databaseClient()
         {
-            ConnectionFactory connectionFactory = new H2ConnectionFactory(
-                H2ConnectionConfiguration
-                    .builder()
-                    .url("mem:test;DB_CLOSE_DELAY=10")
-                    .build()
-            );
+            ConnectionFactory connectionFactory = createH2ConnectionFactory();
             client = DatabaseClient.create(connectionFactory);
             createTestTableForRegions(client);
 
@@ -68,9 +58,21 @@ class RegionDaoTest
     RegionDao regionDao;
 
     @AfterAll
-    static void clean()
+    static void drop()
     {
-        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS regions CASCADE");
+        dropTestTableForRegions(client);
+    }
+
+    @BeforeEach
+    void setUp()
+    {
+        insertTestRegionToTable(client);
+    }
+
+    @AfterEach
+    void clean()
+    {
+        deleteTestTableForRegions(client);
     }
 
     @Test
