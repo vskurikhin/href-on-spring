@@ -34,6 +34,14 @@ public class TestData
 
     public static String TEST_STATE_PROVINCE = "test_state_province";
 
+    public static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
+
+    public static Country testCountry = new Country(TEST_SID, TEST_COUNTRY_NAME, TEST_ID);
+
+    public static Location testLocation = new Location(
+        TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
+    );
+
     public static Region createRegion0()
     {
         Region result = new Region();

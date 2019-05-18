@@ -17,6 +17,7 @@ import su.svn.href.dao.DepartmentFullDao;
 import su.svn.href.models.Department;
 import su.svn.href.models.dto.DepartmentDto;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.DepartmentMapUpdater;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
@@ -48,6 +49,9 @@ class DepartmentsRestControllerTest
 
     @MockBean
     private DepartmentFullDao departmentFullDao;
+
+    @MockBean
+    private DepartmentMapUpdater departmentMapUpdater;
 
     @MockBean
     private PageSettings paging;

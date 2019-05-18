@@ -14,6 +14,7 @@ import su.svn.href.exceptions.LocationNotFoundException;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.LocationMapUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,23 +31,29 @@ public class LocationsRestController
 
     private LocationFullDao locationFullDao;
 
+    private LocationMapUpdater locationMapUpdater;
+
     private PageSettings paging;
 
     @Autowired
-    public LocationsRestController(LocationDao locationDao,
-                                   LocationFullDao locationFullDao,
-                                   PageSettings paging)
+    public LocationsRestController(
+        LocationDao locationDao,
+        LocationFullDao locationFullDao,
+        LocationMapUpdater locationMapUpdater,
+        PageSettings paging)
     {
         this.locationDao = locationDao;
         this.locationFullDao = locationFullDao;
+        this.locationMapUpdater = locationMapUpdater;
         this.paging = paging;
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<? extends Answer> createLocation(@RequestBody Location location,
-                                                 HttpServletRequest request,
-                                                 HttpServletResponse response)
+    public Mono<? extends Answer> createLocation(
+        @RequestBody Location location,
+        HttpServletRequest request,
+        HttpServletResponse response)
     {
         if (Objects.isNull(location.getId()) || location.getId() < 1) {
             throw new BadValueForLocationIdException();
@@ -58,10 +65,17 @@ public class LocationsRestController
             .switchIfEmpty(Mono.error(new LocationDontSavedException()));
     }
 
+    @GetMapping(path = REST_COUNT)
+    public Mono<Long> countLocations()
+    {
+        return locationDao.count();
+    }
+
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
-    public Flux<Location> readLocations(@RequestParam("page") int page,
-                                        @RequestParam("size") int size,
-                                        @RequestParam("sort") String sort)
+    public Flux<Location> readLocations(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
@@ -80,10 +94,22 @@ public class LocationsRestController
         }
     }
 
+    @GetMapping("/{id}")
+    public Mono<LocationDto> readFullLocation(@PathVariable Long id)
+    {
+        if (Objects.isNull(id) || id < 1) throw new BadValueForLocationIdException();
+        AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
+
+        return locationFullDao
+            .findById(id)
+            .switchIfEmpty(Mono.error(new LocationNotFoundException()));
+    }
+
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
-    public Flux<LocationDto> readFullLocations(@RequestParam("page") int page,
-                                               @RequestParam("size") int size,
-                                               @RequestParam("sort") String sort)
+    public Flux<LocationDto> readFullLocations(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
@@ -109,6 +135,16 @@ public class LocationsRestController
 
         return locationDao
             .save(location)
+            .map(r -> new AnswerOk())
+            .switchIfEmpty(Mono.error(new LocationDontSavedException()));
+    }
+
+    @PutMapping(path = REST_UPDATE, params = {"field"})
+    public Mono<? extends Answer> updateLocationField(
+        @RequestParam("field") String field,
+        @RequestBody Location location)
+    {
+        return locationMapUpdater.updateLocation(field, location)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(new LocationDontSavedException()));
     }

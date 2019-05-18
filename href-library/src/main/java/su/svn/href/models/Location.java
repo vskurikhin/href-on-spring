@@ -33,4 +33,62 @@ public class Location
 
     @Column("country_id")
     private String countryId;
+
+    public static class Builder
+    {
+        private Long id;
+        private String streetAddress;
+        private String postalCode;
+        private String city;
+        private String stateProvince;
+        private String countryId;
+
+        private Builder() { /* None */ }
+
+        public Builder setId(Long id)
+        {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setStreetAddress(String streetAddress)
+        {
+            this.streetAddress = streetAddress;
+            return this;
+        }
+
+        public Builder setPostalCode(String postalCode)
+        {
+            this.postalCode = postalCode;
+            return this;
+        }
+
+        public Builder setCity(String city)
+        {
+            this.city = city;
+            return this;
+        }
+
+        public Builder setStateProvince(String stateProvince)
+        {
+            this.stateProvince = stateProvince;
+            return this;
+        }
+
+        public Builder setCountryId(String countryId)
+        {
+            this.countryId = countryId;
+            return this;
+        }
+
+        public Location build()
+        {
+            return new Location(id, streetAddress, postalCode, city, stateProvince, countryId);
+        }
+    }
+
+    public static Builder builder()
+    {
+        return new Builder();
+    }
 }

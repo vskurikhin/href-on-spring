@@ -17,6 +17,7 @@ import su.svn.href.dao.LocationFullDao;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.LocationDto;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.LocationMapUpdater;
 
 import java.util.function.BiConsumer;
 
@@ -47,6 +48,9 @@ class LocationsRestControllerTest
 
     @MockBean
     private LocationFullDao locationFullDao;
+
+    @MockBean
+    private LocationMapUpdater locationMapUpdater;
 
     @MockBean
     private PageSettings paging;
@@ -287,6 +291,66 @@ class LocationsRestControllerTest
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(location0))
         ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("when update streetAddress is ok")
+    void updateStreetAddress() throws Exception
+    {
+        when(locationMapUpdater.updateLocation(anyString(), any()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "street_address")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("when update postalCode is ok")
+    void updatePostalCodes() throws Exception
+    {
+        when(locationMapUpdater.updateLocation(anyString(), any()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "postal_code")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("when update city is ok")
+    void updateCity() throws Exception
+    {
+        when(locationMapUpdater.updateLocation(anyString(), any()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "city")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("when update stateProvince is ok")
+    void updateStateProvince() throws Exception
+    {
+        when(locationMapUpdater.updateLocation(anyString(), any()))
+            .thenReturn(Mono.just(1));
+
+        mvc.perform(
+            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+                .contentType(APPLICATION_JSON_UTF8)
+                .param("field", "state_province")
+                .content(convertObjectToJsonBytes(location1))
+        ).andExpect(status().isOk());
     }
 
     @Test

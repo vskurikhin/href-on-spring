@@ -6,15 +6,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import su.svn.href.configs.ServicesProperties;
-import su.svn.href.models.dto.EmployeeDto;
+import su.svn.href.models.Employee;
 
 import java.time.Duration;
 import java.util.Properties;
 
-import static su.svn.href.controllers.Constants.REST_API;
-import static su.svn.href.controllers.Constants.REST_RANGE_FULL;
-import static su.svn.href.controllers.Constants.REST_V1_EMPLOYEES;
+import static su.svn.href.controllers.Constants.*;
 
 @Repository
 public class ReactiveEmployeeRepository implements EmployeeRepository
@@ -35,13 +34,23 @@ public class ReactiveEmployeeRepository implements EmployeeRepository
     }
 
     @Override
-    public Flux<EmployeeDto> findAll(int page, int size)
+    public Mono<Long> count()
     {
         return webClient
             .get()
-            .uri(REST_RANGE_FULL + "?page=" + page  + "&size=" + size + "&sort=id")
+            .uri(REST_COUNT)
             .retrieve()
-            .bodyToFlux(EmployeeDto.class)
+            .bodyToMono(Long.class);
+    }
+
+    @Override
+    public Flux<Employee> findAll(int page, int size)
+    {
+        return webClient
+            .get()
+            .uri(REST_RANGE + "?page=" + page  + "&size=" + size + "&sort=id")
+            .retrieve()
+            .bodyToFlux(Employee.class)
             .delayElements(Duration.ofMillis(10));
     }
 }

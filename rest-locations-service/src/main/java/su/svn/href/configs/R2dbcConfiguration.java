@@ -42,9 +42,9 @@ public class R2dbcConfiguration extends AbstractR2dbcConfiguration
     }
 
     @Bean
-    public LocationDao locationDao(R2dbcRepositoryFactory factory)
+    public LocationDao locationDao(R2dbcRepositoryFactory factory, DatabaseClient dbc)
     {
-        return factory.getRepository(LocationDao.class);
+        return factory.getRepository(LocationDao.class, new LocationDaoImpl(dbc));
     }
 
 
