@@ -4,17 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import su.svn.href.configs.ServicesProperties;
+import su.svn.href.models.Department;
 import su.svn.href.models.dto.DepartmentDto;
 
 import java.time.Duration;
 import java.util.Properties;
 
-import static su.svn.href.controllers.Constants.REST_API;
-import static su.svn.href.controllers.Constants.REST_RANGE_FULL;
-import static su.svn.href.controllers.Constants.REST_V1_DEPARTMENTS;
+import static su.svn.href.controllers.Constants.*;
 
 @Repository
 public class ReactiveDepartmentRepository implements DepartmentRepository
@@ -30,19 +32,48 @@ public class ReactiveDepartmentRepository implements DepartmentRepository
 
         this.webClient = wcBuilder
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            // .baseUrl("http://localhost:8002/departments")
             .baseUrl("http://" + host + ':' + port + REST_API + REST_V1_DEPARTMENTS)
             .build();
     }
 
     @Override
-    public Flux<DepartmentDto> findAll(int page, int size)
+    public Mono<Long> count()
     {
         return webClient
             .get()
-            .uri(REST_RANGE_FULL + "?page=" + page  + "&size=" + size + "&sort=id")
+            .uri(REST_COUNT)
             .retrieve()
-            .bodyToFlux(DepartmentDto.class)
+            .bodyToMono(Long.class);
+    }
+
+    @Override
+    public Flux<Department> findAll(int page, int size)
+    {
+        return webClient
+            .get()
+            .uri(REST_RANGE + "?page=" + page  + "&size=" + size + "&sort=id")
+            .retrieve()
+            .bodyToFlux(Department.class)
             .delayElements(Duration.ofMillis(10));
+    }
+
+    @Override
+    public Mono<DepartmentDto> findById(long id)
+    {
+        return webClient
+            .get()
+            .uri("/" + id)
+            .retrieve()
+            .bodyToMono(DepartmentDto.class);
+    }
+
+    @Override
+    public Mono<ClientResponse> update(String field, Department department)
+    {
+        return webClient
+            .put()
+            .uri(REST_UPDATE + "?field=" + field)
+            .body(BodyInserters.fromObject(department))
+            .exchange();
     }
 }

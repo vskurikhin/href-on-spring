@@ -2,10 +2,12 @@ package su.svn.href.dao;
 
 import org.springframework.data.r2dbc.repository.query.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import su.svn.href.models.Department;
 
-public interface DepartmentDao extends ReactiveCrudRepository<Department, Long>
+@Repository
+public interface DepartmentDao extends ReactiveCrudRepository<Department, Long>, DepartmentUpdateDao
 {
     @Query("SELECT * FROM departments OFFSET $1 LIMIT $2")
     Flux<Department> findAll(int offset, int limit);
@@ -20,21 +22,21 @@ public interface DepartmentDao extends ReactiveCrudRepository<Department, Long>
     @Query("SELECT * FROM departments WHERE department_name LIKE $1")
     Flux<Department> findByDepartmentName(String departmentName);
 
-    @Query("SELECT * FROM departments OFFSET $1 LIMIT $2 WHERE department_name LIKE $3")
+    @Query("SELECT * FROM departments WHERE department_name LIKE $3 OFFSET $1 LIMIT $2")
     Flux<Department> findByDepartmentName(int offset, int limit, String departmentName);
 
 
     @Query("SELECT * FROM departments WHERE manager_id = $1")
     Flux<Department> findByManagerId(Long managerId);
 
-    @Query("SELECT * FROM departments OFFSET $1 LIMIT $2 WHERE manager_id = $3")
+    @Query("SELECT * FROM departments WHERE manager_id = $3 OFFSET $1 LIMIT $2")
     Flux<Department> findByManagerId(int offset, int limit, Long managerId);
 
 
-    @Query("SELECT * FROM departments WHERE location_id = $3")
+    @Query("SELECT * FROM departments WHERE location_id = $1")
     Flux<Department> findByLocationId(Long locationId);
 
-    @Query("SELECT * FROM departments OFFSET $1 LIMIT $2 WHERE location_id = $3")
+    @Query("SELECT * FROM departments WHERE location_id = $3 OFFSET $1 LIMIT $2")
     Flux<Department> findByLocationId(int offset, int limit, Long locationId);
 }
 

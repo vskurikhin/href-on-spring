@@ -10,7 +10,7 @@ application:
       host: ${LOCATIONS_HOST:localhost}
       port: 8001
 
-logging.level.org.springframework.web: INFO
+logging.level.org.springframework.web: DEBUG
 
 spring.thymeleaf:
   cache: false

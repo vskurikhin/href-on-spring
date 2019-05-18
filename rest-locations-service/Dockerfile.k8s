@@ -1,13 +1,13 @@
 FROM maven:3.6.1-jdk-8
-
 MAINTAINER Victor N. Skurikhin
+
 ENV LIBRARY=href-library
 ENV TARGET=rest-locations-service
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
-ADD ./pom.xml  $PROJECT_DIR
+ADD ./pom.xml   $PROJECT_DIR
 ADD ./$LIBRARY/ $PROJECT_DIR/$LIBRARY
 ADD ./$TARGET/  $PROJECT_DIR/$TARGET
 
@@ -17,4 +17,4 @@ RUN mvn -B clean install
 WORKDIR $PROJECT_DIR/$TARGET
 RUN mvn -B clean package
 
-CMD [ "java", "-jar", "/opt/project/rest-locations-service/target/rest-locations-service.jar" ]
+CMD [ "java", "-jar", "/opt/project/rest-departments-service/target/rest-locations-service.jar" ]

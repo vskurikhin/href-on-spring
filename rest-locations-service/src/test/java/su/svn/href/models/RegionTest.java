@@ -15,28 +15,14 @@ import reactor.test.StepVerifier;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.utils.TestData.*;
+import static su.svn.utils.TestUtil.createTestTableForRegions;
 import static su.svn.utils.TestUtil.databaseClientExecuteSql;
+import static su.svn.utils.TestUtil.insertTestRegionToTable;
 
 @DisplayName("Class Region")
 public class RegionTest
 {
-    public static Region testRegion = new Region(TEST_LID, TEST_REGION_NAME);
 
-    public static void createTestTableForRegions(DatabaseClient client)
-    {
-        databaseClientExecuteSql(client,
-            "CREATE TABLE IF NOT EXISTS regions (\n"
-                + "  region_id SERIAL PRIMARY KEY\n"
-                + ", region_name VARCHAR(25)\n"
-                + ")"
-        );
-        client.insert()
-            .into(Region.class)
-            .using(testRegion)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
 
     private Region region;
 
@@ -139,6 +125,7 @@ public class RegionTest
             );
             DatabaseClient client = DatabaseClient.create(connectionFactory);
             createTestTableForRegions(client);
+            insertTestRegionToTable(client);
             client.select()
                 .from(Region.class)
                 .fetch()
