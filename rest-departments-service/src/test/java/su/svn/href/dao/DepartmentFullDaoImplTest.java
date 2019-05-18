@@ -2,6 +2,8 @@ package su.svn.href.dao;
 
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,6 @@ import org.springframework.data.r2dbc.function.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import reactor.test.StepVerifier;
-import su.svn.href.models.Department;
-import su.svn.href.models.Employee;
-import su.svn.href.models.Location;
 import su.svn.href.models.dto.DepartmentDto;
 
 import java.util.Collections;
@@ -25,6 +23,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static su.svn.href.test.H2Helper.*;
+import static su.svn.href.test.H2Helper.TEST_DEPARTMENT_NAME;
+import static su.svn.href.test.H2Helper.TEST_LID;
+import static su.svn.href.test.H2Helper.testEmployee;
+import static su.svn.href.test.H2Helper.testLocation;
 import static su.svn.utils.TestData.*;
 
 @SuppressWarnings("ALL")
@@ -33,36 +35,6 @@ import static su.svn.utils.TestData.*;
 class DepartmentFullDaoImplTest
 {
     static DatabaseClient client;
-
-    static void insertTestLocationToTable(DatabaseClient client)
-    {
-        client.insert()
-            .into(Location.class)
-            .using(testLocation)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
-
-    static void insertTestDepartmentToTable(DatabaseClient client)
-    {
-        client.insert()
-            .into(Department.class)
-            .using(testDepartment)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
-
-    public static void insertTestEmployeeToTable(DatabaseClient client)
-    {
-        client.insert()
-            .into(Employee.class)
-            .using(testEmployee)
-            .then()
-            .as(StepVerifier::create)
-            .verifyComplete();
-    }
 
     @Configuration
     @EnableR2dbcRepositories(basePackages = "su.svn.href.dao")
@@ -75,13 +47,8 @@ class DepartmentFullDaoImplTest
             client = DatabaseClient.create(connectionFactory);
 
             createTestTableForLocations(client);
-            insertTestLocationToTable(client);
-
             createTestTableForDepartments(client);
-            insertTestDepartmentToTable(client);
-
             createTestTableForEmployees(client);
-            insertTestEmployeeToTable(client);
 
             return client;
         }
@@ -103,12 +70,29 @@ class DepartmentFullDaoImplTest
     DepartmentFullDao departmentFullDao;
 
     @AfterAll
-    static void clean()
+    static void drop()
     {
-        dropTestTableForLocations(client);
         dropTestTableForEmployees(client);
         dropTestTableForDepartments(client);
+        dropTestTableForLocations(client);
     }
+
+    @BeforeEach
+    void setUp()
+    {
+        insertTestLocationToTable(client);
+        insertTestDepartmentToTable(client);
+        insertTestEmployeeToTable(client);
+    }
+
+    @AfterEach
+    void clean()
+    {
+        deleteTestTableForEmployees(client);
+        deleteTestTableForDepartments(client);
+        deleteTestTableForLocations(client);
+    }
+
 
     @Test
     void findById()

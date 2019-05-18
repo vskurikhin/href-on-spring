@@ -17,6 +17,7 @@ import su.svn.href.dao.LocationFullDao;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.LocationDto;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.LocationMapUpdater;
 
 import java.util.function.BiConsumer;
 
@@ -47,6 +48,9 @@ class LocationsRestControllerTest
 
     @MockBean
     private LocationFullDao locationFullDao;
+
+    @MockBean
+    private LocationMapUpdater locationMapUpdater;
 
     @MockBean
     private PageSettings paging;
@@ -293,7 +297,7 @@ class LocationsRestControllerTest
     @DisplayName("when update streetAddress is ok")
     void updateStreetAddress() throws Exception
     {
-        when(locationDao.updateStreetAddress(location1.getId(), location1.getStreetAddress()))
+        when(locationMapUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(
@@ -308,7 +312,7 @@ class LocationsRestControllerTest
     @DisplayName("when update postalCode is ok")
     void updatePostalCodes() throws Exception
     {
-        when(locationDao.updatePostalCode(location1.getId(), location1.getPostalCode()))
+        when(locationMapUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(
@@ -323,7 +327,7 @@ class LocationsRestControllerTest
     @DisplayName("when update city is ok")
     void updateCity() throws Exception
     {
-        when(locationDao.updateCity(location1.getId(), location1.getCity()))
+        when(locationMapUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(
@@ -338,7 +342,7 @@ class LocationsRestControllerTest
     @DisplayName("when update stateProvince is ok")
     void updateStateProvince() throws Exception
     {
-        when(locationDao.updateStateProvince(location1.getId(), location1.getStateProvince()))
+        when(locationMapUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(

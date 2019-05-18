@@ -42,7 +42,7 @@ public class DepartmentDaoImpl implements DepartmentUpdateDao
     public Mono<Integer> updateLocationId(Long id, Long locationId)
     {
         return databaseClient.execute()
-            .sql("UPDATE departments SET department_name = $2 WHERE location_id = $1")
+            .sql("UPDATE departments SET location_id = $2 WHERE department_id = $1")
             .bind("$1", id)
             .bind("$2", locationId)
             .fetch()

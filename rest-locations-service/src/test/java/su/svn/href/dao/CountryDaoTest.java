@@ -3,10 +3,7 @@ package su.svn.href.dao;
 import io.r2dbc.h2.H2ConnectionConfiguration;
 import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,11 +21,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static su.svn.href.models.CountryTest.createTestTableForCountries;
-import static su.svn.href.models.CountryTest.testCountry;
-import static su.svn.href.models.RegionTest.createTestTableForRegions;
+import static su.svn.href.test.H2Helper.createH2ConnectionFactory;
 import static su.svn.utils.TestData.TEST_COUNTRY_NAME;
-import static su.svn.utils.TestUtil.databaseClientExecuteSql;
+import static su.svn.utils.TestData.testCountry;
+import static su.svn.utils.TestUtil.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
@@ -44,13 +40,9 @@ class CountryDaoTest
         @Bean
         public DatabaseClient databaseClient()
         {
-            ConnectionFactory connectionFactory = new H2ConnectionFactory(
-                H2ConnectionConfiguration
-                    .builder()
-                    .url("mem:test;DB_CLOSE_DELAY=10")
-                    .build()
-            );
+            ConnectionFactory connectionFactory = createH2ConnectionFactory();
             client = DatabaseClient.create(connectionFactory);
+
             createTestTableForRegions(client);
             createTestTableForCountries(client);
 
@@ -72,17 +64,28 @@ class CountryDaoTest
     @Autowired
     CountryDao countryDao;
 
+
     @AfterAll
-    static void clean()
+    static void drop()
     {
-        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS countries CASCADE");
-        databaseClientExecuteSql(client, "DROP TABLE IF EXISTS regions CASCADE");
+        dropTestTableForCountries(client);
+        dropTestTableForRegions(client);
     }
 
     @BeforeEach
     void setUp()
     {
+        insertTestRegionToTable(client);
+        insertTestCountryToTable(client);
     }
+
+    @AfterEach
+    void clean()
+    {
+        deleteTestTableForCountries(client);
+        deleteTestTableForRegions(client);
+    }
+
 
     @Test
     void findByCountryName_found()

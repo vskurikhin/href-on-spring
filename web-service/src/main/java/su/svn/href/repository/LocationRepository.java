@@ -14,5 +14,5 @@ public interface LocationRepository
 
     Mono<LocationDto> findById(long id);
 
-    Mono<ClientResponse> update(String field, LocationDto location);
+    Mono<ClientResponse> update(String field, Location location);
 }

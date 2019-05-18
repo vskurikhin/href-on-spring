@@ -11,6 +11,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.LinkedList;
 
+import static su.svn.href.test.H2Helper.testLocation;
+
 public class TestData
 {
     public static String TEST = "test";
@@ -59,7 +61,7 @@ public class TestData
 
     public static Double TEST_COMMISSION_PCT = 0.013;
 
-
+    /*
     public static Location testLocation = new Location(
         TEST_LID, TEST_STREET_ADDRESS, TEST_POSTAL_CODE, TEST_CITY, TEST_STATE_PROVINCE, TEST_SID
     );
@@ -69,7 +71,7 @@ public class TestData
     public static Employee testEmployee = new Employee(
         TEST_LID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PHONE_NUMBER,
         TEST_HIRE_DATE, TEST_SID, TEST_SALARY, TEST_COMMISSION_PCT, TEST_LID, TEST_LID
-    );
+    );*/
 
     public static Manager testManager = new Manager(
         TEST_LID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PHONE_NUMBER
@@ -78,7 +80,6 @@ public class TestData
     public static DepartmentDto testDepartmentDto = new DepartmentDto(
         TEST_LID, TEST_DEPARTMENT_NAME, testManager, testLocation, new LinkedList<>()
     );
-
 
     public static Location createLocation0()
     {

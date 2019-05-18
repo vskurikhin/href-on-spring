@@ -29,9 +29,9 @@ public class R2dbcConfiguration extends AbstractR2dbcConfiguration
     }
 
     @Bean
-    public DepartmentDao departmentDao(R2dbcRepositoryFactory factory)
+    public DepartmentDao departmentDao(R2dbcRepositoryFactory factory, DatabaseClient dbc)
     {
-        return factory.getRepository(DepartmentDao.class);
+        return factory.getRepository(DepartmentDao.class, new DepartmentDaoImpl(dbc));
     }
 
     @Bean

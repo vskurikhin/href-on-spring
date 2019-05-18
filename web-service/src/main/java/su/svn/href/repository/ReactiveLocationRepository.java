@@ -68,11 +68,11 @@ public class ReactiveLocationRepository implements LocationRepository
     }
 
     @Override
-    public Mono<ClientResponse> update(String field, LocationDto location)
+    public Mono<ClientResponse> update(String field, Location location)
     {
         return webClient
             .put()
-            .uri("/field" + field)
+            .uri(REST_UPDATE + "?field=" + field)
             .body(BodyInserters.fromObject(location))
             .exchange();
     }

@@ -22,21 +22,21 @@ public interface DepartmentDao extends ReactiveCrudRepository<Department, Long>,
     @Query("SELECT * FROM departments WHERE department_name LIKE $1")
     Flux<Department> findByDepartmentName(String departmentName);
 
-    @Query("SELECT * FROM departments OFFSET $1 LIMIT $2 WHERE department_name LIKE $3")
+    @Query("SELECT * FROM departments WHERE department_name LIKE $3 OFFSET $1 LIMIT $2")
     Flux<Department> findByDepartmentName(int offset, int limit, String departmentName);
 
 
     @Query("SELECT * FROM departments WHERE manager_id = $1")
     Flux<Department> findByManagerId(Long managerId);
 
-    @Query("SELECT * FROM departments OFFSET $1 LIMIT $2 WHERE manager_id = $3")
+    @Query("SELECT * FROM departments WHERE manager_id = $3 OFFSET $1 LIMIT $2")
     Flux<Department> findByManagerId(int offset, int limit, Long managerId);
 
 
-    @Query("SELECT * FROM departments WHERE location_id = $3")
+    @Query("SELECT * FROM departments WHERE location_id = $1")
     Flux<Department> findByLocationId(Long locationId);
 
-    @Query("SELECT * FROM departments OFFSET $1 LIMIT $2 WHERE location_id = $3")
+    @Query("SELECT * FROM departments WHERE location_id = $3 OFFSET $1 LIMIT $2")
     Flux<Department> findByLocationId(int offset, int limit, Long locationId);
 }
 
