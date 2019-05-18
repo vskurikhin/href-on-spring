@@ -140,7 +140,9 @@ public class LocationsRestController
     }
 
     @PutMapping(path = REST_UPDATE, params = {"field"})
-    public Mono<? extends Answer> updateLocationNew(@RequestParam("field") String field, @RequestBody Location location)
+    public Mono<? extends Answer> updateLocationField(
+        @RequestParam("field") String field,
+        @RequestBody Location location)
     {
         return locationMapUpdater.updateLocation(field, location)
             .map(r -> new AnswerOk())

@@ -6,79 +6,80 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;
-import su.svn.href.models.Location;
+import su.svn.href.models.Department;
 import su.svn.href.models.UpdateValue;
 import su.svn.href.models.dto.*;
-import su.svn.href.repository.LocationRepository;
-import su.svn.href.services.LocationMapUpdater;
+import su.svn.href.repository.DepartmentRepository;
+import su.svn.href.services.DepartmentMapUpdater;
 
 import java.util.Objects;
 
 import static su.svn.href.controllers.Constants.*;
 
+@SuppressWarnings("Duplicates")
 @RestController()
-@RequestMapping(value = REST_API + REST_V1_LOCATIONS)
-public class LocationsRestController
+@RequestMapping(value = REST_API + REST_V1_DEPARTMENTS)
+public class DepartmentsRestController
 {
-    private LocationRepository locationRepository;
+    private DepartmentRepository departmentRepository;
 
-    private LocationMapUpdater locationMapUpdater;
+    private DepartmentMapUpdater departmentMapUpdater;
 
     @Autowired
-    public LocationsRestController(LocationRepository locationRepository, LocationMapUpdater locationMapUpdater)
+    public DepartmentsRestController(DepartmentRepository departmentRepository, DepartmentMapUpdater departmentMapUpdater)
     {
-        this.locationRepository = locationRepository;
-        this.locationMapUpdater = locationMapUpdater;
+        this.departmentRepository = departmentRepository;
+        this.departmentMapUpdater = departmentMapUpdater;
     }
 
     @GetMapping
-    public Mono<LocationDataTables> readFullLocations(
+    public Mono<DepartmentDataTables> readFullDepartments(
         @RequestParam("draw")   final Integer draw,
         @RequestParam("start")  final Integer start,
         @RequestParam("length") final Integer length,
         @RequestParam("search[value]") final String searchValue,
         @RequestParam("columns[0][search][value]") final String id,
-        @RequestParam("columns[1][search][value]") final String streetAddress,
-        @RequestParam("columns[2][search][value]") final String postalCode,
-        @RequestParam("columns[3][search][value]") final String city,
-        @RequestParam("columns[4][search][value]") final String stateProvince,
+        @RequestParam("columns[1][search][value]") final String departmentName,
+        @RequestParam("columns[2][search][value]") final String managerId,
+        @RequestParam("columns[3][search][value]") final String locationId,
         @RequestParam("order[0][column]") final Integer order,
         @RequestParam("order[0][dir]") final String orderDir)
     {
-        return locationRepository
+        return departmentRepository
             .findAll(start / length + 1, length)
             .collectList().flatMap(locationDtos ->
-                locationRepository.count().flatMap(count ->
-                    Mono.just(new LocationDataTables(draw, count, count, locationDtos))
+                departmentRepository.count().flatMap(count ->
+                    Mono.just(new DepartmentDataTables(draw, count, count, locationDtos))
                 )
             );
     }
 
-    private Mono<ClientResponse> updateLocation(UpdateValue<Long> update)
+    private Mono<ClientResponse> updateDepartment(UpdateValue<Long> update)
     {
-        Location location = locationMapUpdater.updateLocation(update);
+        Department location = departmentMapUpdater.updateDepartment(update);
 
         if (Objects.isNull(location)) {
             return Mono.empty();
         }
         else {
-            return locationRepository.update(update.getName(), location);
+            return departmentRepository.update(update.getName(), location);
         }
     }
 
     private Mono<Boolean> checkResponse(UpdateValue<Long> update)
     {
-        return updateLocation(update).map(response -> response.rawStatusCode() == HttpStatus.OK.value());
+        return updateDepartment(update).map(response -> response.rawStatusCode() == HttpStatus.OK.value());
     }
 
     @PostMapping(path = REST_UPDATE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public Mono<? extends Answer> updateLocation(UpdateValueDto body)
+    public Mono<? extends Answer> updateDepartment(UpdateValueDto body)
     {
+        System.out.println("body = " + body);
         try {
             UpdateValue<Long> update = body.convertWithLongPk();
             Mono<Answer> error = Mono.error(new RuntimeException()); // TODO
 
-            return locationRepository
+            return departmentRepository
                 .findById(update.getPk())
                 .flatMap(locationDto -> checkResponse(update))
                 .flatMap(result -> result ? Mono.just(new AnswerOk()) : error)

@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta regionName="viewport" content="width=device-width, initial-scale=1">
 
-    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <link data-th-href="@{/css/datatables.min.css}" rel="stylesheet">
-    <link data-th-href="@{/css/main.css}" rel="stylesheet">
-
-    <!-- bootstrap -->
     <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script th:src="@{/js/departments.js}"></script>
+
+    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -31,16 +27,21 @@
         <div id="title">
             <h1>departments</h1>
         </div>
-
-        <table id="departments" class="display" style="width:100%">
+        <table id="departments" class="table table-hover">
             <thead>
-            <tr class="tr-header">
-                <th name="id" style="width: 10%">Id</th>
-                <th name="departmentName" style="width: 35%">Department name</th>
-                <th name="managerId">Manager Id</th>
-                <th name="locationId">Location Id</th>
+            <tr>
+                <th width="12%">Id</th>
+                <th width="44%">Name</th>
+                <th width="44%">Manager</th>
             </tr>
             </thead>
+            <tbody>
+            <tr class="result" data-th-each="department : ${departments}">
+                <td>[[${department.id}]]</td>
+                <td>[[${department.departmentName}]]</td>
+                <td>[[${department.manager.id}]]</td>
+            </tr>
+            </tbody>
         </table>
     </div>
 

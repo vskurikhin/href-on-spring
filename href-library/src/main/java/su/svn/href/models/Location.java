@@ -81,7 +81,6 @@ public class Location
             return this;
         }
 
-
         public Location build()
         {
             return new Location(id, streetAddress, postalCode, city, stateProvince, countryId);
