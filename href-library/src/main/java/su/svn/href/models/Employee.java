@@ -51,4 +51,101 @@ public class Employee
 
     @Column("department_id")
     private Long departmentId;
+
+
+    public static class Builder
+    {
+        private Long id;
+        private String firstName;
+        private String lastName;
+        private String email;
+        private String phoneNumber;
+        private Date hireDate;
+        private String jobId;
+        private Double salary;
+        private Double commissionPct;
+        private Long managerId;
+        private Long departmentId;
+
+        private Builder() { /* None */ }
+
+        public Builder setId(Long id)
+        {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setFirstName(String firstName)
+        {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder setLastName(String lastName)
+        {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder setEmail(String email)
+        {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setPhoneNumber(String phoneNumber)
+        {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder setHireDate(Date hireDate)
+        {
+            this.hireDate = hireDate;
+            return this;
+        }
+
+        public Builder setJobId(String jobId)
+        {
+            this.jobId = jobId;
+            return this;
+        }
+
+        public Builder setSalary(Double salary)
+        {
+            this.salary = salary;
+            return this;
+        }
+
+        public Builder setCommissionPct(Double commissionPct)
+        {
+            this.commissionPct = commissionPct;
+            return this;
+        }
+
+        public Builder setManagerId(Long managerId)
+        {
+            this.managerId = managerId;
+            return this;
+        }
+
+        public Builder setDepartmentId(Long departmentId)
+        {
+            this.departmentId = departmentId;
+            return this;
+        }
+
+        public Employee build()
+        {
+            return new Employee(
+                id, firstName, lastName, email, phoneNumber, hireDate,
+                jobId, salary, commissionPct, managerId, departmentId
+            );
+        }
+    }
+
+    public static Builder builder()
+    {
+        return new Builder();
+    }
 }
