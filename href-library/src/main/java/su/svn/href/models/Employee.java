@@ -1,5 +1,7 @@
 package su.svn.href.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -35,15 +37,18 @@ public class Employee
     private String phoneNumber;
 
     @Column("hire_date")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date hireDate;
 
     @Column("job_id")
     private String jobId;
 
     @Column("salary")
+    @JsonSerialize(using = MoneySerializer.class)
     private Double salary;
 
     @Column("commission_pct")
+    @JsonSerialize(using = MoneySerializer.class)
     private Double commissionPct;
 
     @Column("manager_id")

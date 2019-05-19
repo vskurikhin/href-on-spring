@@ -2,7 +2,7 @@ package su.svn.href.models.dto;
 
 import lombok.*;
 import su.svn.href.models.Department;
-import su.svn.href.models.Location;
+import su.svn.href.models.Employee;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DepartmentDataTables<T>
+public class EmployeeDataTables<T>
 {
-    static final long serialVersionUID = -62L;
+    static final long serialVersionUID = -63L;
 
     private int draw;
 
@@ -21,5 +21,5 @@ public class DepartmentDataTables<T>
 
     private long recordsFiltered;
 
-    private List<Department> data;
+    private List<Employee> data;
 }

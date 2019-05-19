@@ -43,50 +43,50 @@
             <tr>
                 <td width="25%">Manager id</td>
                 <td width="75%">
-                    <a href="#" id="managerId" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter manager id">[[${department.manager.id}]]</a>
+                    <a href="#" id="managerId" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter manager id">[[${department.manager?.id}]]</a>
                 </td>
             </tr>
             <tr>
                 <td width="25%">Manager first name</td>
-                <td width="75%">[[${department.manager.firstName}]]</td>
+                <td width="75%">[[${department.manager?.firstName}]]</td>
             </tr>
             <tr>
                 <td width="25%">Manager last name</td>
-                <td width="75%">[[${department.manager.lastName}]]</td>
+                <td width="75%">[[${department.manager?.lastName}]]</td>
             </tr>
             <tr>
                 <td width="25%">Manager email</td>
-                <td width="75%">[[${department.manager.email}]]</td>
+                <td width="75%">[[${department.manager?.email}]]</td>
             </tr>
             <tr>
                 <td width="25%">Manager phone number</td>
-                <td width="75%">[[${department.manager.phoneNumber}]]</td>
+                <td width="75%">[[${department.manager?.phoneNumber}]]</td>
             </tr>
             <tr>
                 <td width="25%">Location id</td>
                 <td width="75%">
-                    <a href="#" id="locationId" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter location id">[[${department.location.id}]]</a>
+                    <a href="#" id="locationId" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter location id">[[${department.location?.id}]]</a>
                 </td>
             </tr>
             <tr>
                 <td width="25%">Location street address</td>
-                <td width="75%">[[${department.location.streetAddress}]]</td>
+                <td width="75%">[[${department.location?.streetAddress}]]</td>
             </tr>
             <tr>
                 <td width="25%">Location postal code</td>
-                <td width="75%">[[${department.location.postalCode}]]</td>
+                <td width="75%">[[${department.location?.postalCode}]]</td>
             </tr>
             <tr>
                 <td width="25%">Location city</td>
-                <td width="75%">[[${department.location.city}]]</td>
+                <td width="75%">[[${department.location?.city}]]</td>
             </tr>
             <tr>
                 <td width="25%">Location state province</td>
-                <td width="75%">[[${department.location.stateProvince}]]</td>
+                <td width="75%">[[${department.location?.stateProvince}]]</td>
             </tr>
             <tr>
                 <td width="25%">Location country id</td>
-                <td width="75%">[[${department.location.countryId}]]</td>
+                <td width="75%">[[${department.location?.countryId}]]</td>
             </tr>
             </tbody>
         </table>
@@ -94,3 +94,6 @@
 
     </div>
 </div>
+
+</body>
+</html>
