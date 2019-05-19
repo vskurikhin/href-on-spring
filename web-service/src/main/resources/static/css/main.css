@@ -10,3 +10,25 @@
 .table-hover> tbody> tr:hover{
     background-color:ghostwhite;
 }
+
+.alert {
+    height:38px;
+    margin-block-end: 0;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    font-size: 11px;
+}
+
+.close {
+    float: right;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}

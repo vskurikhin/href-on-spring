@@ -1,12 +1,12 @@
 package su.svn.href.configs;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-@Configuration
-@ComponentScan
+@SpringBootApplication
+@EnableConfigurationProperties({ServicesProperties.class})
 public class ApplicationConfig
 {
     private ServicesProperties servicesProperties;

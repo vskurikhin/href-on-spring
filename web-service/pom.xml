@@ -6,12 +6,12 @@
     <packaging>jar</packaging>
 
     <artifactId>web-service</artifactId>
-    <version>1.7.9-SNAPSHOT</version>
+    <version>1.8.0-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.7.9-SNAPSHOT</version>
+        <version>1.8.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,6 +21,9 @@
         <org.webjars.jquery-ui.version>1.12.1</org.webjars.jquery-ui.version>
         <org.webjars.jquery.version>3.3.1-2</org.webjars.jquery.version>
         <org.webjars.x-editable-bootstrap.version>1.5.1</org.webjars.x-editable-bootstrap.version>
+
+        <reactor-spring.version>1.0.1.RELEASE</reactor-spring.version>
+        <rxjava-version>2.1.12</rxjava-version>
 
         <!-- TEST scope -->
         <org.junit.jupiter.version>5.3.2</org.junit.jupiter.version>
@@ -34,6 +37,11 @@
             <groupId>su.svn.href</groupId>
             <artifactId>href-library</artifactId>
             <version>${href-library.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <!-- reactive -->
