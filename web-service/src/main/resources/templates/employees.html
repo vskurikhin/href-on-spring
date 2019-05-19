@@ -5,11 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta regionName="viewport" content="width=device-width, initial-scale=1">
 
+    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/datatables.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/main.css}" rel="stylesheet">
+
+    <!-- bootstrap -->
     <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <link data-th-href="@{/css/main.css}" rel="stylesheet">
+    <script src="/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/employees.js}"></script>
 </head>
 <body>
 
@@ -27,22 +31,27 @@
         <div id="title">
             <h1>employees</h1>
         </div>
-        <table id="employees" class="table table-hover">
+
+        <table id="employees" class="display" style="width:100%">
             <thead>
-            <tr>
-                <th width="12%">Id</th>
-                <th width="44%">First name</th>
-                <th>Last name</th>
+            <tr class="tr-header">
+                <th name="id" style="width: 10%">Id</th>
+                <th name="firstName" style="width: 15%">First name</th>
+                <th name="lastName" style="width: 15%">Last name</th>
+                <th name="email" style="width: 15%">E-mail</th>
+                <th name="phoneNumber">Phone number </th>
+                <th name="hireDate">Hire date</th>
+                <th name="jobId">Job Id</th>
+                <th name="salary">Salary</th>
+                <th name="commissionPct">Commission Pct</th>
+                <th name="managerId">Manager Id</th>
+                <th name="departmentId">Department Id</th>
             </tr>
             </thead>
-            <tbody>
-            <tr class="result" data-th-each="employee : ${employees}">
-                <td>[[${employee.id}]]</td>
-                <td>[[${employee.firstName}]]</td>
-                <td>[[${employee.lastName}]]</td>
-            </tr>
-            </tbody>
         </table>
     </div>
 
 </div>
+
+</body>
+</html>

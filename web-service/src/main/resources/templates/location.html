@@ -64,11 +64,11 @@
                     <a href="#" id="country-id" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}" data-title="Enter country id">[[${location.country.id}]]</a>
                 </td>
             </tr>
-            <tr>
+            <tr th:if="${location.country != null}">
                 <td width="25%">Country name</td>
                 <td width="75%">[[${location.country.countryName}]]</td>
             </tr>
-            <tr>
+            <tr th:if="${location.country != null && location.country.region != null}">
                 <td width="25%">Region</td>
                 <td width="75%">[[${location.country.region.regionName}]]</td>
             </tr>
@@ -79,3 +79,6 @@
     </div>
 
 </div>
+
+</body>
+</html>

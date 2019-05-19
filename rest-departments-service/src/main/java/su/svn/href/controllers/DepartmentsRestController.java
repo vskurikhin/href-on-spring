@@ -36,10 +36,11 @@ public class DepartmentsRestController
     private PageSettings paging;
 
     @Autowired
-    public DepartmentsRestController(DepartmentDao departmentDao,
-                                     DepartmentFullDao departmentFullDao,
-                                     DepartmentMapUpdater departmentMapUpdater,
-                                     PageSettings paging)
+    public DepartmentsRestController(
+        DepartmentDao departmentDao,
+        DepartmentFullDao departmentFullDao,
+        DepartmentMapUpdater departmentMapUpdater,
+        PageSettings paging)
     {
         this.departmentDao = departmentDao;
         this.departmentFullDao = departmentFullDao;
@@ -49,9 +50,10 @@ public class DepartmentsRestController
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<? extends Answer> createDepartment(@RequestBody Department department,
-                                                   HttpServletRequest request,
-                                                   HttpServletResponse response)
+    public Mono<? extends Answer> createDepartment(
+        @RequestBody Department department,
+        HttpServletRequest request,
+        HttpServletResponse response)
     {
         if (Objects.isNull(department.getId()) || department.getId() < 2) {
             throw new BadValueForDepartmentIdException();
@@ -64,15 +66,16 @@ public class DepartmentsRestController
     }
 
     @GetMapping(path = REST_COUNT)
-    public Mono<Long> countLocations()
+    public Mono<Long> countDepartments()
     {
         return departmentDao.count();
     }
 
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
-    public Flux<Department> readDepartments(@RequestParam("page") int page,
-                                            @RequestParam("size") int size,
-                                            @RequestParam("sort") String sort)
+    public Flux<Department> readDepartments(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
@@ -88,9 +91,10 @@ public class DepartmentsRestController
     }
 
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
-    public Mono<List<DepartmentDto>> readFullDepartments(@RequestParam("page") int page,
-                                                         @RequestParam("size") int size,
-                                                         @RequestParam("sort") String sort)
+    public Mono<List<DepartmentDto>> readFullDepartments(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
@@ -129,7 +133,7 @@ public class DepartmentsRestController
     }
 
     @PutMapping(path = REST_UPDATE, params = {"field"})
-    public Mono<? extends Answer> updateLocationField(
+    public Mono<? extends Answer> updateDepartmentField(
         @RequestParam("field") String field,
         @RequestBody Department department)
     {

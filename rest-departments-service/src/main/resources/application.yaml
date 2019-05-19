@@ -14,7 +14,7 @@ application:
 logging:
   level:
     org.springframework:
-      web: INFO
+      web: DEBUG
       data.r2dbc: DEBUG
 
 server:
