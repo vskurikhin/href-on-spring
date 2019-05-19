@@ -56,13 +56,13 @@ public class DepartmentsRestController
 
     private Mono<ClientResponse> updateDepartment(UpdateValue<Long> update)
     {
-        Department location = departmentMapUpdater.updateDepartment(update);
+        Department department = departmentMapUpdater.updateDepartment(update);
 
-        if (Objects.isNull(location)) {
+        if (Objects.isNull(department)) {
             return Mono.empty();
         }
         else {
-            return departmentRepository.update(update.getName(), location);
+            return departmentRepository.update(update.getName(), department);
         }
     }
 
@@ -74,7 +74,6 @@ public class DepartmentsRestController
     @PostMapping(path = REST_UPDATE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Mono<? extends Answer> updateDepartment(UpdateValueDto body)
     {
-        System.out.println("body = " + body);
         try {
             UpdateValue<Long> update = body.convertWithLongPk();
             Mono<Answer> error = Mono.error(new RuntimeException()); // TODO

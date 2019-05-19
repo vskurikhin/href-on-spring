@@ -48,10 +48,6 @@ public class EmployeesRestController
         @RequestParam("columns[4][search][value]") final String phoneNumber,
         @RequestParam("columns[5][search][value]") final String hireDate,
         @RequestParam("columns[6][search][value]") final String jobId,
-        @RequestParam("columns[7][search][value]") final String salary,
-        @RequestParam("columns[8][search][value]") final String commissionPct,
-        @RequestParam("columns[9][search][value]") final String managerId,
-        @RequestParam("columns[10][search][value]") final String departmentId,
         @RequestParam("order[0][column]") final Integer order,
         @RequestParam("order[0][dir]") final String orderDir)
     {
@@ -66,13 +62,13 @@ public class EmployeesRestController
 
     private Mono<ClientResponse> updateEmployee(UpdateValue<Long> update)
     {
-        Employee location = employeeMapUpdater.updateEmployee(update);
+        Employee employee = employeeMapUpdater.updateEmployee(update);
 
-        if (Objects.isNull(location)) {
+        if (Objects.isNull(employee)) {
             return Mono.empty();
         }
         else {
-            return employeeRepository.update(update.getName(), location);
+            return employeeRepository.update(update.getName(), employee);
         }
     }
 
@@ -84,7 +80,6 @@ public class EmployeesRestController
     @PostMapping(path = REST_UPDATE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Mono<? extends Answer> updateEmployee(UpdateValueDto body)
     {
-        System.out.println("body = " + body);
         try {
             UpdateValue<Long> update = body.convertWithLongPk();
             Mono<Answer> error = Mono.error(new RuntimeException()); // TODO

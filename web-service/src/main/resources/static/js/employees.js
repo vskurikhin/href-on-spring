@@ -17,11 +17,7 @@ $(document).ready(function () {
             {"data": "email"},
             {"data": "phoneNumber"},
             {"data": "hireDate"},
-            {"data": "jobId"},
-            {"data": "salary"},
-            {"data": "commissionPct"},
-            {"data": "managerId"},
-            {"data": "departmentId"}
+            {"data": "jobId"}
         ]
     }).columns().every(function () {
         var that = this;
