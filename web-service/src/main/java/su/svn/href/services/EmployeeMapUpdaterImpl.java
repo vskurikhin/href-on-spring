@@ -1,9 +1,14 @@
 package su.svn.href.services;
 
 import org.springframework.stereotype.Service;
+import su.svn.href.exceptions.DateParseException;
 import su.svn.href.models.Employee;
 import su.svn.href.models.UpdateValue;
+import su.svn.utils.StringHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,17 +25,23 @@ public class EmployeeMapUpdaterImpl implements EmployeeMapUpdater
 
     private Long convertToLong(String value)
     {
-        return null; // TODO
+        return Long.parseLong(value);
     }
 
     private Double convertToDouble(String value)
     {
-        return null; // TODO
+        return Double.parseDouble(value);
     }
 
     private Date convertToDate(String value)
     {
-        return null; // TODO
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return formatter.parse(value);
+        }
+        catch (ParseException e) {
+            throw new DateParseException();
+        }
     }
 
     private Map<String, Function<UpdateValue<Long>, Employee>> caseMap()
@@ -53,6 +64,11 @@ public class EmployeeMapUpdaterImpl implements EmployeeMapUpdater
     @Override
     public Employee updateEmployee(UpdateValue<Long> update)
     {
-        return caseMap().getOrDefault(update.getName().toUpperCase(), (v) -> null).apply(update);
+        try {
+            return caseMap().getOrDefault(update.getName().toUpperCase(), (v) -> null).apply(update); // TODO not null!!
+        }
+        catch (NumberFormatException | DateParseException e) {
+            return null; // TODO not null!!!
+        }
     }
 }

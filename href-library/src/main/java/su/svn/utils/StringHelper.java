@@ -1,5 +1,10 @@
 package su.svn.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
@@ -38,6 +43,20 @@ public class StringHelper
     {
         Object d = map.get(key);
 
-        return d.getClass().getName().equals(Date.class.getName()) ? (Date) d : null;
+        switch (d.getClass().getName()) {
+            case "java.util.Date":
+                return (Date) d;
+            case "java.time.LocalDate":
+                LocalDate localDate = (LocalDate) d;
+                return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            default:
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    return formatter.parse(d.toString());
+                }
+                catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+        }
     }
 }
