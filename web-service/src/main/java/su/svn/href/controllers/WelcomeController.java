@@ -23,9 +23,9 @@ public class WelcomeController
         return "welcome";
     }
 
-    @RequestMapping("/form-login")
-    public String formLogin(final Model model)
+    @RequestMapping("/login")
+    public String login(final Model model)
     {
-        return "form-login";
+        return "login";
     }
 }
