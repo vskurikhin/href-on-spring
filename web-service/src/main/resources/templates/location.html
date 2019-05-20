@@ -12,73 +12,79 @@
     <!-- bootstrap -->
     <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
     <script th:src="@{/js/bootstrap-3.4.1.min.js}"></script>
-    <script src="/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js"></script>
+    <script th:src="@{/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js}"></script>
     <script th:src="@{/js/location.js}"></script>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="container"><br/>
-        <div class="alert alert-success">
-            <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="welcome">Welcome!</a></li>
+                <li class="active"><a href="locations">Locations</a></li>
+                <li><a href="departments">Departments</a></li>
+                <li><a href="employees">Employees</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div class="row">
-        <div id="title">
-            <h1>location</h1>
+<main>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <table id="location" class="table table-bordered table-striped" style="clear: both; min-width: 969px">
+                <tbody>
+                <tr>
+                    <td width="25%">Street address</td>
+                    <td width="75%">
+                        <a href="#" id="streetAddress" data-type="text" th:data-pk="${location.id}"
+                           th:data-url="${restPath}" data-title="Enter street address">[[${location.streetAddress}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Postal code</td>
+                    <td width="75%">
+                        <a href="#" id="postalCode" data-type="text" th:data-pk="${location.id}"
+                           th:data-url="${restPath}" data-title="Enter postal code">[[${location.postalCode}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">City</td>
+                    <td width="75%">
+                        <a href="#" id="city" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}"
+                           data-title="Enter city name">[[${location.city}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">State province</td>
+                    <td width="75%">
+                        <a href="#" id="stateProvince" data-type="text" th:data-pk="${location.id}"
+                           th:data-url="${restPath}" data-title="Enter state province">[[${location.stateProvince}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Country id</td>
+                    <td width="75%"> <!-- TODO -->
+                        <a href="#" id="country-id" data-type="text" th:data-pk="${location.id}"
+                           th:data-url="${restPath}" data-title="Enter country id">[[${location.country.id}]]</a>
+                    </td>
+                </tr>
+                <tr th:if="${location.country != null}">
+                    <td width="25%">Country name</td>
+                    <td width="75%">[[${location.country.countryName}]]</td>
+                </tr>
+                <tr th:if="${location.country != null && location.country.region != null}">
+                    <td width="25%">Region</td>
+                    <td width="75%">[[${location.country.region.regionName}]]</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
-        <table width="800px" id="user" class="table table-bordered table-striped" style="clear: both">
-            <tbody>
-            <tr>
-                <td width="25%">Street address</td>
-                <td width="75%">
-                    <a href="#" id="streetAddress" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}" data-title="Enter street address">[[${location.streetAddress}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Postal code</td>
-                <td width="75%">
-                    <a href="#" id="postalCode" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}" data-title="Enter postal code">[[${location.postalCode}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">City</td>
-                <td width="75%">
-                    <a href="#" id="city" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}" data-title="Enter city name">[[${location.city}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">State province</td>
-                <td width="75%">
-                    <a href="#" id="stateProvince" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}" data-title="Enter state province">[[${location.stateProvince}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Country id</td>
-                <td width="75%"> <!-- TODO -->
-                    <a href="#" id="country-id" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}" data-title="Enter country id">[[${location.country.id}]]</a>
-                </td>
-            </tr>
-            <tr th:if="${location.country != null}">
-                <td width="25%">Country name</td>
-                <td width="75%">[[${location.country.countryName}]]</td>
-            </tr>
-            <tr th:if="${location.country != null && location.country.region != null}">
-                <td width="25%">Region</td>
-                <td width="75%">[[${location.country.region.regionName}]]</td>
-            </tr>
-            </tbody>
-        </table>
-        <a th:href="@{/locations}">Locations</a>
-
     </div>
-
-</div>
+</main>
 
 </body>
 </html>
