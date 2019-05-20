@@ -16,107 +16,131 @@
     <script th:src="@{/js/employee.js}"></script>
 </head>
 <body>
-
-<div class="container">
-
-    <div class="container"><br/>
+<!-- Links -->
+<ul class="navbar-nav">
+    <li class="nav-item">
+        <a class="nav-link" href="locations">Locations</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="departments">Departments</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="employees">Employees</a>
+    </li>
+    <li class="nav-item">&nbsp;</li>
+    <li class="nav-item">
         <div class="alert alert-success">
             <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
+               aria-label="close">&nbsp;×</a>
             <strong>Success!</strong> It is working as we expected.
         </div>
-    </div>
+    </li>
+</ul>
+</nav>
 
-    <div class="row">
-        <div id="title">
-            <h1>employee</h1>
+<main>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div id="title">
+                <h1>employee</h1>
+            </div>
+
+            <table width="800px" id="employee" class="table table-bordered table-striped" style="clear: both">
+                <tbody>
+                <tr>
+                    <td width="25%">First name</td>
+                    <td width="75%">
+                        <a href="#" id="firstName" data-type="text" th:data-pk="${employee.id}"
+                           th:data-url="${restPath}" data-title="Enter first name">[[${employee.firstName}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Last name</td>
+                    <td width="75%">
+                        <a href="#" id="lastName" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                           data-title="Enter last name">[[${employee.lastName}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">E-mail</td>
+                    <td width="75%">
+                        <a href="#" id="email" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                           data-title="Enter E-mail">[[${employee.email}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Phone number</td>
+                    <td width="75%">
+                        <a href="#" id="phoneNumber" data-type="text" th:data-pk="${employee.id}"
+                           th:data-url="${restPath}" data-title="Enter phone number">[[${employee.phoneNumber}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Hire date</td>
+                    <td width="75%">
+                        <a href="#" id="hireDate" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                           data-title="Enter hire date"
+                        >[[${#dates.format(employee.hireDate, 'yyyy-MM-dd')}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">salary</td>
+                    <td width="75%">
+                        <a href="#" id="salary" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                           data-title="Enter salary">[[${employee.salary}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Commission %</td>
+                    <td width="75%">
+                        <a href="#" id="commissionPct" data-type="text" th:data-pk="${employee.id}"
+                           th:data-url="${restPath}" data-title="Enter commission %">[[${employee.commissionPct}]]</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="25%">Manager id</td>
+                    <td width="75%">
+                        <a href="#" id="managerId" data-type="text" th:data-pk="${employee.id}"
+                           th:data-url="${restPath}" data-title="Enter manager id">[[${employee.manager?.id}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager first name</td>
+                    <td width="75%">[[${employee.manager?.firstName}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager last name</td>
+                    <td width="75%">[[${employee.manager?.lastName}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager email</td>
+                    <td width="75%">[[${employee.manager?.email}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager phone number</td>
+                    <td width="75%">[[${employee.manager?.phoneNumber}]]</td>
+                </tr>
+
+                <tr>
+                    <td width="25%">Department id</td>
+                    <td width="75%">
+                        <a href="#" id="departmentId" data-type="text" th:data-pk="${employee.id}"
+                           th:data-url="${restPath}" data-title="Enter location id">[[${employee.department?.id}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Department name</td>
+                    <td width="75%">[[${employee.department?.departmentName}]]</td>
+                </tr>
+                </tbody>
+            </table>
+            <a th:href="@{/employees}">Employees</a>
+
         </div>
-
-        <table width="800px" id="employee" class="table table-bordered table-striped" style="clear: both">
-            <tbody>
-            <tr>
-                <td width="25%">First name</td>
-                <td width="75%">
-                    <a href="#" id="firstName" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter first name">[[${employee.firstName}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Last name</td>
-                <td width="75%">
-                    <a href="#" id="lastName" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter last name">[[${employee.lastName}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">E-mail</td>
-                <td width="75%">
-                    <a href="#" id="email" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter E-mail">[[${employee.email}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Phone number</td>
-                <td width="75%">
-                    <a href="#" id="phoneNumber" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter phone number">[[${employee.phoneNumber}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Hire date</td>
-                <td width="75%">
-                    <a href="#" id="hireDate" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter hire date"
-                    >[[${#dates.format(employee.hireDate, 'yyyy-MM-dd')}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">salary</td>
-                <td width="75%">
-                    <a href="#" id="salary" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter salary">[[${employee.salary}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Commission %</td>
-                <td width="75%">
-                    <a href="#" id="commissionPct" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter commission %">[[${employee.commissionPct}]]</a>
-                </td>
-            </tr>
-
-            <tr>
-                <td width="25%">Manager id</td>
-                <td width="75%">
-                    <a href="#" id="managerId" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter manager id">[[${employee.manager?.id}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Manager first name</td>
-                <td width="75%">[[${employee.manager?.firstName}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Manager last name</td>
-                <td width="75%">[[${employee.manager?.lastName}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Manager email</td>
-                <td width="75%">[[${employee.manager?.email}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Manager phone number</td>
-                <td width="75%">[[${employee.manager?.phoneNumber}]]</td>
-            </tr>
-
-            <tr>
-                <td width="25%">Department id</td>
-                <td width="75%">
-                    <a href="#" id="departmentId" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}" data-title="Enter location id">[[${employee.department?.id}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Department name</td>
-                <td width="75%">[[${employee.department?.departmentName}]]</td>
-            </tr>
-            </tbody>
-        </table>
-        <a th:href="@{/employees}">Employees</a>
-
     </div>
-</div>
+</main>
 
 </body>
 </html>

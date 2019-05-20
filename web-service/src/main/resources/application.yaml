@@ -1,4 +1,12 @@
 application:
+  locale: "en_US"
+
+  r2dbc:
+    host: ${DB_HOST:localhost}
+    database: "db"
+    username: "dbuser"
+    password: "password"
+
   services:
     departments:
       host: ${DEPARTMENTS_HOST:localhost}

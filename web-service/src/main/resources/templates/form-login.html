@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<main class="auto-center">
+    <h2 th:if = "${loginError}">Ошибка входа, попробуйте ещё раз</h2>
+    <h2 th:unless = "${loginError}">Вход</h2>
+    <form action="login-process" method="POST">
+        <div>
+            <label for="readerLogin">Имя пользователя</label>
+            <input type="text" name="jUserLogin" id="readerLogin" placeholder="Имя пользователя" required value="user"><br/>
+        </div>
+        <div>
+            <label for="readerPassword">Пароль</label>
+            <input type="password" name="jUserPassword" id="readerPassword" placeholder="Пароль" required value="123456"><br/>
+        </div>
+        <input type="submit" value="Войти">
+    </form>
+    </div>
+
+</main>
+
+</body>
+</html>

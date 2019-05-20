@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta regionName="viewport" content="width=device-width, initial-scale=1">
 
-    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet">
     <link data-th-href="@{/css/datatables.min.css}" rel="stylesheet">
     <link data-th-href="@{/css/main.css}" rel="stylesheet">
 
@@ -17,34 +17,47 @@
 </head>
 <body>
 
-<div class="container">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="locations">Locations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="departments">Departments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="employees">Employees</a>
+        </li>
+        <li class="nav-item">&nbsp;</li>
+        <li class="nav-item">
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert"
+                   aria-label="close">&nbsp;×</a>
+                <strong>Success!</strong> It is working as we expected.
+            </div>
+        </li>
+    </ul>
+</nav>
 
-    <div class="container"><br/>
-        <div class="alert alert-success">
-            <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+<main>
+
+    <div class="container">
+        <div class="row">
+            <div class="row">&nbsp;</div>
+            <table id="departments" class="display" style="width:100%; min-width: 969px">
+                <thead>
+                <tr class="tr-header">
+                    <th name="id" style="width: 10%">Id</th>
+                    <th name="departmentName" style="width: 35%">Department name</th>
+                    <th name="managerId">Manager Id</th>
+                    <th name="locationId">Location Id</th>
+                </tr>
+                </thead>
+            </table>
         </div>
     </div>
-
-    <div class="row">
-        <div id="title">
-            <h1>departments</h1>
-        </div>
-
-        <table id="departments" class="display" style="width:100%">
-            <thead>
-            <tr class="tr-header">
-                <th name="id" style="width: 10%">Id</th>
-                <th name="departmentName" style="width: 35%">Department name</th>
-                <th name="managerId">Manager Id</th>
-                <th name="locationId">Location Id</th>
-            </tr>
-            </thead>
-        </table>
-    </div>
-
-</div>
+</main>
 
 </body>
 </html>

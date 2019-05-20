@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
 
     <artifactId>web-service</artifactId>
-    <version>1.8.0.1-SNAPSHOT</version>
+    <version>1.8.0.2-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
@@ -24,6 +24,12 @@
 
         <reactor-spring.version>1.0.1.RELEASE</reactor-spring.version>
         <rxjava-version>2.1.12</rxjava-version>
+
+        <!-- R2DBC -->
+        <io.projectreactor.reactor-extra.version>3.2.2.RELEASE</io.projectreactor.reactor-extra.version>
+        <io.projectreactor.version>3.2.6.RELEASE</io.projectreactor.version>
+        <r2dbc.version>1.0.0.M7</r2dbc.version>
+        <spring-data-r2dbc.version>1.0.0.M1</spring-data-r2dbc.version>
 
         <!-- TEST scope -->
         <org.junit.jupiter.version>5.3.2</org.junit.jupiter.version>
@@ -60,6 +66,35 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-r2dbc -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>${io.projectreactor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor.addons</groupId>
+            <artifactId>reactor-extra</artifactId>
+            <version>${io.projectreactor.reactor-extra.version}</version>
+        </dependency>
+
+        <!-- R2DBC -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-r2dbc</artifactId>
+            <version>${spring-data-r2dbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-spi</artifactId>
+            <version>${r2dbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>${r2dbc.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
