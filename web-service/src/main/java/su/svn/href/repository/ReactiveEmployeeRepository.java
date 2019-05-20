@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.configs.ServicesProperties;
 import su.svn.href.models.Employee;
+import su.svn.href.models.dto.EmployeeDto;
 
 import java.time.Duration;
 import java.util.Properties;
@@ -52,5 +55,26 @@ public class ReactiveEmployeeRepository implements EmployeeRepository
             .retrieve()
             .bodyToFlux(Employee.class)
             .delayElements(Duration.ofMillis(10));
+    }
+
+    @Override
+    public Mono<EmployeeDto> findById(long id)
+    {
+        return webClient
+            .get()
+            .uri("/" + id)
+            .retrieve()
+            .bodyToMono(EmployeeDto.class);
+    }
+
+    @Override
+    public Mono<ClientResponse> update(String field, Employee employee)
+    {
+        System.err.println("employee = " + employee);
+        return webClient
+            .put()
+            .uri(REST_UPDATE + "?field=" + field)
+            .body(BodyInserters.fromObject(employee))
+            .exchange();
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @ToString
 public class LocationDataTables
 {
-    static final long serialVersionUID = -32L;
+    static final long serialVersionUID = -61L;
 
     private int draw;
 

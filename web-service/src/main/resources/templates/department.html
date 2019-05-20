@@ -12,85 +12,94 @@
     <!-- bootstrap -->
     <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
     <script th:src="@{/js/bootstrap-3.4.1.min.js}"></script>
-    <script src="/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js"></script>
+    <script th:src="@{/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js}"></script>
     <script th:src="@{/js/department.js}"></script>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="container"><br/>
-        <div class="alert alert-success">
-            <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="welcome">Welcome!</a></li>
+                <li><a href="locations">Locations</a></li>
+                <li class="active"><a href="departments">Departments</a></li>
+                <li><a href="employees">Employees</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div class="row">
-        <div id="title">
-            <h1>department</h1>
+<main>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <table id="department" class="table table-bordered table-striped" style="clear: both; min-width: 969px">
+                <tbody>
+                <tr>
+                    <td width="25%">Department name</td>
+                    <td width="75%">
+                        <a href="#" id="departmentName" data-type="text" th:data-pk="${department.id}"
+                           th:data-url="${restPath}"
+                           data-title="Enter Department name">[[${department.departmentName}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager id</td>
+                    <td width="75%">
+                        <a href="#" id="managerId" data-type="text" th:data-pk="${department.id}"
+                           th:data-url="${restPath}" data-title="Enter manager id">[[${department.manager?.id}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager first name</td>
+                    <td width="75%">[[${department.manager?.firstName}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager last name</td>
+                    <td width="75%">[[${department.manager?.lastName}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager email</td>
+                    <td width="75%">[[${department.manager?.email}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Manager phone number</td>
+                    <td width="75%">[[${department.manager?.phoneNumber}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Location id</td>
+                    <td width="75%">
+                        <a href="#" id="locationId" data-type="text" th:data-pk="${department.id}"
+                           th:data-url="${restPath}" data-title="Enter location id">[[${department.location?.id}]]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">Location street address</td>
+                    <td width="75%">[[${department.location?.streetAddress}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Location postal code</td>
+                    <td width="75%">[[${department.location?.postalCode}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Location city</td>
+                    <td width="75%">[[${department.location?.city}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Location state province</td>
+                    <td width="75%">[[${department.location?.stateProvince}]]</td>
+                </tr>
+                <tr>
+                    <td width="25%">Location country id</td>
+                    <td width="75%">[[${department.location?.countryId}]]</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
-        <table width="800px" id="department" class="table table-bordered table-striped" style="clear: both">
-            <tbody>
-            <tr>
-                <td width="25%">Department name</td>
-                <td width="75%">
-                    <a href="#" id="departmentName" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter Department name">[[${department.departmentName}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Manager id</td>
-                <td width="75%">
-                    <a href="#" id="managerId" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter manager id">[[${department.manager.id}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Manager first name</td>
-                <td width="75%">[[${department.manager.firstName}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Manager last name</td>
-                <td width="75%">[[${department.manager.lastName}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Manager email</td>
-                <td width="75%">[[${department.manager.email}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Manager phone number</td>
-                <td width="75%">[[${department.manager.phoneNumber}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Location id</td>
-                <td width="75%">
-                    <a href="#" id="locationId" data-type="text" th:data-pk="${department.id}" th:data-url="${restPath}" data-title="Enter location id">[[${department.location.id}]]</a>
-                </td>
-            </tr>
-            <tr>
-                <td width="25%">Location street address</td>
-                <td width="75%">[[${department.location.streetAddress}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Location postal code</td>
-                <td width="75%">[[${department.location.postalCode}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Location city</td>
-                <td width="75%">[[${department.location.city}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Location state province</td>
-                <td width="75%">[[${department.location.stateProvince}]]</td>
-            </tr>
-            <tr>
-                <td width="25%">Location country id</td>
-                <td width="75%">[[${department.location.countryId}]]</td>
-            </tr>
-            </tbody>
-        </table>
-        <a th:href="@{/departments}">Departments</a>
-
     </div>
-</div>
+</main>
+
+</body>
+</html>

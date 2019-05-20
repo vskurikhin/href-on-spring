@@ -1,22 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta regionName="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
     <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/webjars/x-editable-bootstrap/1.5.1/css/bootstrap-editable.css}" rel="stylesheet">
     <link data-th-href="@{/css/main.css}" rel="stylesheet">
+
+    <!-- bootstrap -->
+    <script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/locations.js}"></script>
 </head>
 <body>
 
-<div class="container">
-    <ul>
-        <li><a href="locations">locations</a> </li>
-        <li><a href="departments">departments</a> </li>
-        <li><a href="employees">employees</a> </li>
-    </ul>
-</div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="welcome">Welcome!</a></li>
+                <li><a href="locations">Locations</a></li>
+                <li><a href="departments">Departments</a></li>
+                <li><a href="employees">Employees</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</nav>
+
+<main>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert"
+                   aria-label="close">&nbsp;×</a>
+                <strong>Locations - service!</strong> It is working as we expected.
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert"
+                   aria-label="close">&nbsp;×</a>
+                <strong>Departments - service!</strong> It is working as we expected.
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert"
+                   aria-label="close">&nbsp;×</a>
+                <strong>Employees - service!</strong> It is working as we expected.
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

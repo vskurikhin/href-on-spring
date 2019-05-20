@@ -1,48 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta regionName="viewport" content="width=device-width, initial-scale=1">
 
+    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/datatables.min.css}" rel="stylesheet">
+    <link data-th-href="@{/css/main.css}" rel="stylesheet">
+
+    <!-- bootstrap -->
     <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <link data-th-href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <link data-th-href="@{/css/main.css}" rel="stylesheet">
+    <script src="/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/employees.js}"></script>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="container"><br/>
-        <div class="alert alert-success">
-            <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="welcome">Welcome!</a></li>
+                <li><a href="locations">Locations</a></li>
+                <li><a href="departments">Departments</a></li>
+                <li class="active"><a href="employees">Employees</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div class="row">
-        <div id="title">
-            <h1>employees</h1>
+<main>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <table id="employees" class="display" style="width:100%; min-width: 969px">
+                <thead>
+                <tr class="tr-header">
+                    <th name="id" style="width: 10%">Id</th>
+                    <th name="firstName" style="width: 15%">First name</th>
+                    <th name="lastName" style="width: 15%">Last name</th>
+                    <th name="email" style="width: 15%">E-mail</th>
+                    <th name="phoneNumber">Phone number</th>
+                    <th name="hireDate">Hire date</th>
+                    <th name="jobId">Job Id</th>
+                </tr>
+                </thead>
+            </table>
         </div>
-        <table id="employees" class="table table-hover">
-            <thead>
-            <tr>
-                <th width="12%">Id</th>
-                <th width="44%">First name</th>
-                <th>Last name</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="result" data-th-each="employee : ${employees}">
-                <td>[[${employee.id}]]</td>
-                <td>[[${employee.firstName}]]</td>
-                <td>[[${employee.lastName}]]</td>
-            </tr>
-            </tbody>
-        </table>
     </div>
+</main>
 
-</div>
+</body>
+</html>

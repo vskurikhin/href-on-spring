@@ -14,6 +14,7 @@ import su.svn.href.exceptions.EmployeeNotFoundException;
 import su.svn.href.models.Employee;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.EmployeeMapUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,95 +26,109 @@ import static su.svn.href.controllers.Constants.*;
 @RequestMapping(value = REST_API + REST_V1_EMPLOYEES)
 public class EmployeesRestController
 {
-    private EmployeeDao departmentDao;
+    private EmployeeDao employeeDao;
 
-    private EmployeeFullDao departmentFullDao;
+    private EmployeeFullDao employeeFullDao;
+
+    private EmployeeMapUpdater employeeMapUpdater;
 
     private PageSettings paging;
 
     @Autowired
-    public EmployeesRestController(EmployeeDao departmentDao,
-                                   EmployeeFullDao departmentFullDao,
-                                   PageSettings paging)
+    public EmployeesRestController(
+        EmployeeDao employeeDao,
+        EmployeeFullDao employeeFullDao,
+        EmployeeMapUpdater employeeMapUpdater,
+        PageSettings paging)
     {
-        this.departmentDao = departmentDao;
-        this.departmentFullDao = departmentFullDao;
+        this.employeeDao = employeeDao;
+        this.employeeFullDao = employeeFullDao;
+        this.employeeMapUpdater = employeeMapUpdater;
         this.paging = paging;
+    }
+
+    @GetMapping(path = REST_COUNT)
+    public Mono<Long> countEmployees()
+    {
+        return employeeDao.count();
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<? extends Answer> createEmployee(@RequestBody Employee department,
-                                                 HttpServletRequest request,
-                                                 HttpServletResponse response)
+    public Mono<? extends Answer> createEmployee(
+        @RequestBody Employee employee,
+        HttpServletRequest request,
+        HttpServletResponse response)
     {
-        if (Objects.isNull(department.getId()) || department.getId() < 2) {
+        if (Objects.isNull(employee.getId()) || employee.getId() < 2) {
             throw new BadValueForEmployeeIdException();
         }
 
-        return departmentDao
-            .save(department)
+        return employeeDao
+            .save(employee)
             .map(r -> new AnswerCreated(response, request.getRequestURI(), r.getId()))
             .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));
     }
 
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
-    public Flux<Employee> readEmployees(@RequestParam("page") int page,
-                                            @RequestParam("size") int size,
-                                            @RequestParam("sort") String sort)
+    public Flux<Employee> readEmployees(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
         switch (sort.toUpperCase()) {
             case "ID":
-                return departmentDao.findAllOrderById(offset, limit);
+                return employeeDao.findAllOrderById(offset, limit);
             case "FIRST_NAME":
-                return departmentDao.findAllOrderByFirstName(offset, limit);
+                return employeeDao.findAllOrderByFirstName(offset, limit);
             case "LAST_NAME":
-                return departmentDao.findAllOrderByLastName(offset, limit);
+                return employeeDao.findAllOrderByLastName(offset, limit);
             case "EMAIL":
-                return departmentDao.findAllOrderByEmail(offset, limit);
+                return employeeDao.findAllOrderByEmail(offset, limit);
             case "PHONE_NUMBER":
-                return departmentDao.findAllOrderByPhoneNumber(offset, limit);
+                return employeeDao.findAllOrderByPhoneNumber(offset, limit);
             case "HIRE_DATE":
-                return departmentDao.findAllOrderByHireDate(offset, limit);
+                return employeeDao.findAllOrderByHireDate(offset, limit);
             case "SALARY":
-                return departmentDao.findAllOrderBySalary(offset, limit);
+                return employeeDao.findAllOrderBySalary(offset, limit);
             case "COMMISSION_PCT":
-                return departmentDao.findAllOrderByCommissionPct(offset, limit);
+                return employeeDao.findAllOrderByCommissionPct(offset, limit);
             default:
-                return departmentDao.findAll(offset, limit);
+                return employeeDao.findAll(offset, limit);
         }
     }
 
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
-    public Flux<EmployeeDto> readFullEmployees(@RequestParam("page") int page,
-                                                     @RequestParam("size") int size,
-                                                     @RequestParam("sort") String sort)
+    public Flux<EmployeeDto> readFullEmployees(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
         switch (sort.toUpperCase()) {
             case "ID":
-                return departmentFullDao.findAll(offset, limit, "e.employee_id");
+                return employeeFullDao.findAll(offset, limit, "e.employee_id");
             case "FIRST_NAME":
-                return departmentFullDao.findAll(offset, limit, "e.first_name");
+                return employeeFullDao.findAll(offset, limit, "e.first_name");
             case "LAST_NAME":
-                return departmentFullDao.findAll(offset, limit, "e.last_name");
+                return employeeFullDao.findAll(offset, limit, "e.last_name");
             case "EMAIL":
-                return departmentFullDao.findAll(offset, limit, "e.email");
+                return employeeFullDao.findAll(offset, limit, "e.email");
             case "PHONE_NUMBER":
-                return departmentFullDao.findAll(offset, limit, "e.phone_number");
+                return employeeFullDao.findAll(offset, limit, "e.phone_number");
             case "HIRE_DATE":
-                return departmentFullDao.findAll(offset, limit, "e.hire_date");
+                return employeeFullDao.findAll(offset, limit, "e.hire_date");
             case "SALARY":
-                return departmentFullDao.findAll(offset, limit, "e.salary");
+                return employeeFullDao.findAll(offset, limit, "e.salary");
             case "COMMISSION_PCT":
-                return departmentFullDao.findAll(offset, limit, "e.commission_pct");
+                return employeeFullDao.findAll(offset, limit, "e.commission_pct");
             default:
-                return departmentFullDao.findAll(offset, limit);
+                return employeeFullDao.findAll(offset, limit);
         }
     }
 
@@ -122,20 +137,33 @@ public class EmployeesRestController
     {
         if (Objects.isNull(id) || id < 1) throw new BadValueForEmployeeIdException();
 
-        return departmentFullDao
+        return employeeFullDao
             .findById(id)
             .switchIfEmpty(Mono.error(new EmployeeNotFoundException()));
     }
 
     @PutMapping
-    public Mono<? extends Answer> updateEmployee(@RequestBody Employee department)
+    public Mono<? extends Answer> updateEmployee(@RequestBody Employee employee)
     {
-        if (Objects.isNull(department) || Objects.isNull(department.getId()) || department.getId() < 1) {
+        if (Objects.isNull(employee) || Objects.isNull(employee.getId()) || employee.getId() < 1) {
             throw new BadValueForEmployeeIdException();
         }
 
-        return departmentDao
-            .save(department)
+        return employeeDao
+            .save(employee)
+            .map(r -> new AnswerOk())
+            .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));
+    }
+
+    @PutMapping(path = REST_UPDATE, params = {"field"})
+    public Mono<? extends Answer> updateEmployeeField(
+        @RequestParam("field") String field,
+        @RequestBody Employee employee)
+    {
+        System.err.println("field = " + field);
+        System.err.println("employee = " + employee);
+
+        return employeeMapUpdater.updateEmployee(field, employee)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));
     }
@@ -147,10 +175,10 @@ public class EmployeesRestController
         if (Objects.isNull(id) || id < 1) throw new BadValueForEmployeeIdException();
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
 
-        return departmentDao
+        return employeeDao
             .findById(id)
-            .flatMap(department -> departmentDao
-                .delete(department)
+            .flatMap(employee -> employeeDao
+                .delete(employee)
                 .map(v -> answerNoContent)
                 .switchIfEmpty(Mono.error(new EmployeeNotFoundException())))
             .switchIfEmpty(Mono.error(new EmployeeNotFoundException()));

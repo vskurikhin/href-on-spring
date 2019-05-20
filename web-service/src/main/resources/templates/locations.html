@@ -10,40 +10,46 @@
     <link data-th-href="@{/css/main.css}" rel="stylesheet">
 
     <!-- bootstrap -->
-    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js}"></script>
     <script th:src="@{/js/locations.js}"></script>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="container"><br/>
-        <div class="alert alert-success">
-            <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="welcome">Welcome!</a></li>
+                <li class="active"><a href="locations">Locations</a></li>
+                <li><a href="departments">Departments</a></li>
+                <li><a href="employees">Employees</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div class="row">
-        <div id="title">
-            <h1>locations</h1>
+<main>
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <table id="example" class="display" style="width:100%; min-width: 969px">
+                <thead>
+                <tr class="tr-header">
+                    <th name="id" style="width: 8%">Id</th>
+                    <th name="streetAddress" style="width: 36%">Street</th>
+                    <th name="postalCode" style="width: 16%">Postal Code</th>
+                    <th name="city" style="width: 16%">City</th>
+                    <th name="stateProvince" style="width: 16%">State</th>
+                    <th name="countryId">Country</th>
+                </tr>
+                </thead>
+            </table>
         </div>
-
-        <table id="example" class="display" style="width:100%">
-            <thead>
-            <tr class="tr-header">
-                <th name="id" style="width: 10%">Id</th>
-                <th name="streetAddress" style="width: 35%">Street</th>
-                <th name="postalCode">Postal Code</th>
-                <th name="city">City</th>
-                <th name="stateProvince">State</th>
-                <th name="countryId">Country</th>
-            </tr>
-            </thead>
-        </table>
     </div>
+</main>
 
-</div>
+</body>
+</html>

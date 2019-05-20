@@ -10,38 +10,45 @@
     <link data-th-href="@{/css/main.css}" rel="stylesheet">
 
     <!-- bootstrap -->
-    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/datatables.net/1.10.19/js/jquery.dataTables.min.js}"></script>
     <script th:src="@{/js/departments.js}"></script>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="container"><br/>
-        <div class="alert alert-success">
-            <a href="#" class="close" data-dismiss="alert"
-               aria-label="close">×</a>
-            <strong>Success!</strong> It is working as we expected.
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="welcome">Welcome!</a></li>
+                <li><a href="locations">Locations</a></li>
+                <li class="active"><a href="departments">Departments</a></li>
+                <li><a href="employees">Employees</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div class="row">
-        <div id="title">
-            <h1>departments</h1>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="row">&nbsp;</div>
+            <table id="departments" class="display" style="width:100%; min-width: 969px">
+                <thead>
+                <tr class="tr-header">
+                    <th name="id" style="width: 10%">Id</th>
+                    <th name="departmentName" style="width: 35%">Department name</th>
+                    <th name="managerId">Manager Id</th>
+                    <th name="locationId">Location Id</th>
+                </tr>
+                </thead>
+            </table>
         </div>
-
-        <table id="departments" class="display" style="width:100%">
-            <thead>
-            <tr class="tr-header">
-                <th name="id" style="width: 10%">Id</th>
-                <th name="departmentName" style="width: 35%">Department name</th>
-                <th name="managerId">Manager Id</th>
-                <th name="locationId">Location Id</th>
-            </tr>
-            </thead>
-        </table>
     </div>
+</main>
 
-</div>
+</body>
+</html>
+

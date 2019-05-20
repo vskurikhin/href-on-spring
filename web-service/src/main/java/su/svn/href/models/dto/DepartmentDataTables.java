@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 public class DepartmentDataTables<T>
 {
-    static final long serialVersionUID = -32L;
+    static final long serialVersionUID = -62L;
 
     private int draw;
 
