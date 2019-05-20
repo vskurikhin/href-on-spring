@@ -32,7 +32,7 @@ public class R2dbcConfiguration extends AbstractR2dbcConfiguration
     }
 
     @Bean
-    public AccountDao regionDao(R2dbcRepositoryFactory factory)
+    public AccountDao accountDao(R2dbcRepositoryFactory factory)
     {
         return factory.getRepository(AccountDao.class);
     }
