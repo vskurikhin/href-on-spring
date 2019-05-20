@@ -38,9 +38,6 @@ public class UserAccountService implements ReactiveUserDetailsService
     @Override
     public Mono<UserDetails> findByUsername(String username)
     {
-        String encryptedPassword = pw.encode("password");
-        System.err.println("encryptedPassword = " + encryptedPassword);
-
         return accountDao.findByUsername(username).flatMap(a -> user(a, "ROLE_ADMIN", "ROLE_USER"));
     }
 }

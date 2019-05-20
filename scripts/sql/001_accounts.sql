@@ -6,3 +6,10 @@ CREATE TABLE IF NOT EXISTS accounts (
 , password    VARCHAR(255)
 , active      BOOLEAN
 );
+
+INSERT INTO accounts
+  VALUES (
+    'user',
+    '{bcrypt}$2a$10$HdSlY4VfCuJmHPiWl526qu1/ib.83OSpjemT2MIScpXN5WqX9N0.i',
+    TRUE
+);

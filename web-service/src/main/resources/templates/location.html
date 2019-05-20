@@ -12,29 +12,21 @@
     <!-- bootstrap -->
     <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
     <script th:src="@{/js/bootstrap-3.4.1.min.js}"></script>
-    <script src="/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js"></script>
+    <script th:src="@{/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js}"></script>
     <script th:src="@{/js/location.js}"></script>
 </head>
 <body>
 
-<!-- Классы navbar и navbar-default (базовые классы меню) -->
 <nav class="navbar navbar-default">
-    <!-- Контейнер (определяет ширину Navbar) -->
     <div class="container-fluid">
-        <!-- Заголовок -->
-        <div class="navbar-header">
-            <!-- Кнопка «Гамбургер» отображается только в мобильном виде (предназначена для открытия основного содержимого Navbar) -->
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!-- Бренд или название сайта (отображается в левой части меню) -->
-            <a class="navbar-brand" href="#">Brand</a>
-        </div>
-        <!-- Основная часть меню (может содержать ссылки, формы и другие элементы) -->
+        <div class="navbar-header">&nbsp;</div>
         <div class="collapse navbar-collapse" id="navbar-main">
-            <!-- Содержимое основной части -->
+            <ul class="nav navbar-nav">
+                <li><a href="welcome">Welcome!</a></li>
+                <li class="active"><a href="locations">Locations</a></li>
+                <li><a href="departments">Departments</a></li>
+                <li><a href="employees">Employees</a></li>
+            </ul>
         </div>
     </div>
 </nav>
@@ -43,10 +35,6 @@
     <div class="container">
         <div class="row">&nbsp;</div>
         <div class="row">
-            <div id="title">
-                <h1>location</h1>
-            </div>
-
             <table id="location" class="table table-bordered table-striped" style="clear: both; min-width: 969px">
                 <tbody>
                 <tr>
@@ -94,10 +82,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a th:href="@{/locations}">Locations</a>
-
         </div>
-
     </div>
 </main>
 

@@ -6,12 +6,12 @@
     <packaging>jar</packaging>
 
     <artifactId>web-service</artifactId>
-    <version>1.8.0.2-SNAPSHOT</version>
+    <version>1.8.0.3-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.8.0.2-SNAPSHOT</version>
+        <version>1.8.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
