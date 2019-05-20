@@ -3,6 +3,8 @@ package su.svn.href.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;
@@ -22,6 +24,7 @@ import static su.svn.href.controllers.Constants.*;
 @SuppressWarnings("Duplicates")
 @RestController()
 @RequestMapping(value = REST_API + REST_V1_EMPLOYEES)
+@EnableReactiveMethodSecurity
 public class EmployeesRestController
 {
     private EmployeeRepository employeeRepository;
@@ -36,6 +39,7 @@ public class EmployeesRestController
     }
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public Mono<EmployeeDataTables> readFullEmployees(
         @RequestParam("draw")   final Integer draw,
         @RequestParam("start")  final Integer start,
@@ -77,6 +81,7 @@ public class EmployeesRestController
         return updateEmployee(update).map(response -> response.rawStatusCode() == HttpStatus.OK.value());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(path = REST_UPDATE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Mono<? extends Answer> updateEmployee(UpdateValueDto body)
     {
