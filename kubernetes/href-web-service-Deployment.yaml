@@ -1,0 +1,34 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: href-web
+spec:
+  selector:
+    matchLabels:
+      app: href-web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: href-web
+        name: href-web
+    spec:
+      hostname: href-web
+      containers:
+      - image: docker.io/vskurikhin/href-web:latest
+        name: href-web
+        ports:
+        - containerPort: 8080
+          name: locations
+        command: ["java"]
+        args: [ "-jar", "/opt/project/web-service/target/web-service.jar" ]
+        env:
+        - name: "DB_HOST"
+          value: "_DB_HOST_POSTGRESQL_"
+        - name: "LOCATIONS_HOST"
+          value: "href-locations"
+        - name: "DEPARTMENTS_HOST"
+          value: "href-departments"
+        - name: "EMPLOYEES_HOST"
+          value: "href-employees"
