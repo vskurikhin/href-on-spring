@@ -1,15 +1,17 @@
 package su.svn.href.controllers;
 
 import io.r2dbc.postgresql.PostgresqlServerErrorException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.dao.CountryDao;
-import su.svn.href.exceptions.BadValueForCountryIdException;
-import su.svn.href.exceptions.CountryDontSavedException;
-import su.svn.href.exceptions.CountryNotFoundException;
+import su.svn.href.exceptions.BadValueForIdException;
+import su.svn.href.exceptions.EntryDontSavedException;
+import su.svn.href.exceptions.EntryNotFoundException;
 import su.svn.href.models.Country;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
@@ -26,6 +28,8 @@ import static su.svn.href.controllers.Constants.REST_V1_COUNTRIES;
 @RequestMapping(value = REST_API + REST_V1_COUNTRIES)
 public class CountriesRestController
 {
+    private static final Log LOG = LogFactory.getLog(CountriesRestController.class);
+
     private final CountryDao countryDao;
 
     private final PageSettings paging;
@@ -39,29 +43,33 @@ public class CountriesRestController
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Mono<? extends Answer> createCountry(@RequestBody Country country,
-                                                HttpServletRequest request,
-                                                HttpServletResponse response)
+    public Mono<? extends Answer> createCountry(
+        @RequestBody Country country,
+        HttpServletRequest request,
+        HttpServletResponse response)
     {
-        if (Objects.isNull(country.getId()) || country.getId().length() != 2) {
-            throw new BadValueForCountryIdException();
+        if (Objects.isNull(country) || ! Country.isValidId(country.getId())) {
+            throw new BadValueForIdException(Country.class, "country is: " + country);
         }
 
         return countryDao
             .save(country)
             .map(r -> new AnswerCreated(response, request.getRequestURI(), r.getId()))
-            .switchIfEmpty(Mono.error(new CountryDontSavedException()));
+            .switchIfEmpty(Mono.error(
+                new EntryDontSavedException(Country.class, "when creating country: " + country)
+            ));
     }
 
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
-    public Flux<Country> readCountries(@RequestParam("page") int page,
-                                       @RequestParam("size") int size,
-                                       @RequestParam("sort") String sort)
+    public Flux<Country> readCountries(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sort") String sort)
     {
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) {
+        switch (sort.toUpperCase()) { // TODO
             case "ID":   return countryDao.findAllOrderById(offset, limit);
             case "NAME": return countryDao.findAllOrderByCountryName(offset, limit);
             default:     return countryDao.findAll(offset, limit);
@@ -71,31 +79,39 @@ public class CountriesRestController
     @GetMapping("/{id}")
     public Mono<Country> readCountryById(@PathVariable String id)
     {
-        if (Objects.isNull(id) || id.length() != 2) throw new BadValueForCountryIdException();
+        if ( ! Country.isValidId(id)) {
+            throw new BadValueForIdException(Country.class, "id is: " + id);
+        }
 
         return countryDao
             .findById(id)
-            .switchIfEmpty(Mono.error(new CountryNotFoundException()));
+            .switchIfEmpty(Mono.error(
+                new EntryNotFoundException(Country.class, "for id: " + id)
+            ));
     }
 
     @PutMapping
     public Mono<? extends Answer> updateCountry(@RequestBody Country country)
     {
-        if (Objects.isNull(country) || Objects.isNull(country.getId()) || country.getId().length() != 2) {
-            throw new BadValueForCountryIdException();
+        if (Objects.isNull(country) || ! Country.isValidId(country.getId())) {
+            throw new BadValueForIdException(Country.class, "country is: " + country);
         }
 
         return countryDao
             .save(country)
             .map(r -> new AnswerOk())
-            .switchIfEmpty(Mono.error(new CountryDontSavedException()));
+            .switchIfEmpty(Mono.error(
+                new EntryDontSavedException(Country.class, "when updating country: " + country)
+            ));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public Mono<? extends Answer> deleteCountry(@PathVariable String id)
     {
-        if (Objects.isNull(id) || id.length() != 2) throw new BadValueForCountryIdException();
+        if (Objects.isNull(id) || ! Country.isValidId(id)) {
+            throw new BadValueForIdException(Country.class, "id is: " + id);
+        }
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
 
         return countryDao
@@ -103,22 +119,28 @@ public class CountriesRestController
             .flatMap(country -> countryDao
                 .delete(country)
                 .map(v -> answerNoContent)
-                .switchIfEmpty(Mono.error(new CountryNotFoundException())))
-            .switchIfEmpty(Mono.error(new CountryNotFoundException()));
+                .switchIfEmpty(Mono.error(
+                    new EntryNotFoundException(Country.class, "for id: " + id)
+                ))
+            .switchIfEmpty(Mono.error(
+                new EntryNotFoundException(Country.class, "for id: " + id)
+            )));
     }
 
-    @ExceptionHandler(BadValueForCountryIdException.class)
+    @ExceptionHandler(BadValueForIdException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody AnswerBadRequest handleException(BadValueForCountryIdException e)
+    public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
-        return new AnswerBadRequest("Bad value for Country Id");
+        LOG.error(e.getMessage());
+        return new AnswerBadRequest("Bad value for Country id");
     }
 
-    @ExceptionHandler(CountryNotFoundException.class)
+    @ExceptionHandler(EntryNotFoundException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody AnswerBadRequest handleException(CountryNotFoundException e)
+    public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
-        return new AnswerBadRequest("Country not found for Id");
+        LOG.error(e.getMessage());
+        return new AnswerBadRequest("Country not found for id");
     }
 
     @ExceptionHandler(PostgresqlServerErrorException.class)
@@ -126,14 +148,16 @@ public class CountriesRestController
     public @ResponseBody
     AnswerBadRequest handleException(PostgresqlServerErrorException e)
     {
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Country");
     }
 
-    @ExceptionHandler(CountryDontSavedException.class)
+    @ExceptionHandler(EntryDontSavedException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    AnswerBadRequest handleException(CountryDontSavedException e)
+    AnswerBadRequest handleException(EntryDontSavedException e)
     {
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Country don't saved");
     }
 }

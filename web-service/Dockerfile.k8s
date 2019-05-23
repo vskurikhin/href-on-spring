@@ -17,4 +17,4 @@ RUN mvn -B clean install
 WORKDIR $PROJECT_DIR/$TARGET
 RUN mvn -B clean package
 
-CMD [ "java", "-jar", "/opt/project/rest-departments-service/target/web-service.jar" ]
+CMD [ "java", "-jar", "/opt/project/web-service/target/web-service.jar" ]

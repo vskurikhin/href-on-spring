@@ -65,8 +65,9 @@ class RegionsRestControllerTest
 
         when(regionDao.save(region0)).thenReturn(Mono.just(saved));
 
+        System.out.println(REST_API + REST_V1_REGIONS);
         mvc.perform(
-            post(REST_API + REST_V1_REGIONS)
+            post("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(region0))
         ).andExpect(status().isCreated());
@@ -77,7 +78,7 @@ class RegionsRestControllerTest
     void create_isBadRequest() throws Exception
     {
         mvc.perform(
-            post(REST_API + REST_V1_REGIONS)
+            post("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(region1))
         ).andExpect(status().isBadRequest());
@@ -90,7 +91,7 @@ class RegionsRestControllerTest
         when(regionDao.findAll()).thenReturn(Flux.just(region1, region2));
 
         MvcResult result = mvc
-            .perform(get(REST_API + REST_V1_REGIONS + "/all").contentType(APPLICATION_JSON))
+            .perform(get("/rest/api/v1/regions/all").contentType(APPLICATION_JSON))
             .andReturn();
 
         mvc.perform(asyncDispatch(result))
@@ -109,7 +110,7 @@ class RegionsRestControllerTest
         when(regionDao.findById(id)).thenReturn(Mono.just(region));
 
         MvcResult result = mvc
-            .perform(get(REST_API + REST_V1_REGIONS + "/{id}", id).contentType(APPLICATION_JSON))
+            .perform(get("/rest/api/v1/regions/{id}", id).contentType(APPLICATION_JSON))
             .andReturn();
 
         mvc.perform(asyncDispatch(result))
@@ -132,7 +133,7 @@ class RegionsRestControllerTest
     @DisplayName("when reading, got bad request")
     void readById_isBadRequest() throws Exception
     {
-        mvc.perform(get(REST_API + REST_V1_REGIONS + "/{id}", -1L).contentType(APPLICATION_JSON))
+        mvc.perform(get("/rest/api/v1/regions/{id}", -1L).contentType(APPLICATION_JSON))
            .andExpect(status().isBadRequest());
     }
 
@@ -145,7 +146,7 @@ class RegionsRestControllerTest
         when(regionDao.save(region1)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            put(REST_API + REST_V1_REGIONS)
+            put("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(region1))
         ).andExpect(status().isOk());
@@ -156,7 +157,7 @@ class RegionsRestControllerTest
     void update_isBadRequest() throws Exception
     {
         mvc.perform(
-            put(REST_API + REST_V1_REGIONS)
+            put("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(region0))
         ).andExpect(status().isBadRequest());
@@ -169,7 +170,7 @@ class RegionsRestControllerTest
         when(regionDao.save(region0)).thenReturn(Mono.empty());
 
         MvcResult result = mvc.perform(
-            post(REST_API + REST_V1_REGIONS)
+            post("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(region0))
         ).andReturn();
@@ -185,7 +186,7 @@ class RegionsRestControllerTest
         when(regionDao.save(region0)).thenThrow(PostgresqlServerErrorException.class);
 
         mvc.perform(
-            post(REST_API + REST_V1_REGIONS)
+            post("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(region0))
         ).andExpect(status().isBadRequest());
@@ -198,7 +199,7 @@ class RegionsRestControllerTest
         when(regionDao.findById(1L)).thenReturn(Mono.just(region1));
         when(regionDao.delete(region1)).thenReturn(Mono.just(region1).then());
 
-        mvc.perform(delete(REST_API + REST_V1_REGIONS + "/{id}" , 1L))
+        mvc.perform(delete("/rest/api/v1/regions/{id}" , 1L))
             .andExpect(status().isNoContent());
     }
 
@@ -208,7 +209,7 @@ class RegionsRestControllerTest
     {
         when(regionDao.findById(0L)).thenReturn(Mono.empty());
 
-        mvc.perform(delete(REST_API + REST_V1_REGIONS + "/{id}" , 0L))
+        mvc.perform(delete("/rest/api/v1/regions/{id}" , 0L))
             .andExpect(status().isBadRequest());
     }
 }

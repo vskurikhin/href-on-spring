@@ -81,7 +81,7 @@ public class TestData
     public static Country createCountry1()
     {
         Country result = new Country();
-        result.setId("11");
+        result.setId("AA");
         result.setCountryName("test_country_name_1");
         result.setRegionId(1L);
 
@@ -91,7 +91,7 @@ public class TestData
     public static Country createCountry2()
     {
         Country result = new Country();
-        result.setId("22");
+        result.setId("BB");
         result.setCountryName("test_country_name_2");
         result.setRegionId(2L);
 
@@ -109,7 +109,7 @@ public class TestData
     public static CountryDto createCountryDto1()
     {
         CountryDto result = new CountryDto();
-        result.setId("11");
+        result.setId("AA");
         result.setCountryName("test_countryDto_name_1");
         result.setRegion(createRegion1());
 
@@ -119,7 +119,7 @@ public class TestData
     public static CountryDto createCountryDto2()
     {
         CountryDto result = new CountryDto();
-        result.setId("22");
+        result.setId("BB");
         result.setCountryName("test_countryDto_name_2");
         result.setRegion(createRegion2());
 
