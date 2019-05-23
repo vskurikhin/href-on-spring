@@ -4,6 +4,9 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+import su.svn.utils.StringHelper;
+
+import java.lang.reflect.Field;
 
 @Data
 @NoArgsConstructor
@@ -33,6 +36,41 @@ public class Location
 
     @Column("country_id")
     private String countryId;
+
+    public static boolean isValidId(Long id)
+    {
+        return null != id && id > 0;
+    }
+
+    public static boolean isValidFieldName(String name)
+    {
+        for (Field field : Location.class.getDeclaredFields()) {
+            if (field.getName().toUpperCase().equals(name))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isValidStreetAddress(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
+
+    public static boolean isValidPostalCode(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
+
+    public static boolean isValidCity(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
+
+    public static boolean isValidStateProvince(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
 
     public static class Builder
     {

@@ -116,7 +116,7 @@ public class RegionsRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Region id");
     }
 
@@ -124,7 +124,7 @@ public class RegionsRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Region not found for id");
     }
 
@@ -132,7 +132,7 @@ public class RegionsRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(PostgresqlServerErrorException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Region");
     }
 
@@ -140,7 +140,7 @@ public class RegionsRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(EntryDontSavedException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Region don't saved");
     }
 }

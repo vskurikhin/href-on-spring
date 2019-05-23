@@ -4,9 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import sun.misc.Regexp;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Data

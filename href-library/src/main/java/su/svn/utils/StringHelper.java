@@ -7,9 +7,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class StringHelper
 {
+    private static Pattern pattern = Pattern.compile("[-0-9a-zA-Z .,/!]+");
+
     public static String stringOrNULL(Object o)
     {
         return null == o ? "NULL" : o.toString();
@@ -58,5 +61,10 @@ public class StringHelper
                     throw new RuntimeException(e);
                 }
         }
+    }
+
+    public static boolean isValidValue(String value)
+    {
+        return null != value && pattern.matcher(value).matches();
     }
 }

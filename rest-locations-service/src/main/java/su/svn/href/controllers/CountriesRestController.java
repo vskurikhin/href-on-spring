@@ -48,7 +48,7 @@ public class CountriesRestController
         HttpServletRequest request,
         HttpServletResponse response)
     {
-        if (Objects.isNull(country.getId()) || country.getId().length() != 2) {
+        if (Objects.isNull(country) || ! Country.isValidId(country.getId())) {
             throw new BadValueForIdException(Country.class, "country is: " + country);
         }
 
@@ -79,7 +79,7 @@ public class CountriesRestController
     @GetMapping("/{id}")
     public Mono<Country> readCountryById(@PathVariable String id)
     {
-        if (! Country.isValidId(id)) {
+        if ( ! Country.isValidId(id)) {
             throw new BadValueForIdException(Country.class, "id is: " + id);
         }
 
@@ -93,7 +93,7 @@ public class CountriesRestController
     @PutMapping
     public Mono<? extends Answer> updateCountry(@RequestBody Country country)
     {
-        if (Objects.isNull(country) || Country.isValidId(country.getId())) {
+        if (Objects.isNull(country) || ! Country.isValidId(country.getId())) {
             throw new BadValueForIdException(Country.class, "country is: " + country);
         }
 
@@ -109,7 +109,7 @@ public class CountriesRestController
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public Mono<? extends Answer> deleteCountry(@PathVariable String id)
     {
-        if (Objects.isNull(id) || id.length() != 2) {
+        if (Objects.isNull(id) || ! Country.isValidId(id)) {
             throw new BadValueForIdException(Country.class, "id is: " + id);
         }
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
@@ -131,7 +131,7 @@ public class CountriesRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Country id");
     }
 
@@ -139,7 +139,7 @@ public class CountriesRestController
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Country not found for id");
     }
 
@@ -148,7 +148,7 @@ public class CountriesRestController
     public @ResponseBody
     AnswerBadRequest handleException(PostgresqlServerErrorException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Country");
     }
 
@@ -157,7 +157,7 @@ public class CountriesRestController
     public @ResponseBody
     AnswerBadRequest handleException(EntryDontSavedException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Country don't saved");
     }
 }
