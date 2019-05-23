@@ -85,7 +85,7 @@ class DepartmentsRestControllerTest
         when(departmentDao.save(saved)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            post(REST_API + REST_V1_DEPARTMENTS)
+            post("/rest/api/v1/departments")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(saved))
         ).andExpect(status().isCreated());
@@ -98,7 +98,7 @@ class DepartmentsRestControllerTest
         Department test = createDepartment0();
         department0.setId(-1L);
         mvc.perform(
-            post(REST_API + REST_V1_DEPARTMENTS)
+            post("/rest/api/v1/departments")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(test))
         ).andExpect(status().isBadRequest());
@@ -117,7 +117,7 @@ class DepartmentsRestControllerTest
 
 
         return mvc
-            .perform(get(REST_API + REST_V1_DEPARTMENTS + range + "?page=1&size=2&sort=" + sort)
+            .perform(get("/rest/api/v1/departments" + range + "?page=1&size=2&sort=" + sort)
                 .contentType(APPLICATION_JSON))
             .andReturn();
     }
@@ -264,7 +264,7 @@ class DepartmentsRestControllerTest
         when(departmentDao.save(department1)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            put(REST_API + REST_V1_DEPARTMENTS)
+            put("/rest/api/v1/departments")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(department1))
         ).andExpect(status().isOk());
@@ -275,7 +275,7 @@ class DepartmentsRestControllerTest
     void update_isBadRequest() throws Exception
     {
         mvc.perform(
-            put(REST_API + REST_V1_DEPARTMENTS)
+            put("/rest/api/v1/departments")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(department0))
         ).andExpect(status().isBadRequest());
@@ -288,7 +288,7 @@ class DepartmentsRestControllerTest
         when(departmentDao.findById(1L)).thenReturn(Mono.just(department1));
         when(departmentDao.delete(department1)).thenReturn(Mono.just(department1).then());
 
-        mvc.perform(delete(REST_API + REST_V1_DEPARTMENTS + "/{id}" , 1L))
+        mvc.perform(delete("/rest/api/v1/departments/{id}" , 1L))
             .andExpect(status().isNoContent());
     }
 }

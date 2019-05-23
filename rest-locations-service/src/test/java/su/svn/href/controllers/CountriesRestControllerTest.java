@@ -61,13 +61,13 @@ class CountriesRestControllerTest
     void create_isCreated() throws Exception
     {
         Country saved = createCountry0();
-        saved.setId("44");
+        saved.setId("CC");
         saved.setRegionId(1L);
 
         when(countryDao.save(saved)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            post(REST_API + REST_V1_COUNTRIES)
+            post("/rest/api/v1/countries")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(saved))
         ).andExpect(status().isCreated());
@@ -80,7 +80,7 @@ class CountriesRestControllerTest
         Country test = createCountry0();
         country0.setId("");
         mvc.perform(
-            post(REST_API + REST_V1_COUNTRIES)
+            post("/rest/api/v1/countries")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(test))
         ).andExpect(status().isBadRequest());
@@ -100,7 +100,7 @@ class CountriesRestControllerTest
 
 
         MvcResult result = mvc
-            .perform(get(REST_API + REST_V1_COUNTRIES + REST_RANGE + "?page=1&size=2&sort=none")
+            .perform(get("/rest/api/v1/countries/range?page=1&size=2&sort=none")
                 .contentType(APPLICATION_JSON))
             .andReturn();
 
@@ -131,7 +131,7 @@ class CountriesRestControllerTest
 
 
         MvcResult result = mvc
-            .perform(get(REST_API + REST_V1_COUNTRIES + REST_RANGE + "?page=1&size=2&sort=id")
+            .perform(get("/rest/api/v1/countries/range?page=1&size=2&sort=id")
                 .contentType(APPLICATION_JSON))
             .andReturn();
 
@@ -161,6 +161,7 @@ class CountriesRestControllerTest
         when(countryDao.findAllOrderByCountryName(offset, limit)).thenReturn(Flux.just(country1, country2));
 
 
+        System.out.println("/rest/api/v1/countries/range?page=1&size=2&sort=name");
         MvcResult result = mvc
             .perform(get(REST_API + REST_V1_COUNTRIES + REST_RANGE + "?page=1&size=2&sort=name")
                 .contentType(APPLICATION_JSON))
@@ -184,7 +185,7 @@ class CountriesRestControllerTest
         when(countryDao.findById(id)).thenReturn(Mono.just(country));
 
         MvcResult result = mvc
-            .perform(get(REST_API + REST_V1_COUNTRIES + "/{id}", id).contentType(APPLICATION_JSON))
+            .perform(get("/rest/api/v1/countries/{id}", id).contentType(APPLICATION_JSON))
             .andReturn();
 
         mvc.perform(asyncDispatch(result))
@@ -200,19 +201,19 @@ class CountriesRestControllerTest
     @DisplayName("read by id")
     void readById_isOk() throws Exception
     {
-        readById("11", country1);
-        readById("22", country2);
+        readById("AA", country1);
+        readById("BB", country2);
     }
 
     @Test
     @DisplayName("when reading, got bad request")
     void readById_isBadRequest() throws Exception
     {
-        mvc.perform(get(REST_API + REST_V1_COUNTRIES + "/{id}", "0")
+        mvc.perform(get("/rest/api/v1/countries/{id}", "A")
             .contentType(APPLICATION_JSON))
             .andExpect(status().isBadRequest());
 
-        mvc.perform(get(REST_API + REST_V1_COUNTRIES + "/{id}", "123")
+        mvc.perform(get("/rest/api/v1/countries/{id}", "AAA")
             .contentType(APPLICATION_JSON))
             .andExpect(status().isBadRequest());
     }
@@ -226,7 +227,7 @@ class CountriesRestControllerTest
         when(countryDao.save(country1)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            put(REST_API + REST_V1_COUNTRIES)
+            put("/rest/api/v1/countries")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(country1))
         ).andExpect(status().isOk());
@@ -237,7 +238,7 @@ class CountriesRestControllerTest
     void update_isBadRequest() throws Exception
     {
         mvc.perform(
-            put(REST_API + REST_V1_COUNTRIES)
+            put("/rest/api/v1/countries")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(country0))
         ).andExpect(status().isBadRequest());
@@ -250,7 +251,7 @@ class CountriesRestControllerTest
         when(countryDao.save(country1)).thenReturn(Mono.empty());
 
         MvcResult result = mvc.perform(
-            post(REST_API + REST_V1_COUNTRIES)
+            post("/rest/api/v1/countries")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(country1))
         ).andReturn();
@@ -263,10 +264,10 @@ class CountriesRestControllerTest
     @DisplayName("delete")
     void deleteTest() throws Exception
     {
-        when(countryDao.findById("11")).thenReturn(Mono.just(country1));
+        when(countryDao.findById("AA")).thenReturn(Mono.just(country1));
         when(countryDao.delete(country1)).thenReturn(Mono.just(country1).then());
 
-        mvc.perform(delete(REST_API + REST_V1_COUNTRIES + "/{id}" , "11"))
+        mvc.perform(delete("/rest/api/v1/countries/{id}" , "AA"))
             .andExpect(status().isNoContent());
     }
 
@@ -276,11 +277,7 @@ class CountriesRestControllerTest
     {
         when(countryDao.findById("00")).thenReturn(Mono.empty());
 
-        MvcResult result = mvc
-            .perform(delete(REST_API + REST_V1_COUNTRIES + "/{id}" , "00"))
-            .andReturn();
-
-        mvc.perform(asyncDispatch(result))
+        mvc.perform(delete("/rest/api/v1/countries/{id}" , "00"))
             .andExpect(status().isBadRequest());
     }
 }

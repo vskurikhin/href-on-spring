@@ -84,7 +84,7 @@ class LocationsRestControllerTest
         when(locationDao.save(saved)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            post(REST_API + REST_V1_LOCATIONS)
+            post("/rest/api/v1/locations")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(saved))
         ).andExpect(status().isCreated());
@@ -94,10 +94,11 @@ class LocationsRestControllerTest
     @DisplayName("when creating region, got bad request")
     void create_isBadRequest() throws Exception
     {
+        System.out.println(REST_API + REST_V1_LOCATIONS);
         Location test = createLocation0();
         location0.setId(-1L);
         mvc.perform(
-            post(REST_API + REST_V1_LOCATIONS)
+            post("/rest/api/v1/locations")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(test))
         ).andExpect(status().isBadRequest());
@@ -116,7 +117,7 @@ class LocationsRestControllerTest
 
 
         return mvc
-            .perform(get(REST_API + REST_V1_LOCATIONS + range + "?page=1&size=2&sort=" + sort)
+            .perform(get("/rest/api/v1/locations" + range + "?page=1&size=2&sort=" + sort)
                 .contentType(APPLICATION_JSON))
             .andReturn();
 
@@ -276,7 +277,7 @@ class LocationsRestControllerTest
         when(locationDao.save(location1)).thenReturn(Mono.just(saved));
 
         mvc.perform(
-            put(REST_API + REST_V1_LOCATIONS)
+            put("/rest/api/v1/locations")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(location1))
         ).andExpect(status().isOk());
@@ -287,7 +288,7 @@ class LocationsRestControllerTest
     void update_isBadRequest() throws Exception
     {
         mvc.perform(
-            put(REST_API + REST_V1_LOCATIONS)
+            put("/rest/api/v1/locations")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(location0))
         ).andExpect(status().isBadRequest());
@@ -301,9 +302,9 @@ class LocationsRestControllerTest
             .thenReturn(Mono.just(1));
 
         mvc.perform(
-            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+            put("/rest/api/v1/locations/update")
                 .contentType(APPLICATION_JSON_UTF8)
-                .param("field", "street_address")
+                .param("field", "streetAddress")
                 .content(convertObjectToJsonBytes(location1))
         ).andExpect(status().isOk());
     }
@@ -316,9 +317,9 @@ class LocationsRestControllerTest
             .thenReturn(Mono.just(1));
 
         mvc.perform(
-            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+            put("/rest/api/v1/locations/update")
                 .contentType(APPLICATION_JSON_UTF8)
-                .param("field", "postal_code")
+                .param("field", "postalCode")
                 .content(convertObjectToJsonBytes(location1))
         ).andExpect(status().isOk());
     }
@@ -331,7 +332,7 @@ class LocationsRestControllerTest
             .thenReturn(Mono.just(1));
 
         mvc.perform(
-            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+            put("/rest/api/v1/locations/update")
                 .contentType(APPLICATION_JSON_UTF8)
                 .param("field", "city")
                 .content(convertObjectToJsonBytes(location1))
@@ -346,9 +347,9 @@ class LocationsRestControllerTest
             .thenReturn(Mono.just(1));
 
         mvc.perform(
-            put(REST_API + REST_V1_LOCATIONS + REST_UPDATE)
+            put("/rest/api/v1/locations/update")
                 .contentType(APPLICATION_JSON_UTF8)
-                .param("field", "state_province")
+                .param("field", "stateProvince")
                 .content(convertObjectToJsonBytes(location1))
         ).andExpect(status().isOk());
     }
@@ -360,7 +361,7 @@ class LocationsRestControllerTest
         when(locationDao.findById(1L)).thenReturn(Mono.just(location1));
         when(locationDao.delete(location1)).thenReturn(Mono.just(location1).then());
 
-        mvc.perform(delete(REST_API + REST_V1_LOCATIONS + "/{id}" , 1L))
+        mvc.perform(delete("/rest/api/v1/locations/{id}", 1L))
             .andExpect(status().isNoContent());
     }
 }
