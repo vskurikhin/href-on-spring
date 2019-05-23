@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+import su.svn.utils.StringHelper;
 
 @Data
 @NoArgsConstructor
@@ -30,4 +31,34 @@ public class Manager
 
     @Column("phone_number")
     private String phoneNumber;
+
+    public static boolean isValidId(Long id)
+    {
+        return null != id && id > 0;
+    }
+
+    public static boolean isValidFieldName(String name)
+    {
+        return StringHelper.isValidFieldName(name, Location.class);
+    }
+
+    public static boolean isValidFirstName(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
+
+    public static boolean isValidLastName(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
+
+    public static boolean isValidEmail(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
+
+    public static boolean isValidPhoneNumber(String name)
+    {
+        return StringHelper.isValidValue(name);
+    }
 }

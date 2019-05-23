@@ -1,6 +1,8 @@
 package su.svn.href.controllers;
 
 import io.r2dbc.postgresql.PostgresqlServerErrorException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -8,9 +10,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.dao.EmployeeDao;
 import su.svn.href.dao.EmployeeFullDao;
-import su.svn.href.exceptions.BadValueForEmployeeIdException;
-import su.svn.href.exceptions.EmployeeDontSavedException;
-import su.svn.href.exceptions.EmployeeNotFoundException;
+import su.svn.href.exceptions.*;
+import su.svn.href.models.Department;
 import su.svn.href.models.Employee;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
@@ -26,6 +27,8 @@ import static su.svn.href.controllers.Constants.*;
 @RequestMapping(value = REST_API + REST_V1_EMPLOYEES)
 public class EmployeesRestController
 {
+    private static final Log LOG = LogFactory.getLog(EmployeesRestController.class);
+
     private EmployeeDao employeeDao;
 
     private EmployeeFullDao employeeFullDao;
@@ -60,14 +63,16 @@ public class EmployeesRestController
         HttpServletRequest request,
         HttpServletResponse response)
     {
-        if (Objects.isNull(employee.getId()) || employee.getId() < 2) {
-            throw new BadValueForEmployeeIdException();
+        if (Objects.isNull(employee) || ! Employee.isValidId(employee.getId())) {
+            throw new BadValueForIdException(Employee.class, "employee is: " + employee);
         }
 
         return employeeDao
             .save(employee)
             .map(r -> new AnswerCreated(response, request.getRequestURI(), r.getId()))
-            .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));
+            .switchIfEmpty(Mono.error(
+                new EntryDontSavedException(Employee.class, "when creating employee: " + employee)
+            ));
     }
 
     @GetMapping(path = REST_RANGE, params = { "page", "size", "sort"})
@@ -135,24 +140,30 @@ public class EmployeesRestController
     @GetMapping("/{id}")
     public Mono<EmployeeDto> readEmployeeById(@PathVariable Long id)
     {
-        if (Objects.isNull(id) || id < 1) throw new BadValueForEmployeeIdException();
+        if ( ! Employee.isValidId(id)) {
+            throw new BadValueForIdException(Employee.class, "id is: " + id);
+        }
 
         return employeeFullDao
             .findById(id)
-            .switchIfEmpty(Mono.error(new EmployeeNotFoundException()));
+            .switchIfEmpty(Mono.error(
+                new EntryNotFoundException(Employee.class, "for id: " + id)
+            ));
     }
 
     @PutMapping
     public Mono<? extends Answer> updateEmployee(@RequestBody Employee employee)
     {
-        if (Objects.isNull(employee) || Objects.isNull(employee.getId()) || employee.getId() < 1) {
-            throw new BadValueForEmployeeIdException();
+        if (Objects.isNull(employee) || ! Employee.isValidId(employee.getId())) {
+            throw new BadValueForIdException(Employee.class, "employee is: " + employee);
         }
 
         return employeeDao
             .save(employee)
             .map(r -> new AnswerOk())
-            .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));
+            .switchIfEmpty(Mono.error(
+                new EntryDontSavedException(Employee.class, "when updating employee: " + employee)
+            ));
     }
 
     @PutMapping(path = REST_UPDATE, params = {"field"})
@@ -160,16 +171,24 @@ public class EmployeesRestController
         @RequestParam("field") String field,
         @RequestBody Employee employee)
     {
+        if ( ! Department.isValidFieldName(field.toUpperCase())) {
+            throw new BadValueForFieldException(Department.class, "filed name is: " + field);
+        }
+
         return employeeMapUpdater.updateEmployee(field, employee)
             .map(r -> new AnswerOk())
-            .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));
+            .switchIfEmpty(Mono.error(
+                new EntryDontSavedException(Employee.class, "when updating employee: " + employee)
+            ));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public Mono<? extends Answer> deleteEmployee(@PathVariable Long id)
     {
-        if (Objects.isNull(id) || id < 1) throw new BadValueForEmployeeIdException();
+        if ( ! Employee.isValidId(id)) {
+            throw new BadValueForIdException(Employee.class, "id is: " + id);
+        }
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
 
         return employeeDao
@@ -177,21 +196,27 @@ public class EmployeesRestController
             .flatMap(employee -> employeeDao
                 .delete(employee)
                 .map(v -> answerNoContent)
-                .switchIfEmpty(Mono.error(new EmployeeNotFoundException())))
-            .switchIfEmpty(Mono.error(new EmployeeNotFoundException()));
+                .switchIfEmpty(Mono.error(
+                    new EntryNotFoundException(Employee.class, "for id: " + id)
+                )))
+            .switchIfEmpty(Mono.error(
+                new EntryNotFoundException(Employee.class, "for id: " + id)
+            ));
     }
 
-    @ExceptionHandler(BadValueForEmployeeIdException.class)
+    @ExceptionHandler(BadValueForIdException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody AnswerBadRequest handleException(BadValueForEmployeeIdException e)
+    public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Employee Id");
     }
 
-    @ExceptionHandler(EmployeeNotFoundException.class)
+    @ExceptionHandler(EntryNotFoundException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody AnswerBadRequest handleException(EmployeeNotFoundException e)
+    public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Employee not found for Id");
     }
 
@@ -200,14 +225,16 @@ public class EmployeesRestController
     public @ResponseBody
     AnswerBadRequest handleException(PostgresqlServerErrorException e)
     {
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Bad value for Employee");
     }
 
-    @ExceptionHandler(EmployeeDontSavedException.class)
+    @ExceptionHandler(EntryDontSavedException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    AnswerBadRequest handleException(EmployeeDontSavedException e)
+    AnswerBadRequest handleException(EntryDontSavedException e)
     {
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Employee don't saved");
     }
 }

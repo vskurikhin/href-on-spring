@@ -1,5 +1,6 @@
 package su.svn.utils;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,6 +62,16 @@ public class StringHelper
                     throw new RuntimeException(e);
                 }
         }
+    }
+
+    public static boolean isValidFieldName(String name, Class<?> clazz)
+    {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.getName().toUpperCase().equals(name))
+                return true;
+        }
+
+        return false;
     }
 
     public static boolean isValidValue(String value)

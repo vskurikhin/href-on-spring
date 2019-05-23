@@ -180,10 +180,10 @@ public class LocationsRestController
                 .map(v -> answerNoContent)
                 .switchIfEmpty(Mono.error(
                     new EntryNotFoundException(Location.class, "for id: " + id)
-                ))
+                )))
             .switchIfEmpty(Mono.error(
                 new EntryNotFoundException(Location.class, "for id: " + id)
-            )));
+            ));
     }
 
     @ExceptionHandler(BadValueForIdException.class)

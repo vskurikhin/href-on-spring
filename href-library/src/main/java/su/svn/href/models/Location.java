@@ -6,8 +6,6 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import su.svn.utils.StringHelper;
 
-import java.lang.reflect.Field;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,12 +42,7 @@ public class Location
 
     public static boolean isValidFieldName(String name)
     {
-        for (Field field : Location.class.getDeclaredFields()) {
-            if (field.getName().toUpperCase().equals(name))
-                return true;
-        }
-
-        return false;
+        return StringHelper.isValidFieldName(name, Location.class);
     }
 
     public static boolean isValidStreetAddress(String name)
