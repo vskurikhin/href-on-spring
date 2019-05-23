@@ -160,9 +160,6 @@ public class EmployeesRestController
         @RequestParam("field") String field,
         @RequestBody Employee employee)
     {
-        System.err.println("field = " + field);
-        System.err.println("employee = " + employee);
-
         return employeeMapUpdater.updateEmployee(field, employee)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(new EmployeeDontSavedException()));

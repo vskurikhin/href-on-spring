@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import su.svn.href.dao.CountryDao;
-import su.svn.href.exceptions.BadValueForCountryIdException;
+import su.svn.href.exceptions.BadValueForIdException;
 import su.svn.href.exceptions.CountryDontSavedException;
 import su.svn.href.exceptions.CountryNotFoundException;
 import su.svn.href.models.Country;
@@ -44,7 +44,7 @@ public class CountriesRestController
                                                 HttpServletResponse response)
     {
         if (Objects.isNull(country.getId()) || country.getId().length() != 2) {
-            throw new BadValueForCountryIdException();
+            throw new BadValueForIdException();
         }
 
         return countryDao
@@ -71,7 +71,7 @@ public class CountriesRestController
     @GetMapping("/{id}")
     public Mono<Country> readCountryById(@PathVariable String id)
     {
-        if (Objects.isNull(id) || id.length() != 2) throw new BadValueForCountryIdException();
+        if (Objects.isNull(id) || id.length() != 2) throw new BadValueForIdException();
 
         return countryDao
             .findById(id)
@@ -82,7 +82,7 @@ public class CountriesRestController
     public Mono<? extends Answer> updateCountry(@RequestBody Country country)
     {
         if (Objects.isNull(country) || Objects.isNull(country.getId()) || country.getId().length() != 2) {
-            throw new BadValueForCountryIdException();
+            throw new BadValueForIdException();
         }
 
         return countryDao
@@ -95,7 +95,7 @@ public class CountriesRestController
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public Mono<? extends Answer> deleteCountry(@PathVariable String id)
     {
-        if (Objects.isNull(id) || id.length() != 2) throw new BadValueForCountryIdException();
+        if (Objects.isNull(id) || id.length() != 2) throw new BadValueForIdException();
         AnswerNoContent answerNoContent = new AnswerNoContent("remove successfully");
 
         return countryDao
@@ -107,9 +107,9 @@ public class CountriesRestController
             .switchIfEmpty(Mono.error(new CountryNotFoundException()));
     }
 
-    @ExceptionHandler(BadValueForCountryIdException.class)
+    @ExceptionHandler(BadValueForIdException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody AnswerBadRequest handleException(BadValueForCountryIdException e)
+    public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
         return new AnswerBadRequest("Bad value for Country Id");
     }
