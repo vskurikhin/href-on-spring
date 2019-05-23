@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Service("locationMapUpdater")
-public class LocationMapUpdaterImpl implements LocationMapUpdater
+@Service("locationUpdater")
+public class LocationMapUpdaterImpl implements LocationUpdater
 {
     private LocationDao locationDao;
 

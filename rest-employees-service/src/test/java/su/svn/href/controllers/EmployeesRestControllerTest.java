@@ -106,7 +106,7 @@ class EmployeesRestControllerTest
         Employee test = createEmployee0();
         employee0.setId(-1L);
         mvc.perform(
-            post(REST_API + REST_V1_EMPLOYEES)
+            post("/rest/api/v1/employees")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(test))
         ).andExpect(status().isBadRequest());
@@ -125,7 +125,7 @@ class EmployeesRestControllerTest
 
 
         return mvc
-            .perform(get(REST_API + REST_V1_EMPLOYEES + range + "?page=1&size=2&sort=" + sort)
+            .perform(get("/rest/api/v1/employees" + range + "?page=1&size=2&sort=" + sort)
                 .contentType(APPLICATION_JSON))
             .andReturn();
 
@@ -431,7 +431,7 @@ class EmployeesRestControllerTest
     void update_isBadRequest() throws Exception
     {
         mvc.perform(
-            put(REST_API + REST_V1_EMPLOYEES)
+            put("/rest/api/v1/employees")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(employee0))
         ).andExpect(status().isBadRequest());
@@ -444,7 +444,7 @@ class EmployeesRestControllerTest
         when(employeeDao.findById(1L)).thenReturn(Mono.just(employee1));
         when(employeeDao.delete(employee1)).thenReturn(Mono.just(employee1).then());
 
-        mvc.perform(delete(REST_API + REST_V1_EMPLOYEES + "/{id}" , 1L))
+        mvc.perform(delete("/rest/api/v1/employees/{id}" , 1L))
             .andExpect(status().isNoContent());
     }
 }

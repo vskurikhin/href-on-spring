@@ -15,6 +15,7 @@ import su.svn.href.exceptions.EntryNotFoundException;
 import su.svn.href.models.Country;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.CountryFinder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,12 +33,15 @@ public class CountriesRestController
 
     private final CountryDao countryDao;
 
+    private final CountryFinder countryFinder;
+
     private final PageSettings paging;
 
     @Autowired
-    public CountriesRestController(CountryDao countryDao, PageSettings paging)
+    public CountriesRestController(CountryDao countryDao, CountryFinder countryFinder, PageSettings paging)
     {
         this.countryDao = countryDao;
+        this.countryFinder = countryFinder;
         this.paging = paging;
     }
 
@@ -69,11 +73,7 @@ public class CountriesRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) { // TODO
-            case "ID":   return countryDao.findAllOrderById(offset, limit);
-            case "NAME": return countryDao.findAllOrderByCountryName(offset, limit);
-            default:     return countryDao.findAll(offset, limit);
-        }
+        return countryFinder.findAllCountries(offset, limit, sort);
     }
 
     @GetMapping("/{id}")

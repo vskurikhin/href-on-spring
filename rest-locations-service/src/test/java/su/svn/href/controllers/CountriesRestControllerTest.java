@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
 import su.svn.href.dao.CountryDao;
 import su.svn.href.models.Country;
 import su.svn.href.models.helpers.PageSettings;
+import su.svn.href.services.CountryFinder;
+import su.svn.href.services.LocationFinder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -40,6 +42,9 @@ class CountriesRestControllerTest
 
     @MockBean
     private CountryDao countryDao;
+
+    @MockBean
+    private CountryFinder countryFinder;
 
     @MockBean
     private PageSettings paging;
@@ -96,7 +101,8 @@ class CountriesRestControllerTest
 
         when(paging.getLimit(2)).thenReturn(limit);
         when(paging.getOffset(1,2)).thenReturn(offset);
-        when(countryDao.findAll(offset, limit)).thenReturn(Flux.just(country1, country2));
+        when(countryFinder.findAllCountries(offset, limit, "none"))
+            .thenReturn(Flux.just(country1, country2));
 
 
         MvcResult result = mvc
@@ -127,7 +133,8 @@ class CountriesRestControllerTest
 
         when(paging.getLimit(2)).thenReturn(limit);
         when(paging.getOffset(1,2)).thenReturn(offset);
-        when(countryDao.findAllOrderById(offset, limit)).thenReturn(Flux.just(country1, country2));
+        when(countryFinder.findAllCountries(offset, limit, "id"))
+            .thenReturn(Flux.just(country1, country2));
 
 
         MvcResult result = mvc
@@ -158,7 +165,8 @@ class CountriesRestControllerTest
 
         when(paging.getLimit(2)).thenReturn(limit);
         when(paging.getOffset(1,2)).thenReturn(offset);
-        when(countryDao.findAllOrderByCountryName(offset, limit)).thenReturn(Flux.just(country1, country2));
+        when(countryFinder.findAllCountries(offset, limit, "name"))
+            .thenReturn(Flux.just(country1, country2));
 
 
         System.out.println("/rest/api/v1/countries/range?page=1&size=2&sort=name");
