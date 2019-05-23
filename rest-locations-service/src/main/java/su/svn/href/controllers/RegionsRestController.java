@@ -46,7 +46,7 @@ public class RegionsRestController
         HttpServletResponse response)
     {
         if ( ! Objects.isNull(region.getId())) {
-            throw new BadValueForIdException(Region.class, "id is: " + region.getId());
+            throw new BadValueForIdException(Region.class, "region is: " + region);
         }
 
         return regionDao
@@ -72,14 +72,16 @@ public class RegionsRestController
 
         return regionDao
             .findById(id)
-            .switchIfEmpty(Mono.error(new EntryNotFoundException(Region.class, "for id: " + id)));
+            .switchIfEmpty(Mono.error(
+                new EntryNotFoundException(Region.class, "for id: " + id)
+            ));
     }
 
     @PutMapping
     public Mono<? extends Answer> updateRegion(@RequestBody Region region)
     {
         if (Objects.isNull(region) || Objects.isNull(region.getId()) || region.getId() < 1) {
-            throw new BadValueForIdException(Region.class, "id is: " + region.getId());
+            throw new BadValueForIdException(Region.class, "region is: " + region);
         }
 
         return regionDao
