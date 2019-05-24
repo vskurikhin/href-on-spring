@@ -29,7 +29,7 @@ public class LocationMapUpdaterImpl implements LocationUpdater
             put("POSTALCODE",    l -> locationDao.updatePostalCode(l.getId(), l.getPostalCode()));
             put("CITY",          l -> locationDao.updateCity(l.getId(), l.getCity()));
             put("STATEPROVINCE", l -> locationDao.updateStateProvince(l.getId(), l.getStateProvince()));
-            put("COUNTRY-ID",    l -> locationDao.updateCountryId(l.getId(), l.getCountryId()));
+            put("COUNTRYID",     l -> locationDao.updateCountryId(l.getId(), l.getCountryId()));
         }};
     }
 

@@ -17,5 +17,5 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    $('#country-id').editable();
+    $('#countryId').editable();
 });

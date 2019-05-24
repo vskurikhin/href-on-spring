@@ -202,7 +202,7 @@ public class LocationsRestController
     public @ResponseBody
     AnswerBadRequest handleException(EntryDontSavedException e)
     {
-        LOG.error(e.getMessage());
+        LOG.error(e);
         return new AnswerBadRequest("Location don't saved");
     }
 }
