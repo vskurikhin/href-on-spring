@@ -4,6 +4,7 @@ import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -44,7 +45,7 @@ public class DepartmentsRestController
     public DepartmentsRestController(
         DepartmentDao departmentDao,
         DepartmentFullDao departmentFullDao,
-        DepartmentFinder departmentFinder,
+        @Qualifier("departmentCaseFinder") DepartmentFinder departmentFinder,
         DepartmentUpdater departmentMapUpdater,
         PageSettings paging)
     {
@@ -89,7 +90,7 @@ public class DepartmentsRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        return departmentFinder.findAllDepartments(offset, limit, sort);
+        return departmentFinder.findAllDepartments(offset, limit, sort); // TODO check sort
     }
 
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
@@ -101,7 +102,7 @@ public class DepartmentsRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        return departmentFinder.findAllFullDepartments(offset, limit, sort);
+        return departmentFinder.findAllFullDepartments(offset, limit, sort); // TODO check sort
     }
 
     @GetMapping("/{id}")

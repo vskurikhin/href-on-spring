@@ -8,7 +8,7 @@ import su.svn.href.dao.LocationFullDao;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.LocationDto;
 
-@Service("locationFinder")
+@Service("locationCaseFinder")
 public class LocationCaseFinderImpl implements LocationFinder
 {
     private LocationDao locationDao;

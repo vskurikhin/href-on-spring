@@ -4,6 +4,7 @@ import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -38,7 +39,10 @@ public class CountriesRestController
     private final PageSettings paging;
 
     @Autowired
-    public CountriesRestController(CountryDao countryDao, CountryFinder countryFinder, PageSettings paging)
+    public CountriesRestController(
+        CountryDao countryDao,
+        @Qualifier("countryCaseFinder") CountryFinder countryFinder,
+        PageSettings paging)
     {
         this.countryDao = countryDao;
         this.countryFinder = countryFinder;
@@ -73,7 +77,7 @@ public class CountriesRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        return countryFinder.findAllCountries(offset, limit, sort);
+        return countryFinder.findAllCountries(offset, limit, sort); // TODO check sort
     }
 
     @GetMapping("/{id}")

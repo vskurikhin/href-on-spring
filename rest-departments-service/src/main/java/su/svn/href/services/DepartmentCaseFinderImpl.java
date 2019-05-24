@@ -11,7 +11,7 @@ import su.svn.href.models.dto.DepartmentDto;
 
 import java.util.List;
 
-@Service("departmentFinder")
+@Service("departmentCaseFinder")
 public class DepartmentCaseFinderImpl implements DepartmentFinder
 {
     private final DepartmentDao departmentDao;

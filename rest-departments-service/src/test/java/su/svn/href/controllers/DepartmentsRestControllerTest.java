@@ -51,7 +51,7 @@ class DepartmentsRestControllerTest
     @MockBean
     private DepartmentFullDao departmentFullDao;
 
-    @MockBean
+    @MockBean(name = "departmentCaseFinder")
     private DepartmentFinder departmentFinder;
 
     @MockBean

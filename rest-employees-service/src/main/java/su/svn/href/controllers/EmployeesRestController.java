@@ -4,6 +4,7 @@ import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -34,7 +35,7 @@ public class EmployeesRestController
 
     private final EmployeeFullDao employeeFullDao;
 
-    private final EmployeeFinder employeeFinder;
+     private final EmployeeFinder employeeFinder;
 
     private final EmployeeUpdater employeeUpdater;
 
@@ -44,7 +45,7 @@ public class EmployeesRestController
     public EmployeesRestController(
         EmployeeDao employeeDao,
         EmployeeFullDao employeeFullDao,
-        EmployeeFinder employeeFinder,
+        @Qualifier("employeeCaseFinder") EmployeeFinder employeeFinder,
         EmployeeUpdater employeeUpdater,
         PageSettings paging)
     {

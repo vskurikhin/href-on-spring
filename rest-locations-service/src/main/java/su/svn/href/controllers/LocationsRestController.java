@@ -4,6 +4,7 @@ import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -44,7 +45,7 @@ public class LocationsRestController
     public LocationsRestController(
         LocationDao locationDao,
         LocationFullDao locationFullDao,
-        LocationFinder locationFinder,
+        @Qualifier("locationCaseFinder") LocationFinder locationFinder,
         LocationUpdater locationUpdater,
         PageSettings paging)
     {

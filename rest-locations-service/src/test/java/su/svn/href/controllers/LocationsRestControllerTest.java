@@ -50,7 +50,7 @@ class LocationsRestControllerTest
     @MockBean
     private LocationFullDao locationFullDao;
 
-    @MockBean
+    @MockBean(name = "locationCaseFinder")
     private LocationFinder locationFinder;
 
     @MockBean

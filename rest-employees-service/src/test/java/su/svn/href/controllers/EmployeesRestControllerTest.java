@@ -56,7 +56,7 @@ class EmployeesRestControllerTest
     @MockBean
     private EmployeeFullDao employeeFullDao;
 
-    @MockBean
+    @MockBean(name = "employeeCaseFinder")
     private EmployeeFinder employeeFinder;
 
     @MockBean
