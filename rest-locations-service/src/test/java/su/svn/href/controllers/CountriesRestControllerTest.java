@@ -169,7 +169,6 @@ class CountriesRestControllerTest
             .thenReturn(Flux.just(country1, country2));
 
 
-        System.out.println("/rest/api/v1/countries/range?page=1&size=2&sort=name");
         MvcResult result = mvc
             .perform(get(REST_API + REST_V1_COUNTRIES + REST_RANGE + "?page=1&size=2&sort=name")
                 .contentType(APPLICATION_JSON))

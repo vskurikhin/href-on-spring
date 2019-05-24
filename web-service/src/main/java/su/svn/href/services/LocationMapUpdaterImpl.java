@@ -24,7 +24,7 @@ public class LocationMapUpdaterImpl implements LocationMapUpdater
             put("POSTALCODE",    v -> getBuilder(v).setPostalCode(v.getValue()).build());
             put("CITY",          v -> getBuilder(v).setCity(v.getValue()).build());
             put("STATEPROVINCE", v -> getBuilder(v).setStateProvince(v.getValue()).build());
-            put("COUNTRY-ID",    v -> getBuilder(v).setCountryId(v.getValue()).build());
+            put("COUNTRYID",     v -> getBuilder(v).setCountryId(v.getValue()).build());
         }};
     }
 
