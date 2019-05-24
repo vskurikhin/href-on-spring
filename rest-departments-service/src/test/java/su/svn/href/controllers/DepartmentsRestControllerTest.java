@@ -17,7 +17,8 @@ import su.svn.href.dao.DepartmentFullDao;
 import su.svn.href.models.Department;
 import su.svn.href.models.dto.DepartmentDto;
 import su.svn.href.models.helpers.PageSettings;
-import su.svn.href.services.DepartmentMapUpdater;
+import su.svn.href.services.DepartmentFinder;
+import su.svn.href.services.DepartmentUpdater;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
@@ -51,7 +52,10 @@ class DepartmentsRestControllerTest
     private DepartmentFullDao departmentFullDao;
 
     @MockBean
-    private DepartmentMapUpdater departmentMapUpdater;
+    private DepartmentFinder departmentFinder;
+
+    @MockBean
+    private DepartmentUpdater departmentUpdater;
 
     @MockBean
     private PageSettings paging;
@@ -146,7 +150,8 @@ class DepartmentsRestControllerTest
     void readAll() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(departmentDao.findAll(offset, limit)).thenReturn(Flux.just(department1, department2));
+            when(departmentFinder.findAllDepartments(offset, limit, "none"))
+                .thenReturn(Flux.just(department1, department2));
 
         readRange(findMock, "none", department1, department2);
     }
@@ -156,7 +161,7 @@ class DepartmentsRestControllerTest
     void readAllOrderById() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(departmentDao.findAllOrderById(offset, limit))
+            when(departmentFinder.findAllDepartments(offset, limit, "id"))
                 .thenReturn(Flux.just(department1, department2));
 
         readRange(findMock, "id", department1, department2);
@@ -167,7 +172,7 @@ class DepartmentsRestControllerTest
     void readAllOrderByDepartmentName() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(departmentDao.findAllOrderByDepartmentName(offset, limit))
+            when(departmentFinder.findAllDepartments(offset, limit, "name"))
                 .thenReturn(Flux.just(department1, department2));
 
         readRange(findMock, "name", department1, department2);
@@ -224,9 +229,8 @@ class DepartmentsRestControllerTest
     void readAllFull() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(departmentFullDao.findAll(offset, limit)).thenReturn(
-                Mono.just(Arrays.asList(departmentDto1, departmentDto2))
-            );
+            when(departmentFinder.findAllFullDepartments(offset, limit, "none"))
+                .thenReturn(Mono.just(Arrays.asList(departmentDto1, departmentDto2)));
 
         readFullRange(findMock, "none", departmentDto1, departmentDto2);
     }
@@ -236,9 +240,8 @@ class DepartmentsRestControllerTest
     void readAllFullOrderById() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(departmentFullDao.findAll(offset, limit, "d.department_id")).thenReturn(
-                Mono.just(Arrays.asList(departmentDto1, departmentDto2))
-            );
+            when(departmentFinder.findAllFullDepartments(offset, limit, "id"))
+                .thenReturn(Mono.just(Arrays.asList(departmentDto1, departmentDto2)));
 
         readFullRange(findMock, "id", departmentDto1, departmentDto2);
     }
@@ -248,9 +251,8 @@ class DepartmentsRestControllerTest
     void readAllFullOrderByDepartmentName() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(departmentFullDao.findAll(offset, limit, "department_name")).thenReturn(
-                Mono.just(Arrays.asList(departmentDto1, departmentDto2))
-            );
+            when(departmentFinder.findAllFullDepartments(offset, limit, "name"))
+                .thenReturn(Mono.just(Arrays.asList(departmentDto1, departmentDto2)));
 
         readFullRange(findMock, "name", departmentDto1, departmentDto2);
     }

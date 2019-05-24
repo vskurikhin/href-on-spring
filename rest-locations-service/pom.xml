@@ -7,12 +7,12 @@
     <packaging>jar</packaging>
 
     <artifactId>rest-locations-service</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
 
     <parent>
         <groupId>su.svn.href</groupId>
         <artifactId>href</artifactId>
-        <version>1.8.3-SNAPSHOT</version>
+        <version>1.8.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

@@ -15,7 +15,8 @@ import su.svn.href.models.Department;
 import su.svn.href.models.Employee;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
-import su.svn.href.services.EmployeeMapUpdater;
+import su.svn.href.services.EmployeeFinder;
+import su.svn.href.services.EmployeeUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,24 +30,28 @@ public class EmployeesRestController
 {
     private static final Log LOG = LogFactory.getLog(EmployeesRestController.class);
 
-    private EmployeeDao employeeDao;
+    private final EmployeeDao employeeDao;
 
-    private EmployeeFullDao employeeFullDao;
+    private final EmployeeFullDao employeeFullDao;
 
-    private EmployeeMapUpdater employeeMapUpdater;
+    private final EmployeeFinder employeeFinder;
 
-    private PageSettings paging;
+    private final EmployeeUpdater employeeUpdater;
+
+    private final PageSettings paging;
 
     @Autowired
     public EmployeesRestController(
         EmployeeDao employeeDao,
         EmployeeFullDao employeeFullDao,
-        EmployeeMapUpdater employeeMapUpdater,
+        EmployeeFinder employeeFinder,
+        EmployeeUpdater employeeUpdater,
         PageSettings paging)
     {
         this.employeeDao = employeeDao;
         this.employeeFullDao = employeeFullDao;
-        this.employeeMapUpdater = employeeMapUpdater;
+        this.employeeFinder = employeeFinder;
+        this.employeeUpdater = employeeUpdater;
         this.paging = paging;
     }
 
@@ -84,26 +89,7 @@ public class EmployeesRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) {
-            case "ID":
-                return employeeDao.findAllOrderById(offset, limit);
-            case "FIRST_NAME":
-                return employeeDao.findAllOrderByFirstName(offset, limit);
-            case "LAST_NAME":
-                return employeeDao.findAllOrderByLastName(offset, limit);
-            case "EMAIL":
-                return employeeDao.findAllOrderByEmail(offset, limit);
-            case "PHONE_NUMBER":
-                return employeeDao.findAllOrderByPhoneNumber(offset, limit);
-            case "HIRE_DATE":
-                return employeeDao.findAllOrderByHireDate(offset, limit);
-            case "SALARY":
-                return employeeDao.findAllOrderBySalary(offset, limit);
-            case "COMMISSION_PCT":
-                return employeeDao.findAllOrderByCommissionPct(offset, limit);
-            default:
-                return employeeDao.findAll(offset, limit);
-        }
+        return employeeFinder.findAllEmployees(offset, limit, sort);
     }
 
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
@@ -115,26 +101,7 @@ public class EmployeesRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) {
-            case "ID":
-                return employeeFullDao.findAll(offset, limit, "e.employee_id");
-            case "FIRST_NAME":
-                return employeeFullDao.findAll(offset, limit, "e.first_name");
-            case "LAST_NAME":
-                return employeeFullDao.findAll(offset, limit, "e.last_name");
-            case "EMAIL":
-                return employeeFullDao.findAll(offset, limit, "e.email");
-            case "PHONE_NUMBER":
-                return employeeFullDao.findAll(offset, limit, "e.phone_number");
-            case "HIRE_DATE":
-                return employeeFullDao.findAll(offset, limit, "e.hire_date");
-            case "SALARY":
-                return employeeFullDao.findAll(offset, limit, "e.salary");
-            case "COMMISSION_PCT":
-                return employeeFullDao.findAll(offset, limit, "e.commission_pct");
-            default:
-                return employeeFullDao.findAll(offset, limit);
-        }
+        return employeeFinder.findAllFullEmployees(offset, limit, sort);
     }
 
     @GetMapping("/{id}")
@@ -175,7 +142,7 @@ public class EmployeesRestController
             throw new BadValueForFieldException(Department.class, "filed name is: " + field);
         }
 
-        return employeeMapUpdater.updateEmployee(field, employee)
+        return employeeUpdater.updateEmployee(field, employee)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(
                 new EntryDontSavedException(Employee.class, "when updating employee: " + employee)

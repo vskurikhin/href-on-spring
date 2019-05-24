@@ -176,7 +176,7 @@ public class LocationsRestController
     public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
         LOG.error(e.getMessage());
-        return new AnswerBadRequest("Bad value for Location Id");
+        return new AnswerBadRequest("Bad value for Location id");
     }
 
     @ExceptionHandler(EntryNotFoundException.class)
@@ -184,7 +184,7 @@ public class LocationsRestController
     public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
         LOG.error(e.getMessage());
-        return new AnswerBadRequest("Location not found for Id");
+        return new AnswerBadRequest("Location not found for id");
     }
 
     @ExceptionHandler(PostgresqlServerErrorException.class)

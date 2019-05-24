@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service("departmentMapUpdater")
-public class DepartmentMapUpdaterImpl implements DepartmentMapUpdater
+public class DepartmentMapUpdaterImpl implements DepartmentUpdater
 {
     private DepartmentDao departmentDao;
 
