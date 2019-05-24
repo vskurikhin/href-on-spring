@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import su.svn.href.dao.CountryDao;
 import su.svn.href.models.Country;
 
-@Service("countryFinder")
+@Service("countryCaseFinder")
 public class CountryCaseFinderImpl implements CountryFinder
 {
     private CountryDao countryDao;

@@ -8,7 +8,7 @@ import su.svn.href.dao.EmployeeFullDao;
 import su.svn.href.models.Employee;
 import su.svn.href.models.dto.EmployeeDto;
 
-@Service("employeeFinder")
+@Service("employeeCaseFinder")
 public class EmployeeCaseFinderImpl implements EmployeeFinder
 {
     private final EmployeeDao employeeDao;
