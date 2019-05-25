@@ -1,21 +1,21 @@
 $.fn.editable.defaults.mode = 'popup';
 
 $(document).ready(function() {
-    $('#streetAddress').editable();
+    $('#STREETADDRESS').editable();
 });
 
 $(document).ready(function() {
-    $('#postalCode').editable();
+    $('#POSTALCODE').editable();
 });
 
 $(document).ready(function() {
-    $('#city').editable();
+    $('#CITY').editable();
 });
 
 $(document).ready(function() {
-    $('#stateProvince').editable();
+    $('#STATEPROVINCE').editable();
 });
 
 $(document).ready(function() {
-    $('#countryId').editable();
+    $('#COUNTRYID').editable();
 });

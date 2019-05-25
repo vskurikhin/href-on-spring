@@ -36,7 +36,7 @@ public class Department
 
     public static boolean isValidFieldName(String name)
     {
-        return StringHelper.isValidFieldName(name, Location.class);
+        return StringHelper.isValidFieldName(name, Department.class);
     }
 
     public static boolean isValidDepartmentName(String name)

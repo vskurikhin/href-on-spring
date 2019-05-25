@@ -31,6 +31,11 @@ public class LocationsController
     @RequestMapping("/location")
     public String location(@RequestParam long id, final Model model)
     {
+        model.addAttribute("streetAddress", su.svn.href.regulars.Constants.STREETADDRESS);
+        model.addAttribute("postalCode", su.svn.href.regulars.Constants.POSTALCODE);
+        model.addAttribute("city", su.svn.href.regulars.Constants.CITY);
+        model.addAttribute("stateProvince", su.svn.href.regulars.Constants.STATEPROVINCE);
+        model.addAttribute("countryId", su.svn.href.regulars.Constants.COUNTRYID);
         model.addAttribute("location", locationRepository.findById(id));
         model.addAttribute("restPath",  REST_API + REST_V1_LOCATIONS + REST_UPDATE);
 

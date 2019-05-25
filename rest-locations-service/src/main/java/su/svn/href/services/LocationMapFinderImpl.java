@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static su.svn.href.configs.Constants.*;
+import static su.svn.href.regulars.Constants.*;
 
 @Service("locationMapFinder")
 public class LocationMapFinderImpl implements LocationFinder
