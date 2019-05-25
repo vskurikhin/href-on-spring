@@ -45,7 +45,7 @@ public class LocationsRestController
     public LocationsRestController(
         LocationDao locationDao,
         LocationFullDao locationFullDao,
-        @Qualifier("locationCaseFinder") LocationFinder locationFinder,
+        @Qualifier("locationMapFinder") LocationFinder locationFinder,
         LocationUpdater locationUpdater,
         PageSettings paging)
     {
@@ -143,7 +143,8 @@ public class LocationsRestController
             throw new BadValueForFieldException(Location.class, "filed name is: " + field);
         }
 
-        return locationUpdater.updateLocation(field, location)
+        return locationUpdater
+            .updateLocation(field, location)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(
                 new EntryDontSavedException(Location.class, "when updating location: " + location)
@@ -202,7 +203,7 @@ public class LocationsRestController
     public @ResponseBody
     AnswerBadRequest handleException(EntryDontSavedException e)
     {
-        LOG.error(e);
+        LOG.error(e.getMessage());
         return new AnswerBadRequest("Location don't saved");
     }
 }

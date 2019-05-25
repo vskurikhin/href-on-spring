@@ -10,32 +10,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import static su.svn.href.configs.Constants.ID;
+import static su.svn.href.configs.Constants.NAMEID;
+
 @Service("countryMapFinder")
 public class CountryMapFinderImpl implements CountryFinder
 {
-    private CountryDao countryDao;
+    private final BiFunction<Integer, Integer, Flux<Country> > defaultCase;
 
-    private BiFunction<Integer, Integer, Flux<Country> > defaultCase;
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final Map<String, BiFunction<Integer, Integer, Flux<Country> > > caseMap;
 
     @Autowired
     public CountryMapFinderImpl(CountryDao countryDao)
     {
-        this.countryDao = countryDao;
         this.defaultCase = countryDao::findAll;
-    }
-
-    private Map<String, BiFunction<Integer, Integer, Flux<Country> > > caseMap()
-    {
-        return new HashMap<String, BiFunction<Integer, Integer, Flux<Country> > >()
-        {{
-            put("ID",      (offset, limit) -> countryDao.findAllOrderById(offset, limit));
-            put("NAME-ID", (offset, limit) -> countryDao.findAllOrderByCountryName(offset, limit));
-        }};
+        this.caseMap =
+            new HashMap<String, BiFunction<Integer, Integer, Flux<Country> > >()
+            {{
+                put(ID,     countryDao::findAllOrderById);
+                put(NAMEID, countryDao::findAllOrderByCountryName);
+            }};
     }
 
     @Override
     public Flux<Country> findAllCountries(int offset, int limit, String sort)
     {
-        return caseMap().getOrDefault(sort, defaultCase).apply(offset, limit);
+        return caseMap.getOrDefault(sort, defaultCase).apply(offset, limit);
     }
 }

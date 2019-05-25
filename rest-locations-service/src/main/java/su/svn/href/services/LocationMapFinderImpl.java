@@ -12,60 +12,56 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import static su.svn.href.configs.Constants.*;
+
 @Service("locationMapFinder")
 public class LocationMapFinderImpl implements LocationFinder
 {
-    private final LocationDao locationDao;
-
-    private final LocationFullDao locationFullDao;
-
     private final BiFunction<Integer, Integer, Flux<Location> > defaultLocationFinderCase;
 
     private final BiFunction<Integer, Integer, Flux<LocationDto> > defaultFullLocationFinderCase;
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final Map<String, BiFunction<Integer, Integer, Flux<Location> > > caseMapLocationFinders;
+
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final Map<String, BiFunction<Integer, Integer, Flux<LocationDto> > > caseMapFullLocationFinders;
+
     @Autowired
     public LocationMapFinderImpl(LocationDao locationDao, LocationFullDao locationFullDao)
     {
-        this.locationDao = locationDao;
-        this.locationFullDao = locationFullDao;
         this.defaultLocationFinderCase = locationDao::findAll;
         this.defaultFullLocationFinderCase = locationFullDao::findAll;
-    }
-
-    private Map<String, BiFunction<Integer, Integer, Flux<Location> > > caseMapLocationFinders()
-    {
-        return new HashMap<String, BiFunction<Integer, Integer, Flux<Location> > >()
-        {{
-            put("ID",     locationDao::findAllOrderById);
-            put("STREET", locationDao::findAllOrderByStreetAddress);
-            put("STATE",  locationDao::findAllOrderByStateProvince);
-            put("CITY",   locationDao::findAllOrderByCity);
-        }};
+        this.caseMapLocationFinders =
+            new HashMap<String, BiFunction<Integer, Integer, Flux<Location>>>()
+            {{
+                put(ID,     locationDao::findAllOrderById);
+                put(STREET, locationDao::findAllOrderByStreetAddress);
+                put(STATE,  locationDao::findAllOrderByStateProvince);
+                put(CITY,   locationDao::findAllOrderByCity);
+            }};
+        this.caseMapFullLocationFinders =
+            new HashMap<String, BiFunction<Integer, Integer, Flux<LocationDto>>>()
+            {{
+                put(ID,     (offset, limit) -> locationFullDao.findAll(offset, limit, "id"));
+                put(STREET, (offset, limit) -> locationFullDao.findAll(offset, limit, "street_address"));
+                put(STATE,  (offset, limit) -> locationFullDao.findAll(offset, limit, "state_province"));
+                put(CITY,   (offset, limit) -> locationFullDao.findAll(offset, limit, "city"));
+            }};
     }
 
     @Override
     public Flux<Location> findAllLocations(int offset, int limit, String sort)
     {
-        return caseMapLocationFinders()
+        return caseMapLocationFinders
             .getOrDefault(sort, defaultLocationFinderCase)
             .apply(offset, limit);
-    }
-
-    private Map<String, BiFunction<Integer, Integer, Flux<LocationDto> > > caseMapFullLocationFinders()
-    {
-        return new HashMap<String, BiFunction<Integer, Integer, Flux<LocationDto> > >()
-        {{
-            put("ID",     (offset, limit) -> locationFullDao.findAll(offset, limit, "id"));
-            put("STREET", (offset, limit) -> locationFullDao.findAll(offset, limit, "street_address"));
-            put("STATE",  (offset, limit) -> locationFullDao.findAll(offset, limit, "state_province"));
-            put("CITY",   (offset, limit) -> locationFullDao.findAll(offset, limit, "city"));
-        }};
     }
 
     @Override
     public Flux<LocationDto> findAllFullLocations(int offset, int limit, String sort)
     {
-        return caseMapFullLocationFinders()
+        return caseMapFullLocationFinders
             .getOrDefault(sort, defaultFullLocationFinderCase)
             .apply(offset, limit);
     }

@@ -43,7 +43,7 @@ class CountriesRestControllerTest
     @MockBean
     private CountryDao countryDao;
 
-    @MockBean(name = "countryCaseFinder")
+    @MockBean(name = "countryMapFinder")
     private CountryFinder countryFinder;
 
     @MockBean
