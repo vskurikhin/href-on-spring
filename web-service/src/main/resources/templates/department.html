@@ -40,7 +40,7 @@
                 <tr>
                     <td width="25%">Department name</td>
                     <td width="75%">
-                        <a href="#" id="departmentName" data-type="text" th:data-pk="${department.id}"
+                        <a href="#" th:id="${departmentName}" data-type="text" th:data-pk="${department.id}"
                            th:data-url="${restPath}"
                            data-title="Enter Department name">[[${department.departmentName}]]</a>
                     </td>
@@ -48,7 +48,7 @@
                 <tr>
                     <td width="25%">Manager id</td>
                     <td width="75%">
-                        <a href="#" id="managerId" data-type="text" th:data-pk="${department.id}"
+                        <a href="#" th:id="${managerId}" data-type="text" th:data-pk="${department.id}"
                            th:data-url="${restPath}" data-title="Enter manager id">[[${department.manager?.id}]]</a>
                     </td>
                 </tr>
@@ -71,7 +71,7 @@
                 <tr>
                     <td width="25%">Location id</td>
                     <td width="75%">
-                        <a href="#" id="locationId" data-type="text" th:data-pk="${department.id}"
+                        <a href="#" th:id="${locationId}" data-type="text" th:data-pk="${department.id}"
                            th:data-url="${restPath}" data-title="Enter location id">[[${department.location?.id}]]</a>
                     </td>
                 </tr>

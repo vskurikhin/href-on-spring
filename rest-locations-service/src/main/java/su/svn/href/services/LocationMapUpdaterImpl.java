@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static su.svn.href.configs.Constants.*;
+import static su.svn.href.regulars.Constants.*;
 
 @Service("locationUpdater")
 public class LocationMapUpdaterImpl implements LocationUpdater

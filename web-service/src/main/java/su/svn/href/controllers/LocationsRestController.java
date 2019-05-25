@@ -25,9 +25,9 @@ public class LocationsRestController
 {
     private static final Log LOG = LogFactory.getLog(LocationsRestController.class);
 
-    private LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
-    private LocationMapUpdater locationMapUpdater;
+    private final LocationMapUpdater locationMapUpdater;
 
     @Autowired
     public LocationsRestController(LocationRepository locationRepository, LocationMapUpdater locationMapUpdater)

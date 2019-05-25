@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static su.svn.href.configs.Constants.ID;
-import static su.svn.href.configs.Constants.NAMEID;
+import static su.svn.href.regulars.Constants.ID;
+import static su.svn.href.regulars.Constants.NAMEID;
 
 @Service("countryMapFinder")
 public class CountryMapFinderImpl implements CountryFinder

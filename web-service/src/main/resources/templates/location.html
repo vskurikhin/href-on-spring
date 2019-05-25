@@ -40,35 +40,35 @@
                 <tr>
                     <td width="25%">Street address</td>
                     <td width="75%">
-                        <a href="#" id="streetAddress" data-type="text" th:data-pk="${location.id}"
+                        <a href="#" th:id="${streetAddress}" data-type="text" th:data-pk="${location.id}"
                            th:data-url="${restPath}" data-title="Enter street address">[[${location.streetAddress}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">Postal code</td>
                     <td width="75%">
-                        <a href="#" id="postalCode" data-type="text" th:data-pk="${location.id}"
+                        <a href="#" th:id="${postalCode}" data-type="text" th:data-pk="${location.id}"
                            th:data-url="${restPath}" data-title="Enter postal code">[[${location.postalCode}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">City</td>
                     <td width="75%">
-                        <a href="#" id="city" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}"
+                        <a href="#" th:id="${city}" data-type="text" th:data-pk="${location.id}" th:data-url="${restPath}"
                            data-title="Enter city name">[[${location.city}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">State province</td>
                     <td width="75%">
-                        <a href="#" id="stateProvince" data-type="text" th:data-pk="${location.id}"
+                        <a href="#" th:id="${stateProvince}" data-type="text" th:data-pk="${location.id}"
                            th:data-url="${restPath}" data-title="Enter state province">[[${location.stateProvince}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">Country id</td>
                     <td width="75%"> <!-- TODO -->
-                        <a href="#" id="countryId" data-type="text" th:data-pk="${location.id}"
+                        <a href="#" th:id="${countryId}" data-type="text" th:data-pk="${location.id}"
                            th:data-url="${restPath}" data-title="Enter country id">[[${location.country.id}]]</a>
                     </td>
                 </tr>
