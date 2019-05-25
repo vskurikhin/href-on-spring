@@ -1,11 +1,14 @@
 package su.svn.href.controllers;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;
+import su.svn.href.exceptions.BadServiceStatusException;
 import su.svn.href.models.Location;
 import su.svn.href.models.UpdateValue;
 import su.svn.href.models.dto.*;
@@ -20,6 +23,8 @@ import static su.svn.href.controllers.Constants.*;
 @RequestMapping(value = REST_API + REST_V1_LOCATIONS)
 public class LocationsRestController
 {
+    private static final Log LOG = LogFactory.getLog(LocationsRestController.class);
+
     private LocationRepository locationRepository;
 
     private LocationMapUpdater locationMapUpdater;
@@ -76,7 +81,9 @@ public class LocationsRestController
     {
         try {
             UpdateValue<Long> update = body.convertWithLongPk();
-            Mono<Answer> error = Mono.error(new RuntimeException()); // TODO
+            Mono<Answer> error = Mono.error(
+                new BadServiceStatusException(LocationRepository.class, " error when updating location: " +  body)
+            );
 
             return locationRepository
                 .findById(update.getPk())
@@ -87,6 +94,14 @@ public class LocationsRestController
         catch (NumberFormatException e) {
             return Mono.error(e);
         }
+    }
+
+    @ExceptionHandler(BadServiceStatusException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody AnswerBadRequest handleException(BadServiceStatusException e)
+    {
+        LOG.error(e.getMessage());
+        return new AnswerBadRequest("can't update");
     }
 }
 
