@@ -41,7 +41,7 @@ public class CountriesRestController
     @Autowired
     public CountriesRestController(
         CountryDao countryDao,
-        @Qualifier("countryCaseFinder") CountryFinder countryFinder,
+        @Qualifier("countryMapFinder") CountryFinder countryFinder,
         PageSettings paging)
     {
         this.countryDao = countryDao;

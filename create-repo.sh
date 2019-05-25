@@ -1,7 +1,7 @@
 #!/bin/sh
 # Create maven repository.
 
-VERSION=${2:-1.6.9-2}
+VERSION=${2:-1.6.9-3}
 
 if [ -z "$1" ]
 then
