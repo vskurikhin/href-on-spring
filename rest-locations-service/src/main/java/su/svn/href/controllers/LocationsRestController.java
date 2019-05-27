@@ -4,6 +4,7 @@ import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -14,7 +15,8 @@ import su.svn.href.exceptions.*;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
-import su.svn.href.services.LocationMapUpdater;
+import su.svn.href.services.LocationFinder;
+import su.svn.href.services.LocationUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,24 +31,28 @@ public class LocationsRestController
 {
     private static final Log LOG = LogFactory.getLog(CountriesRestController.class);
 
-    private LocationDao locationDao;
+    private final LocationDao locationDao;
 
-    private LocationFullDao locationFullDao;
+    private final LocationFullDao locationFullDao;
 
-    private LocationMapUpdater locationMapUpdater;
+    private final LocationFinder locationFinder;
 
-    private PageSettings paging;
+    private final LocationUpdater locationUpdater;
+
+    private final PageSettings paging;
 
     @Autowired
     public LocationsRestController(
         LocationDao locationDao,
         LocationFullDao locationFullDao,
-        LocationMapUpdater locationMapUpdater,
+        @Qualifier("locationMapFinder") LocationFinder locationFinder,
+        LocationUpdater locationUpdater,
         PageSettings paging)
     {
         this.locationDao = locationDao;
         this.locationFullDao = locationFullDao;
-        this.locationMapUpdater = locationMapUpdater;
+        this.locationFinder = locationFinder;
+        this.locationUpdater = locationUpdater;
         this.paging = paging;
     }
 
@@ -84,18 +90,7 @@ public class LocationsRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) { // TODO
-            case "ID":
-                return locationDao.findAllOrderById(offset, limit);
-            case "STREET":
-                return locationDao.findAllOrderByStreetAddress(offset, limit);
-            case "STATE":
-                return locationDao.findAllOrderByStateProvince(offset, limit);
-            case "CITY":
-                return locationDao.findAllOrderByCity(offset, limit);
-            default:
-                return locationDao.findAll(offset, limit);
-        }
+        return locationFinder.findAllLocations(offset, limit, sort); // TODO check sort
     }
 
     @GetMapping("/{id}")
@@ -121,16 +116,7 @@ public class LocationsRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) { // TODO
-            case "STREET":
-                return locationFullDao.findAll(offset, limit, "street_address");
-            case "STATE":
-                return locationFullDao.findAll(offset, limit, "state_province");
-            case "CITY":
-                return locationFullDao.findAll(offset, limit, "city");
-            default:
-                return locationFullDao.findAll(offset, limit);
-        }
+        return locationFinder.findAllFullLocations(offset, limit, sort); // TODO check sort
     }
 
     @PutMapping
@@ -157,7 +143,8 @@ public class LocationsRestController
             throw new BadValueForFieldException(Location.class, "filed name is: " + field);
         }
 
-        return locationMapUpdater.updateLocation(field, location)
+        return locationUpdater
+            .updateLocation(field, location)
             .map(r -> new AnswerOk())
             .switchIfEmpty(Mono.error(
                 new EntryDontSavedException(Location.class, "when updating location: " + location)
@@ -191,7 +178,7 @@ public class LocationsRestController
     public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
         LOG.error(e.getMessage());
-        return new AnswerBadRequest("Bad value for Location Id");
+        return new AnswerBadRequest("Bad value for Location id");
     }
 
     @ExceptionHandler(EntryNotFoundException.class)
@@ -199,7 +186,7 @@ public class LocationsRestController
     public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
         LOG.error(e.getMessage());
-        return new AnswerBadRequest("Location not found for Id");
+        return new AnswerBadRequest("Location not found for id");
     }
 
     @ExceptionHandler(PostgresqlServerErrorException.class)

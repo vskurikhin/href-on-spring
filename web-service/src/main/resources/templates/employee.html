@@ -44,35 +44,35 @@
                 <tr>
                     <td width="25%">First name</td>
                     <td width="75%">
-                        <a href="#" id="firstName" data-type="text" th:data-pk="${employee.id}"
+                        <a href="#" th:id="${firstName}" data-type="text" th:data-pk="${employee.id}"
                            th:data-url="${restPath}" data-title="Enter first name">[[${employee.firstName}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">Last name</td>
                     <td width="75%">
-                        <a href="#" id="lastName" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                        <a href="#" th:id="${lastName}" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
                            data-title="Enter last name">[[${employee.lastName}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">E-mail</td>
                     <td width="75%">
-                        <a href="#" id="email" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                        <a href="#" th:id="${email}" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
                            data-title="Enter E-mail">[[${employee.email}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">Phone number</td>
                     <td width="75%">
-                        <a href="#" id="phoneNumber" data-type="text" th:data-pk="${employee.id}"
+                        <a href="#" th:id="${phoneNumber}" data-type="text" th:data-pk="${employee.id}"
                            th:data-url="${restPath}" data-title="Enter phone number">[[${employee.phoneNumber}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">Hire date</td>
                     <td width="75%">
-                        <a href="#" id="hireDate" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                        <a href="#" th:id="${hireDate}" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
                            data-title="Enter hire date"
                         >[[${#dates.format(employee.hireDate, 'yyyy-MM-dd')}]]</a>
                     </td>
@@ -80,14 +80,14 @@
                 <tr>
                     <td width="25%">salary</td>
                     <td width="75%">
-                        <a href="#" id="salary" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
+                        <a href="#" th:id="${salary}" data-type="text" th:data-pk="${employee.id}" th:data-url="${restPath}"
                            data-title="Enter salary">[[${employee.salary}]]</a>
                     </td>
                 </tr>
                 <tr>
                     <td width="25%">Commission %</td>
                     <td width="75%">
-                        <a href="#" id="commissionPct" data-type="text" th:data-pk="${employee.id}"
+                        <a href="#" th:id="${commissionPct}" data-type="text" th:data-pk="${employee.id}"
                            th:data-url="${restPath}" data-title="Enter commission %">[[${employee.commissionPct}]]</a>
                     </td>
                 </tr>
@@ -95,7 +95,7 @@
                 <tr>
                     <td width="25%">Manager id</td>
                     <td width="75%">
-                        <a href="#" id="managerId" data-type="text" th:data-pk="${employee.id}"
+                        <a href="#" th:id="${managerId}" data-type="text" th:data-pk="${employee.id}"
                            th:data-url="${restPath}" data-title="Enter manager id">[[${employee.manager?.id}]]</a>
                     </td>
                 </tr>
@@ -119,7 +119,7 @@
                 <tr>
                     <td width="25%">Department id</td>
                     <td width="75%">
-                        <a href="#" id="departmentId" data-type="text" th:data-pk="${employee.id}"
+                        <a href="#" th:id="${departmentId}" data-type="text" th:data-pk="${employee.id}"
                            th:data-url="${restPath}" data-title="Enter location id">[[${employee.department?.id}]]</a>
                     </td>
                 </tr>

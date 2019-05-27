@@ -17,7 +17,8 @@ import su.svn.href.dao.LocationFullDao;
 import su.svn.href.models.Location;
 import su.svn.href.models.dto.LocationDto;
 import su.svn.href.models.helpers.PageSettings;
-import su.svn.href.services.LocationMapUpdater;
+import su.svn.href.services.LocationFinder;
+import su.svn.href.services.LocationUpdater;
 
 import java.util.function.BiConsumer;
 
@@ -49,8 +50,11 @@ class LocationsRestControllerTest
     @MockBean
     private LocationFullDao locationFullDao;
 
+    @MockBean(name = "locationMapFinder")
+    private LocationFinder locationFinder;
+
     @MockBean
-    private LocationMapUpdater locationMapUpdater;
+    private LocationUpdater locationUpdater;
 
     @MockBean
     private PageSettings paging;
@@ -94,7 +98,6 @@ class LocationsRestControllerTest
     @DisplayName("when creating region, got bad request")
     void create_isBadRequest() throws Exception
     {
-        System.out.println(REST_API + REST_V1_LOCATIONS);
         Location test = createLocation0();
         location0.setId(-1L);
         mvc.perform(
@@ -114,7 +117,6 @@ class LocationsRestControllerTest
         when(paging.getLimit(2)).thenReturn(limit);
         when(paging.getOffset(1,2)).thenReturn(offset);
         findMock.accept(offset, limit);
-
 
         return mvc
             .perform(get("/rest/api/v1/locations" + range + "?page=1&size=2&sort=" + sort)
@@ -151,7 +153,8 @@ class LocationsRestControllerTest
     void readAll() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationDao.findAll(offset, limit)).thenReturn(Flux.just(location1, location2));
+            when(locationFinder.findAllLocations(offset, limit, "none"))
+                .thenReturn(Flux.just(location1, location2));
 
         readRange(findMock, "none", location1, location2);
     }
@@ -161,7 +164,8 @@ class LocationsRestControllerTest
     void readAllOrderById() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationDao.findAllOrderById(offset, limit)).thenReturn(Flux.just(location1, location2));
+            when(locationFinder.findAllLocations(offset, limit, "id"))
+                .thenReturn(Flux.just(location1, location2));
 
         readRange(findMock, "id", location1, location2);
     }
@@ -171,7 +175,8 @@ class LocationsRestControllerTest
     void readAllOrderByStreetAddress() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationDao.findAllOrderByStreetAddress(offset, limit)).thenReturn(Flux.just(location1, location2));
+            when(locationFinder.findAllLocations(offset, limit, "street"))
+                .thenReturn(Flux.just(location1, location2));
 
         readRange(findMock, "street", location1, location2);
     }
@@ -181,7 +186,8 @@ class LocationsRestControllerTest
     void readAllOrderByStateProvince() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationDao.findAllOrderByStateProvince(offset, limit)).thenReturn(Flux.just(location1, location2));
+            when(locationFinder.findAllLocations(offset, limit, "state"))
+                .thenReturn(Flux.just(location1, location2));
 
         readRange(findMock, "state", location1, location2);
     }
@@ -191,7 +197,8 @@ class LocationsRestControllerTest
     void readAllOrderByCity() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationDao.findAllOrderByCity(offset, limit)).thenReturn(Flux.just(location1, location2));
+            when(locationFinder.findAllLocations(offset, limit, "city"))
+                .thenReturn(Flux.just(location1, location2));
 
         readRange(findMock, "city", location1, location2);
     }
@@ -231,7 +238,8 @@ class LocationsRestControllerTest
     void readAllFull() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationFullDao.findAll(offset, limit)).thenReturn(Flux.just(locationDto1, locationDto2));
+            when(locationFinder.findAllFullLocations(offset, limit, "none"))
+                .thenReturn(Flux.just(locationDto1, locationDto2));
 
         readFullRange(findMock, "none", locationDto1, locationDto2);
     }
@@ -241,7 +249,7 @@ class LocationsRestControllerTest
     void readAllFullOrderByStreetAddress() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationFullDao.findAll(offset, limit, "street_address"))
+            when(locationFinder.findAllFullLocations(offset, limit, "street"))
                 .thenReturn(Flux.just(locationDto1, locationDto2));
 
         readFullRange(findMock, "street", locationDto1, locationDto2);
@@ -252,7 +260,7 @@ class LocationsRestControllerTest
     void readAllFullOrderByStateProvince() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationFullDao.findAll(offset, limit, "state_province"))
+            when(locationFinder.findAllFullLocations(offset, limit, "state"))
                 .thenReturn(Flux.just(locationDto1, locationDto2));
 
         readFullRange(findMock, "state", locationDto1, locationDto2);
@@ -263,7 +271,8 @@ class LocationsRestControllerTest
     void readAllFullOrderByCity() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(locationFullDao.findAll(offset, limit, "city")).thenReturn(Flux.just(locationDto1, locationDto2));
+            when(locationFinder.findAllFullLocations(offset, limit, "city"))
+                .thenReturn(Flux.just(locationDto1, locationDto2));
 
         readFullRange(findMock, "city", locationDto1, locationDto2);
     }
@@ -298,7 +307,7 @@ class LocationsRestControllerTest
     @DisplayName("when update streetAddress is ok")
     void updateStreetAddress() throws Exception
     {
-        when(locationMapUpdater.updateLocation(anyString(), any()))
+        when(locationUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(
@@ -313,7 +322,7 @@ class LocationsRestControllerTest
     @DisplayName("when update postalCode is ok")
     void updatePostalCodes() throws Exception
     {
-        when(locationMapUpdater.updateLocation(anyString(), any()))
+        when(locationUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(
@@ -328,7 +337,7 @@ class LocationsRestControllerTest
     @DisplayName("when update city is ok")
     void updateCity() throws Exception
     {
-        when(locationMapUpdater.updateLocation(anyString(), any()))
+        when(locationUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(
@@ -343,7 +352,7 @@ class LocationsRestControllerTest
     @DisplayName("when update stateProvince is ok")
     void updateStateProvince() throws Exception
     {
-        when(locationMapUpdater.updateLocation(anyString(), any()))
+        when(locationUpdater.updateLocation(anyString(), any()))
             .thenReturn(Mono.just(1));
 
         mvc.perform(

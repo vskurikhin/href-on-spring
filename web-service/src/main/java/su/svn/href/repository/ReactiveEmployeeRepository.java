@@ -70,7 +70,6 @@ public class ReactiveEmployeeRepository implements EmployeeRepository
     @Override
     public Mono<ClientResponse> update(String field, Employee employee)
     {
-        System.err.println("employee = " + employee);
         return webClient
             .put()
             .uri(REST_UPDATE + "?field=" + field)

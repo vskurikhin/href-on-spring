@@ -4,6 +4,7 @@ import io.r2dbc.postgresql.PostgresqlServerErrorException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -14,7 +15,8 @@ import su.svn.href.exceptions.*;
 import su.svn.href.models.Department;
 import su.svn.href.models.dto.*;
 import su.svn.href.models.helpers.PageSettings;
-import su.svn.href.services.DepartmentMapUpdater;
+import su.svn.href.services.DepartmentFinder;
+import su.svn.href.services.DepartmentUpdater;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,23 +31,27 @@ public class DepartmentsRestController
 {
     private static final Log LOG = LogFactory.getLog(DepartmentsRestController.class);
 
-    private DepartmentDao departmentDao;
+    private final DepartmentDao departmentDao;
 
-    private DepartmentFullDao departmentFullDao;
+    private final DepartmentFullDao departmentFullDao;
 
-    private DepartmentMapUpdater departmentMapUpdater;
+    private final DepartmentFinder departmentFinder;
 
-    private PageSettings paging;
+    private final DepartmentUpdater departmentMapUpdater;
+
+    private final PageSettings paging;
 
     @Autowired
     public DepartmentsRestController(
         DepartmentDao departmentDao,
         DepartmentFullDao departmentFullDao,
-        DepartmentMapUpdater departmentMapUpdater,
+        @Qualifier("departmentCaseFinder") DepartmentFinder departmentFinder,
+        DepartmentUpdater departmentMapUpdater,
         PageSettings paging)
     {
         this.departmentDao = departmentDao;
         this.departmentFullDao = departmentFullDao;
+        this.departmentFinder = departmentFinder;
         this.departmentMapUpdater = departmentMapUpdater;
         this.paging = paging;
     }
@@ -84,14 +90,7 @@ public class DepartmentsRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) {
-            case "ID":
-                return departmentDao.findAllOrderById(offset, limit);
-            case "NAME":
-                return departmentDao.findAllOrderByDepartmentName(offset, limit);
-            default:
-                return departmentDao.findAll(offset, limit);
-        }
+        return departmentFinder.findAllDepartments(offset, limit, sort); // TODO check sort
     }
 
     @GetMapping(path = REST_RANGE_FULL, params = { "page", "size", "sort"})
@@ -103,14 +102,7 @@ public class DepartmentsRestController
         int limit = paging.getLimit(size);
         int offset = paging.getOffset(page, size);
 
-        switch (sort.toUpperCase()) {
-            case "ID":
-                return departmentFullDao.findAll(offset, limit, "d.department_id");
-            case "NAME":
-                return departmentFullDao.findAll(offset, limit, "department_name");
-            default:
-                return departmentFullDao.findAll(offset, limit);
-        }
+        return departmentFinder.findAllFullDepartments(offset, limit, sort); // TODO check sort
     }
 
     @GetMapping("/{id}")
@@ -185,7 +177,7 @@ public class DepartmentsRestController
     public @ResponseBody AnswerBadRequest handleException(BadValueForIdException e)
     {
         LOG.error(e.getMessage());
-        return new AnswerBadRequest("Bad value for Department Id");
+        return new AnswerBadRequest("Bad value for Department id");
     }
 
     @ExceptionHandler(EntryNotFoundException.class)
@@ -193,7 +185,7 @@ public class DepartmentsRestController
     public @ResponseBody AnswerBadRequest handleException(EntryNotFoundException e)
     {
         LOG.error(e.getMessage());
-        return new AnswerBadRequest("Department not found for Id");
+        return new AnswerBadRequest("Department not found for id");
     }
 
     @ExceptionHandler(PostgresqlServerErrorException.class)

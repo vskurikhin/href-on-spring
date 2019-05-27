@@ -17,7 +17,8 @@ import su.svn.href.dao.EmployeeFullDao;
 import su.svn.href.models.Employee;
 import su.svn.href.models.dto.EmployeeDto;
 import su.svn.href.models.helpers.PageSettings;
-import su.svn.href.services.EmployeeMapUpdater;
+import su.svn.href.services.EmployeeFinder;
+import su.svn.href.services.EmployeeUpdater;
 
 import java.util.function.BiConsumer;
 
@@ -55,8 +56,11 @@ class EmployeesRestControllerTest
     @MockBean
     private EmployeeFullDao employeeFullDao;
 
+    @MockBean(name = "employeeCaseFinder")
+    private EmployeeFinder employeeFinder;
+
     @MockBean
-    private EmployeeMapUpdater employeeMapUpdater;
+    private EmployeeUpdater employeeUpdater;
 
     @MockBean
     private PageSettings paging;
@@ -106,7 +110,7 @@ class EmployeesRestControllerTest
         Employee test = createEmployee0();
         employee0.setId(-1L);
         mvc.perform(
-            post(REST_API + REST_V1_EMPLOYEES)
+            post("/rest/api/v1/employees")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(test))
         ).andExpect(status().isBadRequest());
@@ -125,7 +129,7 @@ class EmployeesRestControllerTest
 
 
         return mvc
-            .perform(get(REST_API + REST_V1_EMPLOYEES + range + "?page=1&size=2&sort=" + sort)
+            .perform(get("/rest/api/v1/employees" + range + "?page=1&size=2&sort=" + sort)
                 .contentType(APPLICATION_JSON))
             .andReturn();
 
@@ -172,7 +176,8 @@ class EmployeesRestControllerTest
     void readAll() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAll(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "none"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "none", employee1, employee2);
     }
@@ -182,7 +187,8 @@ class EmployeesRestControllerTest
     void readAllOrderById() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderById(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "id"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "id", employee1, employee2);
     }
@@ -192,7 +198,8 @@ class EmployeesRestControllerTest
     void readAllOrderByFirstName() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderByFirstName(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "first_name"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "first_name", employee1, employee2);
     }
@@ -202,7 +209,8 @@ class EmployeesRestControllerTest
     void readAllOrderByLastName() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderByLastName(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "last_name"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "last_name", employee1, employee2);
     }
@@ -212,7 +220,8 @@ class EmployeesRestControllerTest
     void readAllOrderByEmail() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderByEmail(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "email"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "email", employee1, employee2);
     }
@@ -222,7 +231,8 @@ class EmployeesRestControllerTest
     void readAllOrderByPhoneNumber() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderByPhoneNumber(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "phone_number"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "phone_number", employee1, employee2);
     }
@@ -232,7 +242,8 @@ class EmployeesRestControllerTest
     void readAllOrderByHireDate() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderByHireDate(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "hire_date"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "hire_date", employee1, employee2);
     }
@@ -242,7 +253,8 @@ class EmployeesRestControllerTest
     void readAllOrderBySalary() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderBySalary(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "salary"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "salary", employee1, employee2);
     }
@@ -252,7 +264,8 @@ class EmployeesRestControllerTest
     void readAllOrderByCommissionPct() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeDao.findAllOrderByCommissionPct(offset, limit)).thenReturn(Flux.just(employee1, employee2));
+            when(employeeFinder.findAllEmployees(offset, limit, "commission_pct"))
+                .thenReturn(Flux.just(employee1, employee2));
 
         readRange(findMock, "commission_pct", employee1, employee2);
     }
@@ -316,7 +329,8 @@ class EmployeesRestControllerTest
     void readAllFull() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit)).thenReturn(Flux.just(employeeDto1, employeeDto2));
+            when(employeeFinder.findAllFullEmployees(offset, limit, "none"))
+                .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "none", employeeDto1, employeeDto2);
     }
@@ -326,7 +340,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderById() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.employee_id"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "id"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "id", employeeDto1, employeeDto2);
@@ -337,7 +351,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderByFirstName() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.first_name"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "first_name"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "first_name", employeeDto1, employeeDto2);
@@ -348,7 +362,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderByLastName() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.last_name"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "last_name"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "last_name", employeeDto1, employeeDto2);
@@ -359,7 +373,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderByEmail() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.email"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "email"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "email", employeeDto1, employeeDto2);
@@ -370,7 +384,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderByPhoneNumber() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.phone_number"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "phone_number"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "phone_number", employeeDto1, employeeDto2);
@@ -381,7 +395,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderByHireDate() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.hire_date"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "hire_date"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "hire_date", employeeDto1, employeeDto2);
@@ -392,7 +406,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderBySalary() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.salary"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "salary"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "salary", employeeDto1, employeeDto2);
@@ -403,7 +417,7 @@ class EmployeesRestControllerTest
     void readAllFullOrderByCommissionPct() throws Exception
     {
         BiConsumer<Integer, Integer> findMock = (offset, limit) ->
-            when(employeeFullDao.findAll(offset, limit, "e.commission_pct"))
+            when(employeeFinder.findAllFullEmployees(offset, limit, "commission_pct"))
                 .thenReturn(Flux.just(employeeDto1, employeeDto2));
 
         readFullRange(findMock, "commission_pct", employeeDto1, employeeDto2);
@@ -431,7 +445,7 @@ class EmployeesRestControllerTest
     void update_isBadRequest() throws Exception
     {
         mvc.perform(
-            put(REST_API + REST_V1_EMPLOYEES)
+            put("/rest/api/v1/employees")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(employee0))
         ).andExpect(status().isBadRequest());
@@ -444,7 +458,7 @@ class EmployeesRestControllerTest
         when(employeeDao.findById(1L)).thenReturn(Mono.just(employee1));
         when(employeeDao.delete(employee1)).thenReturn(Mono.just(employee1).then());
 
-        mvc.perform(delete(REST_API + REST_V1_EMPLOYEES + "/{id}" , 1L))
+        mvc.perform(delete("/rest/api/v1/employees/{id}" , 1L))
             .andExpect(status().isNoContent());
     }
 }

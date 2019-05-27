@@ -1,13 +1,13 @@
 $.fn.editable.defaults.mode = 'popup';
 
 $(document).ready(function() {
-    $('#departmentName').editable();
+    $('#DEPARTMENTNAME').editable();
 });
 
 $(document).ready(function() {
-    $('#managerId').editable();
+    $('#MANAGERID').editable();
 });
 
 $(document).ready(function() {
-    $('#locationId').editable();
+    $('#LOCATIONID').editable();
 });

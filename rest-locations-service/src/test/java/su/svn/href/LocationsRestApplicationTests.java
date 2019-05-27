@@ -36,8 +36,5 @@ public class LocationsRestApplicationTests
         assertThat(yamlApplProperties).hasFieldOrProperty("locale").isNotNull();
         assertThat(yamlApplProperties).hasFieldOrProperty("r2dbc").isNotNull();
         assertThat(yamlApplProperties).hasFieldOrProperty("paging").isNotNull();
-        System.out.println("locale = " + yamlApplProperties.getLocale());
-        System.out.println("r2dbc  = " + yamlApplProperties.getR2dbc());
-        System.out.println("paging = " + yamlApplProperties.getPaging());
     }
 }

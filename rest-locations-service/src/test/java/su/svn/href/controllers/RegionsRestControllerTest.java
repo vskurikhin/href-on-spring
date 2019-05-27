@@ -65,7 +65,6 @@ class RegionsRestControllerTest
 
         when(regionDao.save(region0)).thenReturn(Mono.just(saved));
 
-        System.out.println(REST_API + REST_V1_REGIONS);
         mvc.perform(
             post("/rest/api/v1/regions")
                 .contentType(APPLICATION_JSON_UTF8)

@@ -65,7 +65,7 @@ public class Employee
 
     public static boolean isValidFieldName(String name)
     {
-        return StringHelper.isValidFieldName(name, Location.class);
+        return StringHelper.isValidFieldName(name, Employee.class);
     }
 
     public static boolean isValidFirstName(String name)

@@ -1,17 +1,17 @@
 package su.svn.href.controllers;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;
+import su.svn.href.exceptions.BadServiceStatusException;
 import su.svn.href.models.Employee;
 import su.svn.href.models.UpdateValue;
-import su.svn.href.models.dto.Answer;
-import su.svn.href.models.dto.AnswerOk;
-import su.svn.href.models.dto.EmployeeDataTables;
-import su.svn.href.models.dto.UpdateValueDto;
+import su.svn.href.models.dto.*;
 import su.svn.href.repository.EmployeeRepository;
 import su.svn.href.services.EmployeeMapUpdater;
 
@@ -24,9 +24,11 @@ import static su.svn.href.controllers.Constants.*;
 @RequestMapping(value = REST_API + REST_V1_EMPLOYEES)
 public class EmployeesRestController
 {
-    private EmployeeRepository employeeRepository;
+    private static final Log LOG = LogFactory.getLog(EmployeesRestController.class);
 
-    private EmployeeMapUpdater employeeMapUpdater;
+    private final EmployeeRepository employeeRepository;
+
+    private final EmployeeMapUpdater employeeMapUpdater;
 
     @Autowired
     public EmployeesRestController(EmployeeRepository employeeRepository, EmployeeMapUpdater employeeMapUpdater)
@@ -53,9 +55,10 @@ public class EmployeesRestController
     {
         return employeeRepository
             .findAll(start / length + 1, length)
-            .collectList().flatMap(locationDtos ->
+            .collectList()
+            .flatMap(employees ->
                 employeeRepository.count().flatMap(count ->
-                    Mono.just(new EmployeeDataTables(draw, count, count, locationDtos))
+                    Mono.just(new EmployeeDataTables(draw, count, count, employees))
                 )
             );
     }
@@ -82,17 +85,27 @@ public class EmployeesRestController
     {
         try {
             UpdateValue<Long> update = body.convertWithLongPk();
-            Mono<Answer> error = Mono.error(new RuntimeException()); // TODO
+            Mono<Answer> error = Mono.error(
+                new BadServiceStatusException(EmployeeRepository.class, " error when updating employee: " +  body)
+            );
 
             return employeeRepository
                 .findById(update.getPk())
-                .flatMap(locationDto -> checkResponse(update))
+                .flatMap(employeeDto -> checkResponse(update))
                 .flatMap(result -> result ? Mono.just(new AnswerOk()) : error)
                 .switchIfEmpty(error);
         }
         catch (NumberFormatException e) {
             return Mono.error(e);
         }
+    }
+
+    @ExceptionHandler(BadServiceStatusException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody AnswerBadRequest handleException(BadServiceStatusException e)
+    {
+        LOG.error(e.getMessage());
+        return new AnswerBadRequest("can't update");
     }
 }
 

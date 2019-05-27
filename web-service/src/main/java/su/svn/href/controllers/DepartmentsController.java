@@ -33,6 +33,9 @@ public class DepartmentsController
     @RequestMapping("/department")
     public String department(@RequestParam long id, final Model model)
     {
+        model.addAttribute("departmentName", su.svn.href.regulars.Constants.DEPARTMENTNAME);
+        model.addAttribute("managerId", su.svn.href.regulars.Constants.MANAGERID);
+        model.addAttribute("locationId", su.svn.href.regulars.Constants.LOCATIONID);
         model.addAttribute("department", departmentRepository.findById(id));
         model.addAttribute("restPath",  REST_API + REST_V1_DEPARTMENTS + REST_UPDATE);
 
