@@ -17,7 +17,7 @@
         <com.h2database.h2.version>1.4.197</com.h2database.h2.version>
 
         <!-- R2DBC -->
-        <com.fasterxml.jackson.core.version>2.9.9</com.fasterxml.jackson.core.version>
+        <com.fasterxml.jackson.core.version>2.9.10.8</com.fasterxml.jackson.core.version>
         <io.projectreactor.reactor-extra.version>3.2.2.RELEASE</io.projectreactor.reactor-extra.version>
         <io.projectreactor.version>3.2.6.RELEASE</io.projectreactor.version>
         <org.projectlombok.version>1.18.2</org.projectlombok.version>
